@@ -18,9 +18,6 @@ import static com.ericsson.gerrit.plugins.eventslog.SQLTable.DATE_ENTRY;
 import static com.ericsson.gerrit.plugins.eventslog.SQLTable.PRIMARY_ENTRY;
 import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
 
-import com.google.gerrit.extensions.annotations.PluginName;
-import com.google.gerrit.server.config.PluginConfig;
-import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -33,8 +30,6 @@ import java.util.Map;
 
 @Singleton
 public class SQLQueryMaker implements QueryMaker {
-  private static final String CONFIG_RETURN_LIMIT = "returnLimit";
-  private static final int DEFAULT_RETURN_LIMIT = 5000;
   private static final String TIME_ONE = "t1";
   private static final String TIME_TWO = "t2";
   private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat(
@@ -45,10 +40,8 @@ public class SQLQueryMaker implements QueryMaker {
   private final int returnLimit;
 
   @Inject
-  public SQLQueryMaker(PluginConfigFactory cfgFactory,
-      @PluginName String pluginName) {
-    PluginConfig cfg = cfgFactory.getFromGerritConfig(pluginName, true);
-    this.returnLimit = cfg.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT);
+  public SQLQueryMaker(EventsLogConfig config) {
+    this.returnLimit = config.getReturnLimit();
   }
 
   @Override

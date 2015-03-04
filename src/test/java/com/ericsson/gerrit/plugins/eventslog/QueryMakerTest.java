@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.easymock.EasyMock;
 import org.easymock.EasyMockSupport;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,9 +30,6 @@ import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
 import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
 import com.ericsson.gerrit.plugins.eventslog.SQLQueryMaker;
 
-import com.google.gerrit.server.config.PluginConfig;
-import com.google.gerrit.server.config.PluginConfigFactory;
-
 public class QueryMakerTest {
   private static QueryMaker queryMaker;
   private static String defaultQuery;
@@ -41,15 +37,10 @@ public class QueryMakerTest {
   @BeforeClass
   public static void setUp() throws Exception {
     EasyMockSupport easyMock = new EasyMockSupport();
-    PluginConfigFactory cfgFactoryMock = easyMock.createMock(
-        PluginConfigFactory.class);
-    PluginConfig configMock = easyMock.createNiceMock(PluginConfig.class);
-    expect(cfgFactoryMock.getFromGerritConfig(EasyMock.anyString(),
-        EasyMock.anyBoolean())).andReturn(configMock);
-    expect(configMock.getInt(EasyMock.anyString(),
-        EasyMock.anyInt())).andReturn(10);
+    EventsLogConfig cfgMock = easyMock.createMock(EventsLogConfig.class);
+    expect(cfgMock.getReturnLimit()).andReturn(10);
     easyMock.replayAll();
-    queryMaker = new SQLQueryMaker(cfgFactoryMock, "plugin name");
+    queryMaker = new SQLQueryMaker(cfgMock);
     defaultQuery = queryMaker.getDefaultQuery();
   }
 

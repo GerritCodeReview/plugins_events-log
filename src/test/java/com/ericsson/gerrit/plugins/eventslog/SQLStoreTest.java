@@ -33,8 +33,6 @@ import org.junit.Test;
 import com.google.gerrit.reviewdb.client.Change.Key;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.CurrentUser;
-import com.google.gerrit.server.config.PluginConfig;
-import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.project.NoSuchProjectException;
 import com.google.gerrit.server.project.ProjectControl;
@@ -52,28 +50,21 @@ public class SQLStoreTest {
   private EasyMockSupport easyMock;
   private ProjectControl.GenericFactory pcFactoryMock;
   private Provider<CurrentUser> userProviderMock;
-  private PluginConfigFactory cfgFactoryMock;
+  private EventsLogConfig cfgMock;
   private SQLStore store;
 
   @SuppressWarnings("unchecked")
   @Before
   public void setUp() {
     easyMock = new EasyMockSupport();
-    PluginConfig configMock = easyMock.createNiceMock(PluginConfig.class);
     pcFactoryMock = easyMock.createNiceMock(ProjectControl.GenericFactory.class);
     userProviderMock = easyMock.createNiceMock(Provider.class);
-    cfgFactoryMock = easyMock.createNiceMock(PluginConfigFactory.class);
-    expect(cfgFactoryMock.getFromGerritConfig(EasyMock.anyString(),
-        EasyMock.anyBoolean())).andStubReturn(configMock);
-    expect(configMock.getString(EasyMock.anyString(), EasyMock.anyString()))
-      .andReturn(TEST_PATH).once();
-    expect(configMock.getString(EasyMock.anyString(), EasyMock.anyString()))
-      .andReturn(TEST_OPTIONS).once();
-    expect(configMock.getString(EasyMock.anyString(), EasyMock.anyString()))
-    .andReturn(TEST_DRIVER).once();
+    cfgMock = easyMock.createNiceMock(EventsLogConfig.class);
+    expect(cfgMock.getStoreUrl()).andReturn(TEST_PATH).once();
+    expect(cfgMock.getUrlOptions()).andReturn(TEST_OPTIONS).once();
+    expect(cfgMock.getStoreDriver()).andReturn(TEST_DRIVER).once();
     easyMock.replayAll();
-    store = new SQLStore(pcFactoryMock, userProviderMock, cfgFactoryMock,
-        "plugin name");
+    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock);
     store.start();
   }
 

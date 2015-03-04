@@ -21,12 +21,9 @@ import static com.ericsson.gerrit.plugins.eventslog.SQLTable.PROJECT_ENTRY;
 import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
 import static java.lang.String.format;
 
-import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.CurrentUser;
-import com.google.gerrit.server.config.PluginConfig;
-import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.events.ProjectEvent;
 import com.google.gerrit.server.project.NoSuchProjectException;
 import com.google.gerrit.server.project.ProjectControl;
@@ -53,16 +50,6 @@ import java.util.concurrent.TimeUnit;
 public class SQLStore implements EventStore, LifecycleListener {
   private static final Logger log = LoggerFactory.getLogger(SQLStore.class);
 
-  private static final String DEFAULT_URL = "jdbc:h2:~/db/";
-  private static final String DEFAULT_DRIVER = "org.h2.Driver";
-  private static final String CONFIG_URL = "storeUrl";
-  private static final String CONFIG_DRIVER = "storeDriver";
-  private static final String CONFIG_URL_OPTIONS = "urlOptions";
-  private static final String CONFIG_MAX_AGE = "maxAge";
-  private static final String CONFIG_USERNAME = "storeUsername";
-  private static final String CONFIG_PASSWORD = "storePassword";
-  private static final int DEFAULT_MAX_AGE = 30;
-
   private final ProjectControl.GenericFactory projectControlFactory;
   private final Provider<CurrentUser> userProvider;
   private final String path;
@@ -76,15 +63,13 @@ public class SQLStore implements EventStore, LifecycleListener {
 
   @Inject
   SQLStore(ProjectControl.GenericFactory projectControlFactory,
-      Provider<CurrentUser> userProvider, PluginConfigFactory cfgFactory,
-      @PluginName String pluginName) {
-    PluginConfig cfg = cfgFactory.getFromGerritConfig(pluginName, true);
-    this.path = cfg.getString(CONFIG_URL, DEFAULT_URL) + TABLE_NAME + ";"
-      + cfg.getString(CONFIG_URL_OPTIONS, "");
-    this.driver = cfg.getString(CONFIG_DRIVER, DEFAULT_DRIVER);
-    this.maxAge = cfg.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE);
-    this.username = cfg.getString(CONFIG_USERNAME);
-    this.password = cfg.getString(CONFIG_PASSWORD);
+      Provider<CurrentUser> userProvider, EventsLogConfig cfg) {
+    this.path = cfg.getStoreUrl() + TABLE_NAME + ";"
+      + cfg.getUrlOptions();
+    this.driver = cfg.getStoreDriver();
+    this.maxAge = cfg.getMaxAge();
+    this.username = cfg.getStoreUsername();
+    this.password = cfg.getStorePassword();
     this.projectControlFactory = projectControlFactory;
     this.userProvider = userProvider;
   }
@@ -158,7 +143,7 @@ public class SQLStore implements EventStore, LifecycleListener {
             removeProjectEntries(project.get());
           } catch (IOException e) {
             log.warn("Cannot get project visibility info for " + project.get()
-                + "from cache", e);
+                + " from cache", e);
           }
         }
       } catch (SQLException e) {

@@ -27,13 +27,13 @@ plugin.@PLUGIN@.storeUrl
 :    Specify the path to the directory in which to keep the database. When not
      specified, the default path is jdbc:h2:~/db/.
 
-plugin @PLUGIN@.storeUsername
+plugin.@PLUGIN@.storeUsername
 :    Username to connect to the database, not defined by default. This value can
      also be defined in secure.config.
 
-plugin @PLUGIN@.storePassword
+plugin.@PLUGIN@.storePassword
 :    Password to connect to the database, not defined by default. This value can
      also be defined in secure.config.
 
-plugin @PLUGIN@.urlOptions
+plugin.@PLUGIN@.urlOptions
 :    Options to append to the database url.
