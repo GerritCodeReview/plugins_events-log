@@ -19,19 +19,45 @@ import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.ProjectEvent;
 import com.google.inject.Inject;
 
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+
 public class EventHandler implements EventListener {
 
   private final EventStore database;
+  private ScheduledThreadPoolExecutor pool;
 
   @Inject
-  EventHandler(EventStore database) {
+  EventHandler(EventStore database, EventQueue queue) {
     this.database = database;
+    this.pool = queue.getPool();
   }
 
   @Override
   public void onEvent(Event event) {
     if (event instanceof ProjectEvent) {
-      database.storeEvent((ProjectEvent) event);
+      if (pool != null) {
+        pool.execute(new StoreEventTask((ProjectEvent) event));
+      } else {
+        (new StoreEventTask((ProjectEvent) event)).run();
+      }
+    }
+  }
+
+  public class StoreEventTask implements Runnable {
+    private ProjectEvent event;
+
+    StoreEventTask(ProjectEvent event) {
+      this.event = event;
+    }
+
+    @Override
+    public void run() {
+      database.storeEvent(event);
+    }
+
+    @Override
+    public String toString() {
+        return "(Events-log) Insert Event";
     }
   }
 }

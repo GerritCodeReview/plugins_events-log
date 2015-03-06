@@ -27,12 +27,14 @@ public class EventHandlerTest {
   private EasyMockSupport easyMock;
   private EventStore storeMock;
   private EventListener listener;
+  private EventQueue queueMock;
 
   @Before
   public void setUp() {
     easyMock = new EasyMockSupport();
     storeMock = easyMock.createMock(EventStore.class);
-    listener = new EventHandler(storeMock);
+    queueMock = easyMock.createMock(EventQueue.class);
+    listener = new EventHandler(storeMock, queueMock);
   }
 
   @Test
