@@ -17,12 +17,14 @@ package com.ericsson.gerrit.plugins.eventslog;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_DRIVER;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_MAX_AGE;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_PASSWORD;
+import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_POOL_SIZE;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_RETURN_LIMIT;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_URL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_URL_OPTIONS;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_USERNAME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_DRIVER;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_MAX_AGE;
+import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_POOL_SIZE;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_RETURN_LIMIT;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_URL;
 import static org.easymock.EasyMock.expect;
@@ -46,6 +48,7 @@ public class EventsLogConfigTest {
   public void setUp() {
     EasyMockSupport easyMock = new EasyMockSupport();
     configMock = easyMock.createNiceMock(PluginConfig.class);
+    expect(configMock.getInt(CONFIG_POOL_SIZE, DEFAULT_POOL_SIZE)).andReturn(DEFAULT_POOL_SIZE);
     expect(configMock.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE)).andReturn(DEFAULT_MAX_AGE);
     expect(configMock.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT)).andReturn(DEFAULT_RETURN_LIMIT);
     expect(configMock.getString(CONFIG_DRIVER, DEFAULT_DRIVER)).andReturn(DEFAULT_DRIVER);
@@ -59,6 +62,7 @@ public class EventsLogConfigTest {
         EasyMock.anyBoolean())).andStubReturn(configMock);
 
     configMock2 = easyMock.createNiceMock(PluginConfig.class);
+    expect(configMock2.getInt(CONFIG_POOL_SIZE, DEFAULT_POOL_SIZE)).andReturn(5);
     expect(configMock2.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE)).andReturn(20);
     expect(configMock2.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT)).andReturn(10000);
     expect(configMock2.getString(CONFIG_DRIVER, DEFAULT_DRIVER)).andReturn("org.h2.Driver2");
@@ -75,6 +79,7 @@ public class EventsLogConfigTest {
   @Test
   public void shouldReturnDefaultsWhenMissingConfig() {
     config = new EventsLogConfig(cfgFactoryMock, null);
+    assertEquals(1, config.getPoolSize());
     assertEquals(30, config.getMaxAge());
     assertEquals(5000, config.getReturnLimit());
     assertEquals("org.h2.Driver", config.getStoreDriver());
@@ -87,6 +92,7 @@ public class EventsLogConfigTest {
   @Test
   public void shouldReturnConfigValues() {
     config = new EventsLogConfig(cfgFactoryMock2, null);
+    assertEquals(5, config.getPoolSize());
     assertEquals(20, config.getMaxAge());
     assertEquals(10000, config.getReturnLimit());
     assertEquals("org.h2.Driver2", config.getStoreDriver());

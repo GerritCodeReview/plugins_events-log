@@ -18,12 +18,17 @@ import com.google.gerrit.common.EventListener;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.inject.AbstractModule;
+import com.google.inject.Scopes;
 import com.google.inject.internal.UniqueAnnotations;
 
 class Module extends AbstractModule {
 
   @Override
   protected void configure() {
+    bind(EventQueue.class).in(Scopes.SINGLETON);
+    bind(LifecycleListener.class)
+        .annotatedWith(UniqueAnnotations.create())
+        .to(EventQueue.class);
     bind(EventStore.class).to(SQLStore.class);
     bind(LifecycleListener.class).annotatedWith(UniqueAnnotations.create()).to(
         SQLStore.class);
