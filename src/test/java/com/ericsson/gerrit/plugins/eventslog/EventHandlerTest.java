@@ -23,16 +23,20 @@ import org.easymock.EasyMockSupport;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+
 public class EventHandlerTest {
   private EasyMockSupport easyMock;
   private EventStore storeMock;
   private EventListener listener;
+  private ScheduledThreadPoolExecutor poolMock;
 
   @Before
   public void setUp() {
     easyMock = new EasyMockSupport();
     storeMock = easyMock.createMock(EventStore.class);
-    listener = new EventHandler(storeMock);
+    poolMock = new PoolMock(1);
+    listener = new EventHandler(storeMock, poolMock);
   }
 
   @Test
@@ -44,5 +48,15 @@ public class EventHandlerTest {
     easyMock.replayAll();
     listener.onEvent(eventMock);
     easyMock.verifyAll();
+  }
+
+  class PoolMock extends ScheduledThreadPoolExecutor {
+    PoolMock(int corePoolSize) {
+      super(corePoolSize);
+    }
+    @Override
+    public void execute(Runnable command) {
+      command.run();
+    }
   }
 }
