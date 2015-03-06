@@ -37,3 +37,7 @@ plugin.@PLUGIN@.storePassword
 
 plugin.@PLUGIN@.urlOptions
 :    Options to append to the database url.
+
+plugin.@PLUGIN@.threadPoolSize
+:    Number of threads to allocate for storing events to the database. Defaults
+     to 1 if not provided.

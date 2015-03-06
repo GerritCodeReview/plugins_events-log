@@ -22,6 +22,7 @@ import com.google.inject.Singleton;
 
 @Singleton
 public class EventsLogConfig {
+  static final String CONFIG_POOL_SIZE = "threadPoolSize";
   static final String CONFIG_MAX_AGE = "maxAge";
   static final String CONFIG_RETURN_LIMIT = "returnLimit";
   static final String CONFIG_DRIVER = "storeDriver";
@@ -30,11 +31,13 @@ public class EventsLogConfig {
   static final String CONFIG_USERNAME = "storeUsername";
   static final String CONFIG_PASSWORD = "storePassword";
 
+  static final int DEFAULT_POOL_SIZE = 1;
   static final int DEFAULT_MAX_AGE = 30;
   static final int DEFAULT_RETURN_LIMIT = 5000;
   static final String DEFAULT_DRIVER = "org.h2.Driver";
   static final String DEFAULT_URL = "jdbc:h2:~/db/";
 
+  private int threadPoolSize = DEFAULT_POOL_SIZE;
   private int maxAge = DEFAULT_MAX_AGE;
   private int returnLimit = DEFAULT_RETURN_LIMIT;
   private String storeDriver;
@@ -47,6 +50,7 @@ public class EventsLogConfig {
   public EventsLogConfig(PluginConfigFactory cfgFactory,
       @PluginName String pluginName) {
     PluginConfig cfg = cfgFactory.getFromGerritConfig(pluginName, true);
+    threadPoolSize = cfg.getInt(CONFIG_POOL_SIZE, DEFAULT_POOL_SIZE);
     maxAge = cfg.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE);
     returnLimit = cfg.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT);
     storeDriver = cfg.getString(CONFIG_DRIVER, DEFAULT_DRIVER);
@@ -82,5 +86,9 @@ public class EventsLogConfig {
 
   public String getStorePassword() {
     return storePassword;
+  }
+
+  public int getPoolSize() {
+    return threadPoolSize;
   }
 }

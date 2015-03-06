@@ -18,17 +18,32 @@ import com.google.gerrit.common.EventListener;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Scopes;
 import com.google.inject.internal.UniqueAnnotations;
+
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 class Module extends AbstractModule {
 
   @Override
   protected void configure() {
+    bind(EventQueue.class).in(Scopes.SINGLETON);
+    bind(EventHandler.class).in(Scopes.SINGLETON);
+    bind(LifecycleListener.class)
+        .annotatedWith(UniqueAnnotations.create())
+        .to(EventQueue.class);
     bind(EventStore.class).to(SQLStore.class);
     bind(LifecycleListener.class).annotatedWith(UniqueAnnotations.create()).to(
         SQLStore.class);
     bind(QueryMaker.class).to(SQLQueryMaker.class);
 
     DynamicSet.bind(binder(), EventListener.class).to(EventHandler.class);
+  }
+
+  @Provides
+  @EventPool
+  ScheduledThreadPoolExecutor provideEventPool(EventQueue queue) {
+    return queue.getPool();
   }
 }
