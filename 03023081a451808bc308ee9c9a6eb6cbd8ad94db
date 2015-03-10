@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "177fa84d_c1ac42a3",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-03-10T12:59:42Z",
+      "side": 1,
+      "message": "pool should never be null, I assume this is because of unit tests. Remove this and see comment below to fix unit tests.",
+      "range": {
+        "startLine": 38,
+        "startChar": 6,
+        "endLine": 38,
+        "endChar": 25
+      },
+      "revId": "03023081a451808bc308ee9c9a6eb6cbd8ad94db",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d76190bc_9759a46a",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-03-10T12:59:42Z",
+      "side": 1,
+      "message": "In the unit tests, extends the ScheduledThreadPoolExecutor, override the execute method and move this line in that method. Then setup a mock of the EventQueue that will return this implementation of ScheduledThreadPoolExecutor.\n\nThis way, the task will be executed in the same thread for the unit tests.",
+      "range": {
+        "startLine": 41,
+        "startChar": 8,
+        "endLine": 41,
+        "endChar": 57
+      },
+      "revId": "03023081a451808bc308ee9c9a6eb6cbd8ad94db",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "177fa84d_a1a73ebe",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventHandler.java",
         "patchSetId": 1
