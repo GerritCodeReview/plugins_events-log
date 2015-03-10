@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "177fa84d_a1a73ebe",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2015-03-10T12:52:23Z",
+      "side": 1,
+      "message": "nit: wrong indentation",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 8
+      },
+      "revId": "03023081a451808bc308ee9c9a6eb6cbd8ad94db",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d76190bc_372618e7",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventQueue.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2015-03-10T12:52:23Z",
+      "side": 1,
+      "message": "nit: wrong indentation in this file",
+      "revId": "03023081a451808bc308ee9c9a6eb6cbd8ad94db",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
