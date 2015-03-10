@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d76190bc_f7410065",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/EventHandlerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-03-10T15:57:44Z",
+      "side": 1,
+      "message": "This breaks because it cannot be cast to Executor. The problem is that EventQueue actually expects a WorkQueue.Executor when calling getPool and won\u0027t accept the ScheduledThreadPoolExecutor. I\u0027ve tried making PoolMock extend WorkQueue.Executor but haven\u0027t succeeded. \n\nWill continue working on this.",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 63
+      },
+      "revId": "37e6f292bbf79fdb23f5e83e9e400e906705fdcc",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
