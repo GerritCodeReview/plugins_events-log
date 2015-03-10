@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d76190bc_774ed090",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventPool.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-03-10T19:31:08Z",
+      "side": 1,
+      "message": "Copy paste?",
+      "range": {
+        "startLine": 25,
+        "startChar": 2,
+        "endLine": 26,
+        "endChar": 28
+      },
+      "revId": "dd2aed51679b38b25c65af95467cdc5c73151b74",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
