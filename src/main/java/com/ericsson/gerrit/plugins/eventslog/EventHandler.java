@@ -34,7 +34,9 @@ public class EventHandler implements EventListener {
 
   @Override
   public void onEvent(Event event) {
-    pool.execute(new StoreEventTask((ProjectEvent) event));
+    if(event instanceof ProjectEvent) {
+      pool.execute(new StoreEventTask((ProjectEvent) event));
+    }
   }
 
   class StoreEventTask implements Runnable {
