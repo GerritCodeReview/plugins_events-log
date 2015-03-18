@@ -64,9 +64,9 @@ public class SQLQueryMaker implements QueryMaker {
 
   @Override
   public String getDefaultQuery() {
-    return "SELECT * FROM(SELECT TOP " + returnLimit + " * FROM " + TABLE_NAME
-        + " ORDER BY " + PRIMARY_ENTRY + " DESC)" + " a ORDER BY "
-        + PRIMARY_ENTRY + " ASC";
+    return "SELECT * FROM(SELECT * FROM " + TABLE_NAME
+        + " ORDER BY " + PRIMARY_ENTRY + " DESC LIMIT " + returnLimit + ")"
+        + " a ORDER BY " + PRIMARY_ENTRY + " ASC";
   }
 
   private Date[] parseDates(String dateOne, String dateTwo)
