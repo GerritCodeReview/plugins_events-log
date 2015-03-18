@@ -37,14 +37,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Singleton
 public class SQLStore implements EventStore, LifecycleListener {
@@ -56,22 +55,26 @@ public class SQLStore implements EventStore, LifecycleListener {
   private final String username;
   private final String password;
   private final String driver;
-  private final int maxAge;
+  private final int maxTries;
+  private final int waitTime;
   private final Gson gson = new Gson();
 
+  private SQLHandler sql;
   private BasicDataSource ds;
 
   @Inject
   SQLStore(ProjectControl.GenericFactory projectControlFactory,
-      Provider<CurrentUser> userProvider, EventsLogConfig cfg) {
+      Provider<CurrentUser> userProvider, EventsLogConfig cfg, SQLHandler sql) {
     this.path = cfg.getStoreUrl() + TABLE_NAME + ";"
       + cfg.getUrlOptions();
     this.driver = cfg.getStoreDriver();
-    this.maxAge = cfg.getMaxAge();
+    this.maxTries = cfg.getMaxTries();
+    this.waitTime = cfg.getWaitTime();
     this.username = cfg.getStoreUsername();
     this.password = cfg.getStorePassword();
     this.projectControlFactory = projectControlFactory;
     this.userProvider = userProvider;
+    this.sql = sql;
   }
 
   @Override
@@ -82,7 +85,7 @@ public class SQLStore implements EventStore, LifecycleListener {
       ds.setUrl(path);
       ds.setUsername(username);
       ds.setPassword(password);
-      Connection conn = ds.getConnection();
+      Connection conn = sql.getConnection(ds);
 
       StringBuilder query = new StringBuilder();
       query.append(format("CREATE TABLE IF NOT EXISTS %s(", TABLE_NAME));
@@ -95,9 +98,9 @@ public class SQLStore implements EventStore, LifecycleListener {
       query.append(format("%s TIMESTAMP DEFAULT NOW(),", DATE_ENTRY));
       query.append(format("%s TEXT)", EVENT_ENTRY));
 
-      Statement stat = conn.createStatement();
+      Statement stat = sql.createStatement(conn);
       try {
-        stat.execute(query.toString());
+        sql.execute(stat, query.toString());
       } finally {
         closeStatement(stat);
         closeConnection(conn);
@@ -111,10 +114,10 @@ public class SQLStore implements EventStore, LifecycleListener {
   @Override
   public void stop() {
     try {
-       ds.close();
-     } catch (SQLException e) {
-       throw new RuntimeException("Cannot close datasource ", e);
-     }
+      sql.stopDataSource(ds);
+    } catch (SQLException e) {
+      throw new RuntimeException("Cannot close datasource ", e);
+    }
   }
 
   @Override
@@ -125,11 +128,11 @@ public class SQLStore implements EventStore, LifecycleListener {
     Statement stat = null;
     ResultSet rs = null;
     try {
-      conn = ds.getConnection();
-      stat = conn.createStatement();
+      conn = sql.getConnection(ds);
+      stat = sql.createStatement(conn);
       try {
         Project.NameKey project = null;
-        rs = stat.executeQuery(query);
+        rs = sql.executeQuery(stat, query);
         while (rs.next()) {
           try {
             project = new Project.NameKey(rs.getString(PROJECT_ENTRY));
@@ -166,19 +169,39 @@ public class SQLStore implements EventStore, LifecycleListener {
       return;
     }
     String json = gson.toJson(event);
-    try {
-      Connection conn = ds.getConnection();
-      Statement stat = conn.createStatement();
+    int failedConnections = 0;
+    boolean done = false;
+    while (!done) {
+      done = true;
       try {
-        stat.execute(format("INSERT INTO %s(%s, %s, %s) ",
-          TABLE_NAME, PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
-          + format("VALUES('%s', '%s', '%s')", projectName.get(), new Timestamp(event.eventCreatedOn * 1000L), json));
-      } finally {
-        closeStatement(stat);
-        closeConnection(conn);
+        Connection conn = sql.getConnection(ds);
+        Statement stat = sql.createStatement(conn);
+        try {
+          sql.executeStore(stat, event, json);
+        } finally {
+          closeStatement(stat);
+          closeConnection(conn);
+        }
+      } catch (SQLException e) {
+        log.warn("Cannot store ChangeEvent for: " + projectName.get() + "\n"
+            + e.toString());
+        if (e.getCause() instanceof ConnectException
+            || e.getMessage().contains("terminating connection")) {
+          if (maxTries == 0) {
+          } else if (failedConnections < maxTries-1) {
+            failedConnections++;
+            done = false;
+            log.info("Retrying store event");
+            try {
+              Thread.sleep(waitTime);
+            } catch (InterruptedException e1) {
+              continue;
+            }
+          } else {
+            log.error("Failed to store event " + maxTries + " times");
+          }
+        }
       }
-    } catch (SQLException e) {
-      log.warn("Cannot store ChangeEvent for: " + projectName.get(), e);
     }
   }
 
@@ -187,9 +210,7 @@ public class SQLStore implements EventStore, LifecycleListener {
       Connection conn = ds.getConnection();
       Statement stat = conn.createStatement();
       try {
-        stat.execute(format("DELETE FROM %s WHERE %s < '%s'", TABLE_NAME,
-            DATE_ENTRY, new Timestamp(System.currentTimeMillis()
-                - TimeUnit.MILLISECONDS.convert(maxAge, TimeUnit.DAYS))));
+        sql.executeRemoveOld(stat);
       } finally {
         closeStatement(stat);
         closeConnection(conn);
@@ -204,8 +225,7 @@ public class SQLStore implements EventStore, LifecycleListener {
       Connection conn = ds.getConnection();
       Statement stat = conn.createStatement();
       try {
-        stat.execute(String.format("DELETE FROM %s WHERE project = '%s'",
-            TABLE_NAME, project));
+        sql.executeRemoveProjectEntries(stat, project);
       } finally {
         closeStatement(stat);
         closeConnection(conn);
@@ -218,7 +238,7 @@ public class SQLStore implements EventStore, LifecycleListener {
   private void closeResultSet(ResultSet resultSet) {
     if (resultSet != null) {
       try {
-        resultSet.close();
+        sql.closeResultSet(resultSet);
       } catch (SQLException e) {
         log.warn("Cannot close result set", e);
       }
@@ -228,7 +248,7 @@ public class SQLStore implements EventStore, LifecycleListener {
   private void closeStatement(Statement stat) {
     if (stat != null) {
       try {
-        stat.close();
+        sql.closeStatement(stat);
       } catch (SQLException e) {
         log.warn("Cannot close statement", e);
       }
@@ -238,10 +258,14 @@ public class SQLStore implements EventStore, LifecycleListener {
   private void closeConnection(Connection conn) {
     if (conn != null) {
       try {
-        conn.close();
+        sql.closeConnection(conn);
       } catch (SQLException e) {
         log.warn("Cannot close connection", e);
       }
     }
+  }
+
+  public BasicDataSource getDataSource() {
+    return ds;
   }
 }

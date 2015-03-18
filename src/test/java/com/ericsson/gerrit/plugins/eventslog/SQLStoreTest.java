@@ -19,14 +19,16 @@ import static org.junit.Assert.assertEquals;
 import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import org.apache.commons.dbcp.BasicDataSource;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockSupport;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -46,16 +48,27 @@ public class SQLStoreTest {
   private static final String TEST_PATH = "jdbc:h2:mem:";
   private static final String TEST_DRIVER = "org.h2.Driver";
   private static final String TEST_OPTIONS = "DB_CLOSE_DELAY=-1";
+  private static final String TERM_CONN_MSG = "terminating connection";
+  private static final String MSG = "message";
 
   private EasyMockSupport easyMock;
   private ProjectControl.GenericFactory pcFactoryMock;
   private Provider<CurrentUser> userProviderMock;
   private EventsLogConfig cfgMock;
+  private SQLException SQLExceptionMock;
+  private ConnectException connException;
+  private SQLHandler handler;
   private SQLStore store;
+
+  private String path = TEST_PATH + TABLE_NAME + ";" + TEST_OPTIONS;
+  private Connection conn;
+  private Statement stat;
 
   @SuppressWarnings("unchecked")
   @Before
-  public void setUp() {
+  public void setUp() throws SQLException {
+    conn = DriverManager.getConnection(path);
+    stat = conn.createStatement();
     easyMock = new EasyMockSupport();
     pcFactoryMock = easyMock.createNiceMock(ProjectControl.GenericFactory.class);
     userProviderMock = easyMock.createNiceMock(Provider.class);
@@ -64,20 +77,34 @@ public class SQLStoreTest {
     expect(cfgMock.getUrlOptions()).andReturn(TEST_OPTIONS).once();
     expect(cfgMock.getStoreDriver()).andReturn(TEST_DRIVER).once();
     easyMock.replayAll();
-    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock);
+  }
+
+  public void tearDown() throws Exception {
+    stat.execute("DROP TABLE " + TABLE_NAME);
+    store.stop();
+  }
+
+  private void setUpHandler() {
+    handler = new SQLHandler(cfgMock);
+    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, handler);
     store.start();
   }
 
-  @After
-  public void tearDown() throws Exception {
-    String path = TEST_PATH + TABLE_NAME + ";" + TEST_OPTIONS;
-    Connection conn = DriverManager.getConnection(path);
-    Statement stat = conn.createStatement();
-    stat.execute("DROP TABLE " + TABLE_NAME);
+  private void setUpHandlerMock() {
+    handler = easyMock.createNiceMock(SQLHandler.class);
+    cfgMock = easyMock.createNiceMock(EventsLogConfig.class);
+    SQLExceptionMock = easyMock.createNiceMock(SQLException.class);
+    connException = easyMock.createNiceMock(ConnectException.class);
+    easyMock.resetAll();
+
+    expect(cfgMock.getStoreUrl()).andReturn(TEST_PATH).once();
+    expect(cfgMock.getUrlOptions()).andReturn(TEST_OPTIONS).once();
+    expect(cfgMock.getStoreDriver()).andReturn(TEST_DRIVER).once();
   }
 
   @Test
   public void storeThenQueryVisible() throws Exception {
+    setUpHandler();
     String genericQuery = "SELECT * FROM " + TABLE_NAME;
     MockEvent mockEvent = new MockEvent();
     ProjectControl pcMock = easyMock.createNiceMock(ProjectControl.class);
@@ -94,10 +121,12 @@ public class SQLStoreTest {
     String json = gson.toJson(mockEvent);
     assertEquals(1, events.size());
     assertEquals(json, events.get(0));
+    tearDown();
   }
 
   @Test
   public void storeThenQueryNotVisible() throws Exception {
+    setUpHandler();
     String genericQuery = "SELECT * FROM " + TABLE_NAME;
     MockEvent mockEvent = new MockEvent();
     ProjectControl pcMock = easyMock.createNiceMock(ProjectControl.class);
@@ -111,11 +140,13 @@ public class SQLStoreTest {
     store.storeEvent(mockEvent);
     List<String> events = store.queryChangeEvents(genericQuery);
     assertEquals(0, events.size());
+    tearDown();
   }
 
   @Test(expected = MalformedQueryException.class)
   public void throwBadRequestTriggerOnBadQuery()
       throws MalformedQueryException {
+    setUpHandler();
     String badQuery = "bad query";
     easyMock.resetAll();
     easyMock.replayAll();
@@ -125,6 +156,7 @@ public class SQLStoreTest {
 
   @Test
   public void notReturnEventOfNonExistingProject() throws Exception {
+    setUpHandler();
     String genericQuery = "SELECT * FROM " + TABLE_NAME;
     MockEvent mockEvent = new MockEvent();
     Project.NameKey projectMock = easyMock.createMock(Project.NameKey.class);
@@ -137,10 +169,12 @@ public class SQLStoreTest {
     store.storeEvent(mockEvent);
     List<String> events = store.queryChangeEvents(genericQuery);
     assertEquals(0, events.size());
+    tearDown();
   }
 
   @Test
   public void notReturnEventWithNoVisibilityInfo() throws Exception {
+    setUpHandler();
     String genericQuery = "SELECT * FROM " + TABLE_NAME;
     MockEvent mockEvent = new MockEvent();
     Project.NameKey projectMock = easyMock.createMock(Project.NameKey.class);
@@ -153,6 +187,81 @@ public class SQLStoreTest {
     store.storeEvent(mockEvent);
     List<String> events = store.queryChangeEvents(genericQuery);
     assertEquals(0, events.size());
+    tearDown();
+  }
+
+  @Test
+  public void retryOnConnectException() throws Exception {
+    setUpHandlerMock();
+    expect(cfgMock.getMaxTries()).andReturn(3).once();
+    expect(handler.getConnection(EasyMock.anyObject(BasicDataSource.class)))
+    .andReturn(conn).once();
+    expect(handler.getConnection(EasyMock.anyObject(BasicDataSource.class)))
+    .andThrow(SQLExceptionMock).times(3);
+    expect(SQLExceptionMock.getCause()).andReturn(connException).times(3);
+    easyMock.replayAll();
+    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, handler);
+    store.start();
+
+    MockEvent mockEvent = new MockEvent();
+    store.storeEvent(mockEvent);
+    easyMock.verifyAll();
+  }
+
+  @Test
+  public void retryOnMessage() throws Exception {
+    setUpHandlerMock();
+    expect(cfgMock.getMaxTries()).andReturn(3).once();
+    expect(handler.getConnection(EasyMock.anyObject(BasicDataSource.class)))
+    .andReturn(conn).once();
+    expect(handler.getConnection(EasyMock.anyObject(BasicDataSource.class)))
+    .andThrow(SQLExceptionMock).times(3);
+    expect(SQLExceptionMock.getCause()).andReturn(null).times(3);
+    expect(SQLExceptionMock.getMessage()).andReturn(TERM_CONN_MSG).times(3);
+    easyMock.replayAll();
+    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, handler);
+    store.start();
+
+    MockEvent mockEvent = new MockEvent();
+    store.storeEvent(mockEvent);
+    easyMock.verifyAll();
+  }
+
+  @Test
+  public void noRetryOnMessage() throws Exception {
+    setUpHandlerMock();
+    expect(cfgMock.getMaxTries()).andReturn(3).once();
+    expect(handler.getConnection(EasyMock.anyObject(BasicDataSource.class)))
+    .andReturn(conn).once();
+    expect(handler.getConnection(EasyMock.anyObject(BasicDataSource.class)))
+    .andThrow(SQLExceptionMock).once();
+    expect(SQLExceptionMock.getCause()).andReturn(null).once();
+    expect(SQLExceptionMock.getMessage()).andReturn(MSG).once();
+    easyMock.replayAll();
+    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, handler);
+    store.start();
+
+    MockEvent mockEvent = new MockEvent();
+    store.storeEvent(mockEvent);
+    easyMock.verifyAll();
+  }
+
+  @Test
+  public void noRetryOnZeroMaxTries() throws Exception {
+    setUpHandlerMock();
+    expect(cfgMock.getMaxTries()).andReturn(0).once();
+    expect(handler.getConnection(EasyMock.anyObject(BasicDataSource.class)))
+    .andReturn(conn).once();
+    expect(handler.getConnection(EasyMock.anyObject(BasicDataSource.class)))
+    .andThrow(SQLExceptionMock).once();
+    expect(SQLExceptionMock.getCause()).andReturn(connException).once();
+    easyMock.replayAll();
+    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, handler);
+    store.start();
+
+    MockEvent mockEvent = new MockEvent();
+    store.storeEvent(mockEvent);
+    easyMock.verifyAll();
   }
 
   public class MockEvent extends ChangeEvent {
