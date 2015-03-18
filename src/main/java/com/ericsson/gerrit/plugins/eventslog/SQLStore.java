@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -166,19 +167,33 @@ public class SQLStore implements EventStore, LifecycleListener {
       return;
     }
     String json = gson.toJson(event);
-    try {
-      Connection conn = ds.getConnection();
-      Statement stat = conn.createStatement();
+    int failed = 0;
+    boolean retry = true;
+    while (retry) {
       try {
-        stat.execute(format("INSERT INTO %s(%s, %s, %s) ",
-          TABLE_NAME, PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
-          + format("VALUES('%s', '%s', '%s')", projectName.get(), new Timestamp(event.eventCreatedOn * 1000L), json));
-      } finally {
-        closeStatement(stat);
-        closeConnection(conn);
+        Connection conn = ds.getConnection();
+        Statement stat = conn.createStatement();
+        try {
+          stat.execute(format("INSERT INTO %s(%s, %s, %s) ",
+            TABLE_NAME, PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
+            + format("VALUES('%s', '%s', '%s')", projectName.get(), new Timestamp(event.eventCreatedOn * 1000L), json));
+          retry = false;
+        } finally {
+          closeStatement(stat);
+          closeConnection(conn);
+        }
+      } catch (SQLException e) {
+        log.warn("Cannot store ChangeEvent for: " + projectName.get(), e);
+        if (e.getCause() instanceof ConnectException) {
+          if (failed < 2) {
+            failed++;
+            log.info("Retrying store event");
+          } else {
+            log.error("Failed to store event 3 times");
+            retry = false;
+          }
+        }
       }
-    } catch (SQLException e) {
-      log.warn("Cannot store ChangeEvent for: " + projectName.get(), e);
     }
   }
 
