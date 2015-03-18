@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -57,6 +58,8 @@ public class SQLStore implements EventStore, LifecycleListener {
   private final String password;
   private final String driver;
   private final int maxAge;
+  private final int maxTries;
+  private final int waitTime;
   private final Gson gson = new Gson();
 
   private BasicDataSource ds;
@@ -68,6 +71,8 @@ public class SQLStore implements EventStore, LifecycleListener {
       + cfg.getUrlOptions();
     this.driver = cfg.getStoreDriver();
     this.maxAge = cfg.getMaxAge();
+    this.maxTries = cfg.getMaxTries();
+    this.waitTime = cfg.getWaitTime();
     this.username = cfg.getStoreUsername();
     this.password = cfg.getStorePassword();
     this.projectControlFactory = projectControlFactory;
@@ -166,19 +171,45 @@ public class SQLStore implements EventStore, LifecycleListener {
       return;
     }
     String json = gson.toJson(event);
-    try {
-      Connection conn = ds.getConnection();
-      Statement stat = conn.createStatement();
+    int failedConnections = 0;
+    boolean done = false;
+    while (!done) {
       try {
-        stat.execute(format("INSERT INTO %s(%s, %s, %s) ",
-          TABLE_NAME, PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
-          + format("VALUES('%s', '%s', '%s')", projectName.get(), new Timestamp(event.eventCreatedOn * 1000L), json));
-      } finally {
-        closeStatement(stat);
-        closeConnection(conn);
+        Connection conn = ds.getConnection();
+        Statement stat = conn.createStatement();
+        try {
+          stat.execute(format("INSERT INTO %s(%s, %s, %s) ",
+            TABLE_NAME, PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
+            + format("VALUES('%s', '%s', '%s')", projectName.get(),
+                new Timestamp(event.eventCreatedOn * 1000L), json));
+          done = true;
+        } finally {
+          closeStatement(stat);
+          closeConnection(conn);
+        }
+      } catch (SQLException e) {
+        log.warn("Cannot store ChangeEvent for: " + projectName.get() + "\n"
+            + e.toString());
+        if (e.getCause() instanceof ConnectException
+            || e.toString().contains("terminating connection")) {
+          if (maxTries == 0) {
+            done = true;
+          } else if (failedConnections < maxTries) {
+            failedConnections++;
+            log.info("Retrying store event");
+            try {
+              Thread.sleep(waitTime);
+            } catch (InterruptedException e1) {
+              continue;
+            }
+          } else {
+            log.error("Failed to store event " + maxTries + " times");
+            done = true;
+          }
+        } else {
+          done = true;
+        }
       }
-    } catch (SQLException e) {
-      log.warn("Cannot store ChangeEvent for: " + projectName.get(), e);
     }
   }
 
