@@ -68,6 +68,9 @@ public class EventsRestApiServlet extends HttpServlet {
     } catch (MalformedQueryException e) {
       rsp.sendError(HttpServletResponse.SC_BAD_REQUEST);
       return;
+    } catch (ServiceUnavailableException e) {
+      rsp.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+      return;
     }
   }
 

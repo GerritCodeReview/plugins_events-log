@@ -20,6 +20,7 @@ import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
+import com.google.inject.Singleton;
 import com.google.inject.internal.UniqueAnnotations;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -45,5 +46,25 @@ class Module extends AbstractModule {
   @EventPool
   ScheduledThreadPoolExecutor provideEventPool(EventQueue queue) {
     return queue.getPool();
+  }
+
+  @Provides
+  @Singleton
+  @EventsDb
+  SQLClient provideSqlClient(EventsLogConfig cfg) {
+    SQLClient sqlClient =
+        new SQLClient(cfg.getStoreDriver(), cfg.getStoreUrl(),
+            cfg.getUrlOptions());
+    sqlClient.setUsername(cfg.getStoreUsername());
+    sqlClient.setPassword(cfg.getStorePassword());
+    return sqlClient;
+  }
+
+  @Provides
+  @Singleton
+  @LocalEventsDb
+  SQLClient provideLocalSqlClient(EventsLogConfig cfg) {
+    return new SQLClient(cfg.getLocalStoreDriver(), cfg.getLocalStoreUrl(),
+        cfg.getUrlOptions());
   }
 }

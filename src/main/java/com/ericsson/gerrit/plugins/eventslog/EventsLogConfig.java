@@ -17,52 +17,54 @@ package com.ericsson.gerrit.plugins.eventslog;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
+import com.google.gerrit.server.config.SitePaths;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
 public class EventsLogConfig {
-  static final String CONFIG_POOL_SIZE = "threadPoolSize";
   static final String CONFIG_MAX_AGE = "maxAge";
   static final String CONFIG_MAX_TRIES = "maxTries";
   static final String CONFIG_RETURN_LIMIT = "returnLimit";
   static final String CONFIG_DRIVER = "storeDriver";
   static final String CONFIG_URL = "storeUrl";
+  static final String CONFIG_LOCAL_URL = "localStoreUrl";
   static final String CONFIG_URL_OPTIONS = "urlOptions";
   static final String CONFIG_USERNAME = "storeUsername";
   static final String CONFIG_PASSWORD = "storePassword";
   static final String CONFIG_WAIT_TIME = "retryTimeout";
 
-  static final int DEFAULT_POOL_SIZE = 1;
   static final int DEFAULT_MAX_AGE = 30;
   static final int DEFAULT_MAX_TRIES = 3;
   static final int DEFAULT_RETURN_LIMIT = 5000;
   static final int DEFAULT_WAIT_TIME = 1000;
   static final String DEFAULT_DRIVER = "org.h2.Driver";
   static final String DEFAULT_URL = "jdbc:h2:~/db/";
+  static String DEFAULT_LOCAL_URL;
 
-  private int threadPoolSize = DEFAULT_POOL_SIZE;
   private int maxAge = DEFAULT_MAX_AGE;
   private int maxTries = DEFAULT_MAX_TRIES;
   private int returnLimit = DEFAULT_RETURN_LIMIT;
   private int waitTime = DEFAULT_WAIT_TIME;
   private String storeDriver;
   private String storeUrl;
+  private String localStoreUrl;
   private String urlOptions;
   private String storeUsername;
   private String storePassword;
 
   @Inject
-  public EventsLogConfig(PluginConfigFactory cfgFactory,
+  public EventsLogConfig(PluginConfigFactory cfgFactory, SitePaths site,
       @PluginName String pluginName) {
+    DEFAULT_LOCAL_URL = "jdbc:h2:" + site.site_path.toString() + "/events-db/";
     PluginConfig cfg = cfgFactory.getFromGerritConfig(pluginName, true);
-    threadPoolSize = cfg.getInt(CONFIG_POOL_SIZE, DEFAULT_POOL_SIZE);
     maxAge = cfg.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE);
     maxTries = cfg.getInt(CONFIG_MAX_TRIES, DEFAULT_MAX_TRIES);
     returnLimit = cfg.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT);
     waitTime = cfg.getInt(CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME);
     storeDriver = cfg.getString(CONFIG_DRIVER, DEFAULT_DRIVER);
     storeUrl = cfg.getString(CONFIG_URL, DEFAULT_URL);
+    localStoreUrl = cfg.getString(CONFIG_LOCAL_URL, DEFAULT_LOCAL_URL);
     urlOptions = cfg.getString(CONFIG_URL_OPTIONS, "");
     storeUsername = cfg.getString(CONFIG_USERNAME);
     storePassword = cfg.getString(CONFIG_PASSWORD);
@@ -100,11 +102,15 @@ public class EventsLogConfig {
     return storePassword;
   }
 
-  public int getPoolSize() {
-    return threadPoolSize;
-  }
-
   public int getMaxTries() {
     return maxTries;
+  }
+
+  public String getLocalStoreDriver() {
+    return DEFAULT_DRIVER;
+  }
+
+  public String getLocalStoreUrl() {
+    return localStoreUrl;
   }
 }
