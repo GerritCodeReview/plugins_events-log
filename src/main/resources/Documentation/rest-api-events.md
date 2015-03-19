@@ -34,6 +34,14 @@ Response
     ...
   }
 ```
+
+Error
+
+```
+  HTTP/1.1 503 Service Unavailable
+```
+This error message will be shown if the main database is unavailable. Events will
+not be listed until the main database is back in service.
 #### Options
 
 --From Date/Time (t1)

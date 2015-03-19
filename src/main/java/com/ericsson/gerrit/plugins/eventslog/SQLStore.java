@@ -41,47 +41,61 @@ public class SQLStore implements EventStore, LifecycleListener {
 
   private final ProjectControl.GenericFactory projectControlFactory;
   private final Provider<CurrentUser> userProvider;
-  private SQLClient sqlClient;
+  private SQLClient eventsDb;
+  private SQLClient localEventsDb;
+  private final int maxAge;
   private final int maxTries;
   private final int waitTime;
+  private boolean online = true;
 
   @Inject
   SQLStore(ProjectControl.GenericFactory projectControlFactory,
       Provider<CurrentUser> userProvider,
       EventsLogConfig cfg,
-      SQLClient sqlClient) {
+      @EventsDb SQLClient eventsDb,
+      @LocalEventsDb SQLClient localEventsDb) {
+    this.maxAge = cfg.getMaxAge();
     this.maxTries = cfg.getMaxTries();
     this.waitTime = cfg.getWaitTime();
     this.projectControlFactory = projectControlFactory;
     this.userProvider = userProvider;
-    this.sqlClient = sqlClient;
+    this.eventsDb = eventsDb;
+    this.localEventsDb = localEventsDb;
   }
 
   @Override
   public void start() {
-    try {
-      sqlClient.createDBIfNotCreated();
-    } catch (SQLException e) {
-      throw new RuntimeException("Cannot start the database", e);
-    }
-    removeOldEvents();
+    setUp();
   }
 
   @Override
   public void stop() {
     try {
-      sqlClient.close();
+      eventsDb.close();
+    } catch (SQLException e) {
+      throw new RuntimeException("Cannot close datasource ", e);
+    }
+    try {
+      localEventsDb.close();
     } catch (SQLException e) {
       throw new RuntimeException("Cannot close datasource ", e);
     }
   }
 
+  /**
+   * {@inheritDoc}
+   * The events returned are restricted to the projects which are visible to the
+   * user.
+   */
   @Override
   public List<String> queryChangeEvents(String query)
-      throws MalformedQueryException {
+      throws MalformedQueryException, ServiceUnavailableException {
+    if (!online) {
+      throw new ServiceUnavailableException();
+    }
     List<String> events = new ArrayList<>();
     Project.NameKey project = null;
-    for (Entry<String, Collection<String>> entry : sqlClient.getEvents(query)
+    for (Entry<String, Collection<String>> entry : eventsDb.getEvents(query)
         .asMap().entrySet()) {
       try {
         project = new Project.NameKey(entry.getKey());
@@ -101,6 +115,12 @@ public class SQLStore implements EventStore, LifecycleListener {
     return events;
   }
 
+  /**
+   * {@inheritDoc}
+   * If storing the event fails due to a connection problem, storage will be
+   * re-attempted as specified in gerrit.config. After failing the maximum
+   * amount of times, the event will be stored in a local h2 database.
+   */
   @Override
   public void storeEvent(ProjectEvent event) {
     Project.NameKey projectName = event.getProjectNameKey();
@@ -112,15 +132,14 @@ public class SQLStore implements EventStore, LifecycleListener {
     while (!done) {
       done = true;
       try {
-        sqlClient.storeEvent(event);
+        getEventsDb().storeEvent(event);
       } catch (SQLException e) {
         log.warn("Cannot store ChangeEvent for: " + projectName.get(), e);
         if (e.getCause() instanceof ConnectException
             || e.getMessage().contains("terminating connection")) {
-          if (maxTries == 0) {
-          } else if (failedConnections < maxTries - 1) {
+          done = false;
+          if (failedConnections < maxTries - 1) {
             failedConnections++;
-            done = false;
             log.info("Retrying store event");
             try {
               Thread.sleep(waitTime);
@@ -129,25 +148,46 @@ public class SQLStore implements EventStore, LifecycleListener {
             }
           } else {
             log.error("Failed to store event " + maxTries + " times");
+            setOnline(false);
           }
         }
       }
     }
   }
 
+  private void setUp() {
+    try {
+      getEventsDb().createDBIfNotCreated();
+    } catch (SQLException e) {
+      log.warn("Cannot start the database. Events will be stored locally "
+          + "until database connection can be established", e);
+      setOnline(false);
+    }
+    removeOldEvents();
+  }
+
   private void removeOldEvents() {
     try {
-      sqlClient.removeOldEvents();
+      getEventsDb().removeOldEvents(maxAge);
     } catch (SQLException e) {
       log.warn("Cannot remove old entries from database", e);
     }
   }
 
+  private SQLClient getEventsDb() {
+    return online ? eventsDb : localEventsDb;
+  }
+
   private void removeProjectEvents(String project) {
     try {
-      sqlClient.removeProjectEvents(project);
+      eventsDb.removeProjectEvents(project);
     } catch (SQLException e) {
       log.warn("Cannot remove project " + project + " from database", e);
     }
+  }
+
+  private void setOnline(boolean online) {
+    this.online = online;
+    setUp();
   }
 }

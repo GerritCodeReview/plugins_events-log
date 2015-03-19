@@ -7,7 +7,7 @@ File 'gerrit.config'
   [plugin "@PLUGIN@"]
     maxAge = 20
     returnLimit = 10000
-    storeUrl = jdbc:h2:~/gerrit/db
+    storeUrl = jdbc:h2:~/gerrit/db/
     urlOptions = DB_CLOSE_DELAY=10
 
 plugin.@PLUGIN@.maxAge
@@ -27,6 +27,10 @@ plugin.@PLUGIN@.storeUrl
 :    Specify the path to the directory in which to keep the database. When not
      specified, the default path is jdbc:h2:~/db/.
 
+plugin.@PLUGIN@.localStoreUrl
+:    Specify the path to the directory in which to keep the back up database.
+     When not specified, the default path is jdbc:h2:<gerrit_site>/events-db/.
+
 plugin.@PLUGIN@.storeUsername
 :    Username to connect to the database, not defined by default. This value can
      also be defined in secure.config.
@@ -37,10 +41,6 @@ plugin.@PLUGIN@.storePassword
 
 plugin.@PLUGIN@.urlOptions
 :    Options to append to the database url.
-
-plugin.@PLUGIN@.threadPoolSize
-:    Number of threads to allocate for storing events to the database. When not
-     specified, the default value is 1.
 
 plugin.@PLUGIN@.maxTries
 :    Maximum number of times the plugin should attempt to store the event if a

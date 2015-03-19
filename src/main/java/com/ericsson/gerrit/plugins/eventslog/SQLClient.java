@@ -43,17 +43,21 @@ public class SQLClient {
   private static final Logger log = LoggerFactory.getLogger(SQLClient.class);
 
   private BasicDataSource ds;
-  private final int maxAge;
   private final Gson gson = new Gson();
 
   @Inject
-  SQLClient(EventsLogConfig cfg) {
-    this.maxAge = cfg.getMaxAge();
+  SQLClient(String storeDriver, String storeUrl, String urlOptions) {
     ds = new BasicDataSource();
-    ds.setDriverClassName(cfg.getStoreDriver());
-    ds.setUrl(cfg.getStoreUrl() + TABLE_NAME + ";" + cfg.getUrlOptions());
-    ds.setUsername(cfg.getStoreUsername());
-    ds.setPassword(cfg.getStorePassword());
+    ds.setDriverClassName(storeDriver);
+    ds.setUrl(storeUrl + TABLE_NAME + ";" + urlOptions);
+  }
+
+  public void setUsername(String username) {
+    ds.setUsername(username);
+  }
+
+  public void setPassword(String password) {
+    ds.setPassword(password);
   }
 
   public void createDBIfNotCreated() throws SQLException {
@@ -125,7 +129,7 @@ public class SQLClient {
     }
   }
 
-  public void removeOldEvents() throws SQLException {
+  public void removeOldEvents(int maxAge) throws SQLException {
     Connection conn = ds.getConnection();
     Statement stat = conn.createStatement();
     try {
