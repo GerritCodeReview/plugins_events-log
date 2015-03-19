@@ -22,18 +22,16 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public class EventQueue  implements LifecycleListener {
   private final WorkQueue workQueue;
-  private final int poolSize;
   private WorkQueue.Executor pool;
 
   @Inject
-  EventQueue(WorkQueue workQueue, EventsLogConfig config) {
-    this.poolSize = config.getPoolSize();
+  EventQueue(WorkQueue workQueue) {
     this.workQueue = workQueue;
   }
 
   @Override
   public void start() {
-    pool = workQueue.createQueue(poolSize, "Store events");
+    pool = workQueue.createQueue(1, "Store events");
   }
 
   @Override
