@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "26856059_f198e879",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-03-20T14:36:08Z",
+      "side": 1,
+      "message": "I would prefer that you add unit tests for that new code",
+      "range": {
+        "startLine": 174,
+        "startChar": 4,
+        "endLine": 212,
+        "endChar": 7
+      },
+      "revId": "20d244912cc9a7cb07e0c7d8e79e6598e42bc391",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
