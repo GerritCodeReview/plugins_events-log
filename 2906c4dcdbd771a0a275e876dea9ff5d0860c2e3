@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e68ee87f_cf2f3dba",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2015-03-20T03:03:29Z",
+      "side": 1,
+      "message": "Name this \u0027retryTimeout\u0027 or something like that?",
+      "range": {
+        "startLine": 34,
+        "startChar": 42,
+        "endLine": 34,
+        "endChar": 54
+      },
+      "revId": "2906c4dcdbd771a0a275e876dea9ff5d0860c2e3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26856059_f10d486e",
+        "filename": "src/main/resources/Documentation/config.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2015-03-20T03:03:29Z",
+      "side": 1,
+      "message": "Should it be possible to disable retries?  I.e. by setting this to a specific value like 0 or -1.",
+      "revId": "2906c4dcdbd771a0a275e876dea9ff5d0860c2e3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26856059_31ed1004",
+        "filename": "src/main/resources/Documentation/config.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2015-03-20T03:03:29Z",
+      "side": 1,
+      "message": "For consistency, change this to:  \"Defaults to 3 if not provided.\"",
+      "range": {
+        "startLine": 47,
+        "startChar": 41,
+        "endLine": 47,
+        "endChar": 84
+      },
+      "revId": "2906c4dcdbd771a0a275e876dea9ff5d0860c2e3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26856059_d1084461",
+        "filename": "src/main/resources/Documentation/config.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2015-03-20T03:03:29Z",
+      "side": 1,
+      "message": "\"Defaults to 1000ms if not provided.\"",
+      "range": {
+        "startLine": 51,
+        "startChar": 28,
+        "endLine": 51,
+        "endChar": 83
+      },
+      "revId": "2906c4dcdbd771a0a275e876dea9ff5d0860c2e3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
