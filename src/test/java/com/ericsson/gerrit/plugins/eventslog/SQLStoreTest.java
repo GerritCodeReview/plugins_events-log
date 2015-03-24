@@ -14,9 +14,9 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
+import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -38,9 +38,6 @@ import com.google.gerrit.server.project.NoSuchProjectException;
 import com.google.gerrit.server.project.ProjectControl;
 import com.google.gson.Gson;
 import com.google.inject.Provider;
-
-import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
-import com.ericsson.gerrit.plugins.eventslog.SQLStore;
 
 public class SQLStoreTest {
   private static final String TEST_PATH = "jdbc:h2:mem:";
@@ -64,7 +61,7 @@ public class SQLStoreTest {
     expect(cfgMock.getUrlOptions()).andReturn(TEST_OPTIONS).once();
     expect(cfgMock.getStoreDriver()).andReturn(TEST_DRIVER).once();
     easyMock.replayAll();
-    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock);
+    store = new SQLStore(pcFactoryMock, userProviderMock, new SQLClient(cfgMock));
     store.start();
   }
 

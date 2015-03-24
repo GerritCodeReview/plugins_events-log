@@ -14,12 +14,15 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.DATE_ENTRY;
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.EVENT_ENTRY;
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.PRIMARY_ENTRY;
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.PROJECT_ENTRY;
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
-import static java.lang.String.format;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map.Entry;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.reviewdb.client.Project;
@@ -27,24 +30,9 @@ import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.events.ProjectEvent;
 import com.google.gerrit.server.project.NoSuchProjectException;
 import com.google.gerrit.server.project.ProjectControl;
-import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-
-import org.apache.commons.dbcp.BasicDataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Singleton
 public class SQLStore implements EventStore, LifecycleListener {
@@ -52,109 +40,57 @@ public class SQLStore implements EventStore, LifecycleListener {
 
   private final ProjectControl.GenericFactory projectControlFactory;
   private final Provider<CurrentUser> userProvider;
-  private final String path;
-  private final String username;
-  private final String password;
-  private final String driver;
-  private final int maxAge;
-  private final Gson gson = new Gson();
-
-  private BasicDataSource ds;
+  private SQLClient sqlClient;
 
   @Inject
   SQLStore(ProjectControl.GenericFactory projectControlFactory,
-      Provider<CurrentUser> userProvider, EventsLogConfig cfg) {
-    this.path = cfg.getStoreUrl() + TABLE_NAME + ";"
-      + cfg.getUrlOptions();
-    this.driver = cfg.getStoreDriver();
-    this.maxAge = cfg.getMaxAge();
-    this.username = cfg.getStoreUsername();
-    this.password = cfg.getStorePassword();
+      Provider<CurrentUser> userProvider,
+      SQLClient sqlClient) {
     this.projectControlFactory = projectControlFactory;
     this.userProvider = userProvider;
+    this.sqlClient = sqlClient;
   }
 
   @Override
   public void start() {
     try {
-      ds = new BasicDataSource();
-      ds.setDriverClassName(driver);
-      ds.setUrl(path);
-      ds.setUsername(username);
-      ds.setPassword(password);
-      Connection conn = ds.getConnection();
-
-      StringBuilder query = new StringBuilder();
-      query.append(format("CREATE TABLE IF NOT EXISTS %s(", TABLE_NAME));
-      if (ds.getDriverClassName().contains("postgresql")) {
-        query.append(format("%s SERIAL PRIMARY KEY,", PRIMARY_ENTRY));
-      } else {
-        query.append(format("%s INT AUTO_INCREMENT PRIMARY KEY,", PRIMARY_ENTRY));
-      }
-      query.append(format("%s VARCHAR(255),", PROJECT_ENTRY));
-      query.append(format("%s TIMESTAMP DEFAULT NOW(),", DATE_ENTRY));
-      query.append(format("%s TEXT)", EVENT_ENTRY));
-
-      Statement stat = conn.createStatement();
-      try {
-        stat.execute(query.toString());
-      } finally {
-        closeStatement(stat);
-        closeConnection(conn);
-      }
+      sqlClient.createDBIfNotCreated();
     } catch (SQLException e) {
       throw new RuntimeException("Cannot start the database", e);
     }
-    removeOldEntries();
+    removeOldEvents();
   }
 
   @Override
   public void stop() {
     try {
-       ds.close();
-     } catch (SQLException e) {
-       throw new RuntimeException("Cannot close datasource ", e);
-     }
+      sqlClient.close();
+    } catch (SQLException e) {
+      throw new RuntimeException("Cannot close datasource ", e);
+    }
   }
 
   @Override
   public List<String> queryChangeEvents(String query)
       throws MalformedQueryException {
     List<String> events = new ArrayList<>();
-    Connection conn = null;
-    Statement stat = null;
-    ResultSet rs = null;
-    try {
-      conn = ds.getConnection();
-      stat = conn.createStatement();
+    Project.NameKey project = null;
+    for (Entry<String, Collection<String>> entry : sqlClient.getEvents(query)
+        .asMap().entrySet()) {
       try {
-        Project.NameKey project = null;
-        rs = stat.executeQuery(query);
-        while (rs.next()) {
-          try {
-            project = new Project.NameKey(rs.getString(PROJECT_ENTRY));
-            if (projectControlFactory.controlFor(project, userProvider.get())
-                .isVisible()) {
-              events.add(rs.getString(EVENT_ENTRY));
-            }
-          } catch (NoSuchProjectException e) {
-            log.warn("Database contains a non-existing project, " + project.get()
-                + ", removing project from database", e);
-            removeProjectEntries(project.get());
-          } catch (IOException e) {
-            log.warn("Cannot get project visibility info for " + project.get()
-                + " from cache", e);
-          }
+        project = new Project.NameKey(entry.getKey());
+        if (projectControlFactory.controlFor(project, userProvider.get())
+            .isVisible()) {
+          events.addAll(entry.getValue());
         }
-      } catch (SQLException e) {
-        throw new MalformedQueryException(e);
+      } catch (NoSuchProjectException e) {
+        log.warn("Database contains a non-existing project, " + project.get()
+            + ", removing project from database", e);
+        removeProjectEvents(project.get());
+      } catch (IOException e) {
+        log.warn("Cannot get project visibility info for " + project.get()
+            + " from cache", e);
       }
-    } catch (SQLException e) {
-      throw new RuntimeException("Cannot query database", e);
-    } finally {
-      closeResultSet(rs);
-      closeStatement(stat);
-      closeConnection(conn);
     }
     return events;
   }
@@ -165,83 +101,26 @@ public class SQLStore implements EventStore, LifecycleListener {
     if (projectName == null) {
       return;
     }
-    String json = gson.toJson(event);
     try {
-      Connection conn = ds.getConnection();
-      Statement stat = conn.createStatement();
-      try {
-        stat.execute(format("INSERT INTO %s(%s, %s, %s) ",
-          TABLE_NAME, PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
-          + format("VALUES('%s', '%s', '%s')", projectName.get(), new Timestamp(event.eventCreatedOn * 1000L), json));
-      } finally {
-        closeStatement(stat);
-        closeConnection(conn);
-      }
+      sqlClient.storeEvent(event);
     } catch (SQLException e) {
       log.warn("Cannot store ChangeEvent for: " + projectName.get(), e);
     }
   }
 
-  private void removeOldEntries() {
+  private void removeOldEvents() {
     try {
-      Connection conn = ds.getConnection();
-      Statement stat = conn.createStatement();
-      try {
-        stat.execute(format("DELETE FROM %s WHERE %s < '%s'", TABLE_NAME,
-            DATE_ENTRY, new Timestamp(System.currentTimeMillis()
-                - TimeUnit.MILLISECONDS.convert(maxAge, TimeUnit.DAYS))));
-      } finally {
-        closeStatement(stat);
-        closeConnection(conn);
-      }
+      sqlClient.removeOldEvents();
     } catch (SQLException e) {
       log.warn("Cannot remove old entries from database", e);
     }
   }
 
-  private void removeProjectEntries(String project) {
+  private void removeProjectEvents(String project) {
     try {
-      Connection conn = ds.getConnection();
-      Statement stat = conn.createStatement();
-      try {
-        stat.execute(String.format("DELETE FROM %s WHERE project = '%s'",
-            TABLE_NAME, project));
-      } finally {
-        closeStatement(stat);
-        closeConnection(conn);
-      }
+      sqlClient.removeProjectEvents(project);
     } catch (SQLException e) {
       log.warn("Cannot remove project " + project + " from database", e);
-    }
-  }
-
-  private void closeResultSet(ResultSet resultSet) {
-    if (resultSet != null) {
-      try {
-        resultSet.close();
-      } catch (SQLException e) {
-        log.warn("Cannot close result set", e);
-      }
-    }
-  }
-
-  private void closeStatement(Statement stat) {
-    if (stat != null) {
-      try {
-        stat.close();
-      } catch (SQLException e) {
-        log.warn("Cannot close statement", e);
-      }
-    }
-  }
-
-  private void closeConnection(Connection conn) {
-    if (conn != null) {
-      try {
-        conn.close();
-      } catch (SQLException e) {
-        log.warn("Cannot close connection", e);
-      }
     }
   }
 }
