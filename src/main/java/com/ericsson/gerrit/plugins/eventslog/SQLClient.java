@@ -163,7 +163,7 @@ public class SQLClient {
   private void closeStatement(Statement stat) {
     if (stat != null) {
       try {
-        stat.close();;
+        stat.close();
       } catch (SQLException e) {
         log.warn("Cannot close statement", e);
       }

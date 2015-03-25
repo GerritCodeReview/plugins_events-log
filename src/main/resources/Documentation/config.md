@@ -39,5 +39,14 @@ plugin.@PLUGIN@.urlOptions
 :    Options to append to the database url.
 
 plugin.@PLUGIN@.threadPoolSize
-:    Number of threads to allocate for storing events to the database. Defaults
-     to 1 if not provided.
+:    Number of threads to allocate for storing events to the database. When not
+     specified, the default value is 1.
+
+plugin.@PLUGIN@.maxTries
+:    Maximum number of times the plugin should attempt to store the event if a
+     loss in database connection occurs. Setting this value to 0 will disable
+     retries. When not specified, the default value is 3.
+
+plugin.@PLUGIN@.retryTimeout
+:    Amount of time in milliseconds for which the plugin should wait in between
+     event storage retries. When not specified, the default value is set to 1000ms.

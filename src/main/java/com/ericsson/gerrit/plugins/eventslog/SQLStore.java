@@ -15,6 +15,7 @@
 package com.ericsson.gerrit.plugins.eventslog;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,11 +42,16 @@ public class SQLStore implements EventStore, LifecycleListener {
   private final ProjectControl.GenericFactory projectControlFactory;
   private final Provider<CurrentUser> userProvider;
   private SQLClient sqlClient;
+  private final int maxTries;
+  private final int waitTime;
 
   @Inject
   SQLStore(ProjectControl.GenericFactory projectControlFactory,
       Provider<CurrentUser> userProvider,
+      EventsLogConfig cfg,
       SQLClient sqlClient) {
+    this.maxTries = cfg.getMaxTries();
+    this.waitTime = cfg.getWaitTime();
     this.projectControlFactory = projectControlFactory;
     this.userProvider = userProvider;
     this.sqlClient = sqlClient;
@@ -101,10 +107,31 @@ public class SQLStore implements EventStore, LifecycleListener {
     if (projectName == null) {
       return;
     }
-    try {
-      sqlClient.storeEvent(event);
-    } catch (SQLException e) {
-      log.warn("Cannot store ChangeEvent for: " + projectName.get(), e);
+    int failedConnections = 0;
+    boolean done = false;
+    while (!done) {
+      done = true;
+      try {
+        sqlClient.storeEvent(event);
+      } catch (SQLException e) {
+        log.warn("Cannot store ChangeEvent for: " + projectName.get(), e);
+        if (e.getCause() instanceof ConnectException
+            || e.getMessage().contains("terminating connection")) {
+          if (maxTries == 0) {
+          } else if (failedConnections < maxTries - 1) {
+            failedConnections++;
+            done = false;
+            log.info("Retrying store event");
+            try {
+              Thread.sleep(waitTime);
+            } catch (InterruptedException e1) {
+              continue;
+            }
+          } else {
+            log.error("Failed to store event " + maxTries + " times");
+          }
+        }
+      }
     }
   }
 
