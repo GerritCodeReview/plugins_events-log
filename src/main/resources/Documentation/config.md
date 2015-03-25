@@ -45,8 +45,14 @@ plugin.@PLUGIN@.urlOptions
 plugin.@PLUGIN@.maxTries
 :    Maximum number of times the plugin should attempt to store the event if a
      loss in database connection occurs. Setting this value to 0 will disable
-     retries. When not specified, the default value is 3.
+     retries. When not specified, the default value is 3. After this number of
+     failed tries, events shall be stored in the back up database until connection
+     can be established.
 
 plugin.@PLUGIN@.retryTimeout
 :    Amount of time in milliseconds for which the plugin should wait in between
      event storage retries. When not specified, the default value is set to 1000ms.
+
+plugin.@PLUGIN@.connectTimeout
+:    Interval of time in milliseconds for which the plugin should try to reconnect
+     to the database. When not specified, the default value is set to 1000ms.
