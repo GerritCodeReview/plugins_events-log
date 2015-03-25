@@ -26,6 +26,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.dbcp.BasicDataSource;
@@ -129,6 +131,19 @@ public class SQLClient {
     }
   }
 
+  public void storeEvent(String projectName, Timestamp timestamp, String event) throws SQLException {
+    Connection conn = ds.getConnection();
+    Statement stat = conn.createStatement();
+    try {
+      stat.execute(format("INSERT INTO %s(%s, %s, %s) ", TABLE_NAME,
+          PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
+          + format("VALUES('%s', '%s', '%s')", projectName, timestamp, event));
+    } finally {
+      closeStatement(stat);
+      closeConnection(conn);
+    }
+  }
+
   public void removeOldEvents(int maxAge) throws SQLException {
     Connection conn = ds.getConnection();
     Statement stat = conn.createStatement();
@@ -149,6 +164,40 @@ public class SQLClient {
       stat.execute(String.format("DELETE FROM %s WHERE project = '%s'",
           TABLE_NAME, project));
     } finally {
+      closeStatement(stat);
+      closeConnection(conn);
+    }
+  }
+
+  public void queryOne() throws SQLException {
+    Connection conn = null;
+    Statement stat = null;
+    try {
+      conn = ds.getConnection();
+      stat = conn.createStatement();
+      stat.executeQuery("SELECT * FROM " + TABLE_NAME + " LIMIT 1");
+    } finally {
+      closeStatement(stat);
+      closeConnection(conn);
+    }
+  }
+
+  public List<Result> getAll() throws SQLException {
+    List<Result> result = new ArrayList<>();
+    Connection conn = null;
+    Statement stat = null;
+    ResultSet rs = null;
+    try {
+      conn = ds.getConnection();
+      stat = conn.createStatement();
+      rs = stat.executeQuery("SELECT * FROM " + TABLE_NAME);
+      while (rs.next()) {
+        result.add(new Result(rs.getString(PROJECT_ENTRY), rs.getTimestamp(DATE_ENTRY),
+            rs.getString(EVENT_ENTRY)));
+      }
+      return result;
+    } finally {
+      closeResultSet(rs);
       closeStatement(stat);
       closeConnection(conn);
     }
@@ -181,6 +230,30 @@ public class SQLClient {
       } catch (SQLException e) {
         log.warn("Cannot close connection", e);
       }
+    }
+  }
+
+  class Result {
+    private String name;
+    private Timestamp timestamp;
+    private String event;
+
+    Result(String name, Timestamp timestamp, String event){
+      this.name = name;
+      this.timestamp = timestamp;
+      this.event = event;
+    }
+
+    public String getName() {
+      return name;
+    }
+
+    public Timestamp getTimestamp() {
+      return timestamp;
+    }
+
+    public String getEvent() {
+      return event;
     }
   }
 }

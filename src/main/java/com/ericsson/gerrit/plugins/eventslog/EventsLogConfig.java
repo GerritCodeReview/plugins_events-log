@@ -33,11 +33,13 @@ public class EventsLogConfig {
   static final String CONFIG_USERNAME = "storeUsername";
   static final String CONFIG_PASSWORD = "storePassword";
   static final String CONFIG_WAIT_TIME = "retryTimeout";
+  static final String CONFIG_CONN_TIME = "connectTimeout";
 
   static final int DEFAULT_MAX_AGE = 30;
   static final int DEFAULT_MAX_TRIES = 3;
   static final int DEFAULT_RETURN_LIMIT = 5000;
   static final int DEFAULT_WAIT_TIME = 1000;
+  static final int DEFAULT_CONN_TIME = 1000;
   static final String DEFAULT_DRIVER = "org.h2.Driver";
   static final String DEFAULT_URL = "jdbc:h2:~/db/";
   static String DEFAULT_LOCAL_URL;
@@ -46,6 +48,7 @@ public class EventsLogConfig {
   private int maxTries = DEFAULT_MAX_TRIES;
   private int returnLimit = DEFAULT_RETURN_LIMIT;
   private int waitTime = DEFAULT_WAIT_TIME;
+  private int connectTime = DEFAULT_CONN_TIME;
   private String storeDriver;
   private String storeUrl;
   private String localStoreUrl;
@@ -62,6 +65,7 @@ public class EventsLogConfig {
     maxTries = cfg.getInt(CONFIG_MAX_TRIES, DEFAULT_MAX_TRIES);
     returnLimit = cfg.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT);
     waitTime = cfg.getInt(CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME);
+    connectTime = cfg.getInt(CONFIG_CONN_TIME, DEFAULT_CONN_TIME);
     storeDriver = cfg.getString(CONFIG_DRIVER, DEFAULT_DRIVER);
     storeUrl = cfg.getString(CONFIG_URL, DEFAULT_URL);
     localStoreUrl = cfg.getString(CONFIG_LOCAL_URL, DEFAULT_LOCAL_URL);
@@ -80,6 +84,10 @@ public class EventsLogConfig {
 
   public int getWaitTime() {
     return waitTime;
+  }
+
+  public int getConnectTime() {
+    return connectTime;
   }
 
   public String getStoreDriver() {
