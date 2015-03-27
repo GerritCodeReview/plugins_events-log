@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "83a8be5c_84d76643",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventQueue.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-03-27T14:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c343967f_5ec995a5",
+      "revId": "aa2b5b9988022d192cff3fbcb954ef70f83c11a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83a8be5c_64bfcaf4",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/Module.java",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2015-03-27T13:58:02Z",
       "side": 1,
       "message": "exceeding 72 chars",
+      "revId": "aa2b5b9988022d192cff3fbcb954ef70f83c11a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c343967f_3ee3e920",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/Module.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-03-27T14:50:27Z",
+      "side": 1,
+      "message": "In file, maximum line width is 80 chars",
+      "parentUuid": "83a8be5c_64bfcaf4",
       "revId": "aa2b5b9988022d192cff3fbcb954ef70f83c11a2",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "83a8be5c_c4cd5eb3",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-03-27T14:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c343967f_7ec45191",
+      "revId": "aa2b5b9988022d192cff3fbcb954ef70f83c11a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c343967f_becd39b4",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
         "patchSetId": 2
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "c343967f_7edd715d",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-03-27T14:50:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c343967f_becd39b4",
+      "revId": "aa2b5b9988022d192cff3fbcb954ef70f83c11a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c343967f_9ecafd97",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/ServiceUnavailableException.java",
         "patchSetId": 2
@@ -81,6 +153,24 @@
       "writtenOn": "2015-03-27T13:58:02Z",
       "side": 1,
       "message": "exceeding 72 chars here and in a few other places",
+      "revId": "aa2b5b9988022d192cff3fbcb954ef70f83c11a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c343967f_1ee8adf7",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/ServiceUnavailableException.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-03-27T14:50:27Z",
+      "side": 1,
+      "message": "we use 80 chars in file",
+      "parentUuid": "c343967f_9ecafd97",
       "revId": "aa2b5b9988022d192cff3fbcb954ef70f83c11a2",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
