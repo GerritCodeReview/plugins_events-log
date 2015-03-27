@@ -14,6 +14,9 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
+import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
+
+import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.sql.SQLException;
@@ -28,6 +31,8 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.io.Files;
+import com.google.gerrit.common.TimeUtil;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.CurrentUser;
@@ -53,8 +58,10 @@ public class SQLStore implements EventStore, LifecycleListener {
   private final int waitTime;
   private final int connectTime;
   private boolean online = true;
+  private boolean copyLocal;
   private final ScheduledThreadPoolExecutor pool;
   private ScheduledFuture<?> task;
+  private String localUrl;
 
   @Inject
   SQLStore(ProjectControl.GenericFactory projectControlFactory,
@@ -67,11 +74,13 @@ public class SQLStore implements EventStore, LifecycleListener {
     this.maxTries = cfg.getMaxTries();
     this.waitTime = cfg.getWaitTime();
     this.connectTime = cfg.getConnectTime();
+    this.copyLocal = cfg.getCopyLocal();
     this.projectControlFactory = projectControlFactory;
     this.userProvider = userProvider;
     this.eventsDb = eventsDb;
     this.localEventsDb = localEventsDb;
     this.pool = pool;
+    this.localUrl = cfg.getLocalStoreUrl();
   }
 
   @Override
@@ -214,6 +223,9 @@ public class SQLStore implements EventStore, LifecycleListener {
   }
 
   private void restoreEventsFromLocal() {
+    if (copyLocal) {
+      copyFile();
+    }
     List<Result> results;
     try {
       results = localEventsDb.getAll();
@@ -260,6 +272,17 @@ public class SQLStore implements EventStore, LifecycleListener {
     @Override
     public String toString() {
       return "(Events-log) Connect to database";
+    }
+  }
+
+  private void copyFile() {
+    String localFile = localUrl.substring(localUrl.indexOf("/")).concat(TABLE_NAME);
+    String copiedFile = localFile + (TimeUtil.nowMs() / 1000L);
+    try {
+      Files.copy(new File(localFile.concat(".h2.db")),
+          new File(copiedFile.concat(".h2.db")));
+    } catch (IOException e1) {
+      log.warn("Could not copy local database file with timestamp");
     }
   }
 }
