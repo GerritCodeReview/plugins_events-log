@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c343967f_5ec995a5",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventQueue.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-03-27T13:58:02Z",
+      "side": 1,
+      "message": "missing javadoc for at least the meaningful public methods",
+      "revId": "aa2b5b9988022d192cff3fbcb954ef70f83c11a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "83a8be5c_64bfcaf4",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/Module.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-03-27T13:58:02Z",
+      "side": 1,
+      "message": "exceeding 72 chars",
+      "revId": "aa2b5b9988022d192cff3fbcb954ef70f83c11a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c343967f_7ec45191",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-03-27T13:58:02Z",
+      "side": 1,
+      "message": "could the above close throw an exception, preventing the below close from being attempted? if so, need to wrap the below close so it gets tried no matter what",
+      "revId": "aa2b5b9988022d192cff3fbcb954ef70f83c11a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c343967f_becd39b4",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-03-27T13:58:02Z",
+      "side": 1,
+      "message": "missing javadoc for at least the meaningful public methods",
+      "revId": "aa2b5b9988022d192cff3fbcb954ef70f83c11a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c343967f_9ecafd97",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/ServiceUnavailableException.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-03-27T13:58:02Z",
+      "side": 1,
+      "message": "exceeding 72 chars here and in a few other places",
+      "revId": "aa2b5b9988022d192cff3fbcb954ef70f83c11a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
