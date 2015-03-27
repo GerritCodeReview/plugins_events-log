@@ -23,6 +23,7 @@ import com.google.inject.Singleton;
 
 @Singleton
 public class EventsLogConfig {
+  static final String CONFIG_COPY_LOCAL = "copyLocal";
   static final String CONFIG_MAX_AGE = "maxAge";
   static final String CONFIG_MAX_TRIES = "maxTries";
   static final String CONFIG_RETURN_LIMIT = "returnLimit";
@@ -35,6 +36,7 @@ public class EventsLogConfig {
   static final String CONFIG_WAIT_TIME = "retryTimeout";
   static final String CONFIG_CONN_TIME = "connectTimeout";
 
+  static final boolean DEFAULT_COPY_LOCAL = false;
   static final int DEFAULT_MAX_AGE = 30;
   static final int DEFAULT_MAX_TRIES = 3;
   static final int DEFAULT_RETURN_LIMIT = 5000;
@@ -44,6 +46,7 @@ public class EventsLogConfig {
   static final String DEFAULT_URL = "jdbc:h2:~/db/";
   static String DEFAULT_LOCAL_URL;
 
+  private boolean copyLocal = DEFAULT_COPY_LOCAL;
   private int maxAge = DEFAULT_MAX_AGE;
   private int maxTries = DEFAULT_MAX_TRIES;
   private int returnLimit = DEFAULT_RETURN_LIMIT;
@@ -61,6 +64,7 @@ public class EventsLogConfig {
       @PluginName String pluginName) {
     DEFAULT_LOCAL_URL = "jdbc:h2:" + site.site_path.toString() + "/events-db/";
     PluginConfig cfg = cfgFactory.getFromGerritConfig(pluginName, true);
+    copyLocal = cfg.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL);
     maxAge = cfg.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE);
     maxTries = cfg.getInt(CONFIG_MAX_TRIES, DEFAULT_MAX_TRIES);
     returnLimit = cfg.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT);
@@ -120,5 +124,9 @@ public class EventsLogConfig {
 
   public String getLocalStoreUrl() {
     return localStoreUrl;
+  }
+
+  public boolean getCopyLocal() {
+    return copyLocal;
   }
 }

@@ -9,6 +9,7 @@ File 'gerrit.config'
     returnLimit = 10000
     storeUrl = jdbc:h2:~/gerrit/db/
     urlOptions = DB_CLOSE_DELAY=10
+    copyLocal = true
 
 plugin.@PLUGIN@.maxAge
 :    Specify the maximum allowed age in days of the entries in the database.
@@ -56,3 +57,10 @@ plugin.@PLUGIN@.retryTimeout
 plugin.@PLUGIN@.connectTimeout
 :    Interval of time in milliseconds for which the plugin should try to reconnect
      to the database. When not specified, the default value is set to 1000ms.
+
+plugin.@PLUGIN@.copyLocal
+:    To keep a copy of the backup database once main database connection is
+     restored, set to true. The file will be copied to the same location as the
+     backup database with a timestamp appended. Note that the copied file will
+     not be deleted and must be removed manually. When not specified, the default
+     value is set to false.
