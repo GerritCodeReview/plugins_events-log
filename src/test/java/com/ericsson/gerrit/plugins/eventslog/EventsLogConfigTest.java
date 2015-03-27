@@ -15,6 +15,7 @@
 package com.ericsson.gerrit.plugins.eventslog;
 
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_CONN_TIME;
+import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_COPY_LOCAL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_DRIVER;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_MAX_AGE;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_PASSWORD;
@@ -23,6 +24,7 @@ import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_URL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_URL_OPTIONS;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_USERNAME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_CONN_TIME;
+import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_COPY_LOCAL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_DRIVER;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_MAX_AGE;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_RETURN_LIMIT;
@@ -60,6 +62,7 @@ public class EventsLogConfigTest {
     site = new SitePaths(gerrit_site.getRoot());
     site.etc_dir.mkdirs();
     configMock = easyMock.createNiceMock(PluginConfig.class);
+    expect(configMock.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL)).andReturn(DEFAULT_COPY_LOCAL);
     expect(configMock.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE)).andReturn(DEFAULT_MAX_AGE);
     expect(configMock.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT)).andReturn(DEFAULT_RETURN_LIMIT);
     expect(configMock.getInt(CONFIG_CONN_TIME, DEFAULT_CONN_TIME)).andReturn(DEFAULT_CONN_TIME);
@@ -74,6 +77,7 @@ public class EventsLogConfigTest {
         EasyMock.anyBoolean())).andStubReturn(configMock);
 
     configMock2 = easyMock.createNiceMock(PluginConfig.class);
+    expect(configMock2.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL)).andReturn(true);
     expect(configMock2.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE)).andReturn(20);
     expect(configMock2.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT)).andReturn(10000);
     expect(configMock2.getInt(CONFIG_CONN_TIME, DEFAULT_CONN_TIME)).andReturn(5000);
@@ -91,6 +95,7 @@ public class EventsLogConfigTest {
   @Test
   public void shouldReturnDefaultsWhenMissingConfig() {
     config = new EventsLogConfig(cfgFactoryMock, site, null);
+    assertEquals(false, config.getCopyLocal());
     assertEquals(30, config.getMaxAge());
     assertEquals(5000, config.getReturnLimit());
     assertEquals(1000, config.getConnectTime());
@@ -104,6 +109,7 @@ public class EventsLogConfigTest {
   @Test
   public void shouldReturnConfigValues() {
     config = new EventsLogConfig(cfgFactoryMock2, site, null);
+    assertEquals(true, config.getCopyLocal());
     assertEquals(20, config.getMaxAge());
     assertEquals(10000, config.getReturnLimit());
     assertEquals(5000, config.getConnectTime());
