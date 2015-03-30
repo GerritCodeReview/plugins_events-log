@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "235c7263_39082f5d",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-03-30T14:51:29Z",
+      "side": 1,
+      "message": "Yes, I think it will be better to use paths here.",
+      "parentUuid": "e355fa39_57e20c19",
+      "revId": "364999e894c7dd6439ec15391a308c508bc834e5",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e355fa39_3708385d",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-03-30T14:04:50Z",
       "side": 1,
       "message": "might want to make \u0027.h2.db\u0027 a reusable /reused constant",
+      "revId": "364999e894c7dd6439ec15391a308c508bc834e5",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e355fa39_b7fba8bb",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-03-30T14:51:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e355fa39_3708385d",
       "revId": "364999e894c7dd6439ec15391a308c508bc834e5",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "e355fa39_97f824c0",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-03-30T14:51:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e355fa39_f7f080e0",
+      "revId": "364999e894c7dd6439ec15391a308c508bc834e5",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "235c7263_f9f077e0",
         "filename": "src/main/resources/Documentation/config.md",
         "patchSetId": 1
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "235c7263_d9edb304",
+        "filename": "src/main/resources/Documentation/config.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-03-30T14:51:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "235c7263_f9f077e0",
+      "revId": "364999e894c7dd6439ec15391a308c508bc834e5",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e355fa39_170d346d",
         "filename": "src/main/resources/Documentation/config.md",
         "patchSetId": 1
@@ -81,6 +153,24 @@
       "writtenOn": "2015-03-30T14:04:50Z",
       "side": 1,
       "message": "(idem)",
+      "revId": "364999e894c7dd6439ec15391a308c508bc834e5",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e355fa39_5717ac7e",
+        "filename": "src/main/resources/Documentation/config.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-03-30T14:51:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e355fa39_170d346d",
       "revId": "364999e894c7dd6439ec15391a308c508bc834e5",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
