@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e355fa39_37e31821",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-03-30T12:20:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83a8be5c_a4edc204",
+      "revId": "5756bb51031ee1aaac1085b24a779981f8e832a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83a8be5c_44088e5d",
         "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfigTest.java",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "235c7263_b9f6ffdb",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfigTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-03-30T12:20:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83a8be5c_44088e5d",
+      "revId": "5756bb51031ee1aaac1085b24a779981f8e832a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83a8be5c_640d8a6c",
         "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfigTest.java",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2015-03-27T17:27:25Z",
       "side": 1,
       "message": "could alpha-sort this added one too (above)",
+      "revId": "5756bb51031ee1aaac1085b24a779981f8e832a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e355fa39_17e894f7",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfigTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-03-30T12:20:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "83a8be5c_640d8a6c",
       "revId": "5756bb51031ee1aaac1085b24a779981f8e832a9",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
