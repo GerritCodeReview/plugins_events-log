@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e355fa39_57e20c19",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2015-03-30T12:57:10Z",
+      "side": 1,
+      "message": "Just wondering if we musn\u0027t evaluate the new java.nio API for future developments to replace string urls by Path objects. One of the advantages is most operations are simpler because we don\u0027t need to use String methods like substring or concatenation. When used correctly, the Path methods resolve, relativize and subpath allow us to build file paths easier and with less errors.",
+      "revId": "364999e894c7dd6439ec15391a308c508bc834e5",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
