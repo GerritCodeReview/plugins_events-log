@@ -89,7 +89,7 @@ public class SQLClient {
     ds.close();
   }
 
-  public ListMultimap<String, String> getEvents(String query)
+  public ListMultimap<String, SQLEntry> getEvents(String query)
       throws MalformedQueryException {
     Connection conn = null;
     Statement stat = null;
@@ -99,9 +99,13 @@ public class SQLClient {
       stat = conn.createStatement();
       try {
         rs = stat.executeQuery(query);
-        ListMultimap<String, String> result = ArrayListMultimap.create();
+        ListMultimap<String, SQLEntry> result = ArrayListMultimap.create();
         while (rs.next()) {
-          result.put(rs.getString(PROJECT_ENTRY), rs.getString(EVENT_ENTRY));
+          result.put(
+              rs.getString(PROJECT_ENTRY),
+              new SQLEntry(rs.getString(PROJECT_ENTRY), rs
+                  .getTimestamp(DATE_ENTRY), rs.getString(EVENT_ENTRY), rs
+                  .getInt(PRIMARY_ENTRY)));
         }
         return result;
       } catch (SQLException e) {
@@ -182,8 +186,8 @@ public class SQLClient {
     }
   }
 
-  public List<Result> getAll() throws SQLException {
-    List<Result> result = new ArrayList<>();
+  public List<SQLEntry> getAll() throws SQLException {
+    List<SQLEntry> entries = new ArrayList<>();
     Connection conn = null;
     Statement stat = null;
     ResultSet rs = null;
@@ -192,10 +196,10 @@ public class SQLClient {
       stat = conn.createStatement();
       rs = stat.executeQuery("SELECT * FROM " + TABLE_NAME);
       while (rs.next()) {
-        result.add(new Result(rs.getString(PROJECT_ENTRY), rs.getTimestamp(DATE_ENTRY),
-            rs.getString(EVENT_ENTRY)));
+        entries.add(new SQLEntry(rs.getString(PROJECT_ENTRY), rs.getTimestamp(DATE_ENTRY),
+            rs.getString(EVENT_ENTRY), rs.getInt(PRIMARY_ENTRY)));
       }
-      return result;
+      return entries;
     } finally {
       closeResultSet(rs);
       closeStatement(stat);
@@ -233,15 +237,17 @@ public class SQLClient {
     }
   }
 
-  class Result {
+  class SQLEntry implements Comparable<SQLEntry> {
     private String name;
     private Timestamp timestamp;
     private String event;
+    private int id;
 
-    Result(String name, Timestamp timestamp, String event){
+    SQLEntry(String name, Timestamp timestamp, String event, int id){
       this.name = name;
       this.timestamp = timestamp;
       this.event = event;
+      this.id = id;
     }
 
     public String getName() {
@@ -254,6 +260,11 @@ public class SQLClient {
 
     public String getEvent() {
       return event;
+    }
+
+    @Override
+    public int compareTo(SQLEntry o) {
+      return this.id - o.id;
     }
   }
 }
