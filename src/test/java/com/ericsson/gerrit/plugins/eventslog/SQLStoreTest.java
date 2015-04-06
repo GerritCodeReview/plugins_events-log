@@ -47,7 +47,7 @@ import com.google.gson.Gson;
 import com.google.inject.Provider;
 
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
-import com.ericsson.gerrit.plugins.eventslog.SQLClient.Result;
+import com.ericsson.gerrit.plugins.eventslog.SQLClient.SQLEntry;
 import com.ericsson.gerrit.plugins.eventslog.SQLStore;
 
 public class SQLStoreTest {
@@ -71,7 +71,7 @@ public class SQLStoreTest {
   private String path = TEST_PATH + TABLE_NAME + ";" + TEST_OPTIONS;
   private Connection conn;
   private Statement stat;
-  private List<Result> results;
+  private List<SQLEntry> results;
 
   @SuppressWarnings("unchecked")
   @Before
@@ -351,8 +351,8 @@ public class SQLStoreTest {
     store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock,
         eventsDb, localEventsDb, poolMock);
     store.start();
-    List<Result> results = localEventsDb.getAll();
-    assertEquals(0, results.size());
+    List<SQLEntry> entries = localEventsDb.getAll();
+    assertEquals(0, entries.size());
     easyMock.verifyAll();
   }
 

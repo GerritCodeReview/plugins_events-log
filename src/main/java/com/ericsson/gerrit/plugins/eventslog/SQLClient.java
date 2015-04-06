@@ -27,6 +27,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -46,12 +47,19 @@ public class SQLClient {
 
   private BasicDataSource ds;
   private final Gson gson = new Gson();
+  private final Comparator<SQLEntry> idComparator;
 
   @Inject
   SQLClient(String storeDriver, String storeUrl, String urlOptions) {
     ds = new BasicDataSource();
     ds.setDriverClassName(storeDriver);
     ds.setUrl(storeUrl + TABLE_NAME + ";" + urlOptions);
+    this.idComparator = new Comparator<SQLEntry>() {
+      @Override
+      public int compare(SQLEntry e1, SQLEntry e2) {
+          return e1.id - e2.id;
+      }
+    };
   }
 
   public void setUsername(String username) {
@@ -89,7 +97,7 @@ public class SQLClient {
     ds.close();
   }
 
-  public ListMultimap<String, String> getEvents(String query)
+  public ListMultimap<String, SQLEntry> getEvents(String query)
       throws MalformedQueryException {
     Connection conn = null;
     Statement stat = null;
@@ -99,9 +107,13 @@ public class SQLClient {
       stat = conn.createStatement();
       try {
         rs = stat.executeQuery(query);
-        ListMultimap<String, String> result = ArrayListMultimap.create();
+        ListMultimap<String, SQLEntry> result = ArrayListMultimap.create();
         while (rs.next()) {
-          result.put(rs.getString(PROJECT_ENTRY), rs.getString(EVENT_ENTRY));
+          result.put(
+              rs.getString(PROJECT_ENTRY),
+              new SQLEntry(rs.getString(PROJECT_ENTRY), rs
+                  .getTimestamp(DATE_ENTRY), rs.getString(EVENT_ENTRY), rs
+                  .getInt(PRIMARY_ENTRY)));
         }
         return result;
       } catch (SQLException e) {
@@ -182,8 +194,8 @@ public class SQLClient {
     }
   }
 
-  public List<Result> getAll() throws SQLException {
-    List<Result> result = new ArrayList<>();
+  public List<SQLEntry> getAll() throws SQLException {
+    List<SQLEntry> entries = new ArrayList<>();
     Connection conn = null;
     Statement stat = null;
     ResultSet rs = null;
@@ -192,10 +204,10 @@ public class SQLClient {
       stat = conn.createStatement();
       rs = stat.executeQuery("SELECT * FROM " + TABLE_NAME);
       while (rs.next()) {
-        result.add(new Result(rs.getString(PROJECT_ENTRY), rs.getTimestamp(DATE_ENTRY),
-            rs.getString(EVENT_ENTRY)));
+        entries.add(new SQLEntry(rs.getString(PROJECT_ENTRY), rs.getTimestamp(DATE_ENTRY),
+            rs.getString(EVENT_ENTRY), rs.getInt(PRIMARY_ENTRY)));
       }
-      return result;
+      return entries;
     } finally {
       closeResultSet(rs);
       closeStatement(stat);
@@ -233,15 +245,21 @@ public class SQLClient {
     }
   }
 
-  class Result {
+  public Comparator<SQLEntry> getIdComparator() {
+    return idComparator;
+  }
+
+  class SQLEntry {
     private String name;
     private Timestamp timestamp;
     private String event;
+    private int id;
 
-    Result(String name, Timestamp timestamp, String event){
+    SQLEntry(String name, Timestamp timestamp, String event, int id){
       this.name = name;
       this.timestamp = timestamp;
       this.event = event;
+      this.id = id;
     }
 
     public String getName() {

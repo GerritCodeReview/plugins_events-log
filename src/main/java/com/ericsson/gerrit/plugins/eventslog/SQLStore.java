@@ -24,6 +24,7 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
@@ -45,7 +46,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
-import com.ericsson.gerrit.plugins.eventslog.SQLClient.Result;
+import com.ericsson.gerrit.plugins.eventslog.SQLClient.SQLEntry;
 
 @Singleton
 public class SQLStore implements EventStore, LifecycleListener {
@@ -118,14 +119,15 @@ public class SQLStore implements EventStore, LifecycleListener {
       throw new ServiceUnavailableException();
     }
     List<String> events = new ArrayList<>();
+    List<SQLEntry> entries = new ArrayList<>();
     Project.NameKey project = null;
-    for (Entry<String, Collection<String>> entry : eventsDb.getEvents(query)
+    for (Entry<String, Collection<SQLEntry>> entry : eventsDb.getEvents(query)
         .asMap().entrySet()) {
       try {
         project = new Project.NameKey(entry.getKey());
         if (projectControlFactory.controlFor(project, userProvider.get())
             .isVisible()) {
-          events.addAll(entry.getValue());
+          entries.addAll(entry.getValue());
         }
       } catch (NoSuchProjectException e) {
         log.warn("Database contains a non-existing project, " + project.get()
@@ -135,6 +137,10 @@ public class SQLStore implements EventStore, LifecycleListener {
         log.warn("Cannot get project visibility info for " + project.get()
             + " from cache", e);
       }
+    }
+    Collections.sort(entries, eventsDb.getIdComparator());
+    for (SQLEntry entry : entries) {
+      events.add(entry.getEvent());
     }
     return events;
   }
@@ -230,13 +236,13 @@ public class SQLStore implements EventStore, LifecycleListener {
     if (copyLocal) {
       copyFile();
     }
-    List<Result> results;
+    List<SQLEntry> entries;
     try {
-      results = localEventsDb.getAll();
-      for (Result result : results) {
+      entries = localEventsDb.getAll();
+      for (SQLEntry entry : entries) {
         try {
-          eventsDb.storeEvent(result.getName(),
-              result.getTimestamp(), result.getEvent());
+          eventsDb.storeEvent(entry.getName(),
+              entry.getTimestamp(), entry.getEvent());
         } catch (SQLException e) {
           log.warn("Could not restore events from local");
         }
