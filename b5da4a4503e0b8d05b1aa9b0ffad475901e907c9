@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "23855259_f1bea8f6",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLClient.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-04-07T13:01:29Z",
+      "side": 1,
+      "message": "instead of having a comparator that you need to expose so SQLStore could use it, why not make your SQLEntry implement Comparable?",
+      "range": {
+        "startLine": 50,
+        "startChar": 2,
+        "endLine": 50,
+        "endChar": 50
+      },
+      "revId": "b5da4a4503e0b8d05b1aa9b0ffad475901e907c9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
