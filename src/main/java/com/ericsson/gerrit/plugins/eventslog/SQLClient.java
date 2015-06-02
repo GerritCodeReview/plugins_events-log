@@ -90,7 +90,7 @@ public class SQLClient {
   }
 
   public ListMultimap<String, SQLEntry> getEvents(String query)
-      throws MalformedQueryException {
+      throws EventsLogException {
     Connection conn = null;
     Statement stat = null;
     ResultSet rs = null;
@@ -112,7 +112,7 @@ public class SQLClient {
         throw new MalformedQueryException(e);
       }
     } catch (SQLException e) {
-      throw new RuntimeException("Cannot query database", e);
+      throw new EventsLogException("Cannot query database", e);
     } finally {
       closeResultSet(rs);
       closeStatement(stat);

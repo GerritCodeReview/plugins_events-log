@@ -50,7 +50,7 @@ public class QueryMakerTest {
   }
 
   @Test(expected = MalformedQueryException.class)
-  public void badParameters() throws MalformedQueryException {
+  public void badParameters() throws EventsLogException {
     Map<String, String> params = new HashMap<>();
     params.put("t1", "bad format");
     params.put("t2", "bad format");
@@ -58,7 +58,7 @@ public class QueryMakerTest {
   }
 
   @Test
-  public void dateOneOnly() throws MalformedQueryException {
+  public void dateOneOnly() throws EventsLogException {
     Map<String, String> params = new HashMap<>();
     String oldDate = "1990-10-10 10:00:00";
     params.put("t1", oldDate);
@@ -67,7 +67,7 @@ public class QueryMakerTest {
   }
 
   @Test
-  public void dateTwoOnly() throws MalformedQueryException {
+  public void dateTwoOnly() throws EventsLogException {
     Map<String, String> params = new HashMap<>();
     String oldDate = "1990-10-10 10:00:00";
     params.put("t2", oldDate);
@@ -76,13 +76,13 @@ public class QueryMakerTest {
   }
 
   @Test(expected = MalformedQueryException.class)
-  public void noDate() throws MalformedQueryException {
+  public void noDate() throws EventsLogException {
     Map<String, String> params = new HashMap<>();
     queryMaker.formQueryFromRequestParameters(params);
   }
 
   @Test
-  public void dateOrdering() throws MalformedQueryException {
+  public void dateOrdering() throws EventsLogException {
     String query;
     Map<String, String> params = new HashMap<>();
     String olderDate = "2013-10-10 10:00:00";
@@ -102,7 +102,7 @@ public class QueryMakerTest {
   }
 
   @Test
-  public void bothDateTime() throws MalformedQueryException {
+  public void bothDateTime() throws EventsLogException {
     Map<String, String> params = new HashMap<>();
     params.put("t1", "2013-10-10 10:00:00");
     params.put("t2", "2014-10-10 10:00:00");
@@ -111,7 +111,7 @@ public class QueryMakerTest {
   }
 
   @Test
-  public void onlyDateNoTime() throws MalformedQueryException {
+  public void onlyDateNoTime() throws EventsLogException {
     Map<String, String> params = new HashMap<>();
     params.put("t1", "2013-10-10");
     params.put("t2", "2014-10-10");

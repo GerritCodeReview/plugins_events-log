@@ -149,7 +149,7 @@ public class SQLStoreTest {
 
   @Test(expected = MalformedQueryException.class)
   public void throwBadRequestTriggerOnBadQuery()
-      throws MalformedQueryException, ServiceUnavailableException {
+      throws EventsLogException {
     setUpClient();
     String badQuery = "bad query";
     easyMock.resetAll();
@@ -263,8 +263,7 @@ public class SQLStoreTest {
   }
 
   @Test (expected = ServiceUnavailableException.class)
-  public void throwSQLExceptionIfNotOnline()
-      throws MalformedQueryException, ServiceUnavailableException, SQLException {
+  public void throwSQLExceptionIfNotOnline() throws EventsLogException, SQLException {
     MockEvent mockEvent = new MockEvent();
     setUpClientMock();
     eventsDb.createDBIfNotCreated();

@@ -20,6 +20,9 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
@@ -32,6 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Singleton
 public class EventsRestApiServlet extends HttpServlet {
+  private static final Logger log = LoggerFactory.getLogger(EventsRestApiServlet.class);
   private static final long serialVersionUID = 1L;
 
   private final EventStore store;
@@ -66,11 +70,13 @@ public class EventsRestApiServlet extends HttpServlet {
         out.write(event + "\n");
       }
     } catch (MalformedQueryException e) {
+      log.debug("Bad Request", e);
       rsp.sendError(HttpServletResponse.SC_BAD_REQUEST);
-      return;
     } catch (ServiceUnavailableException e) {
+      log.debug("Service Unavailable", e);
       rsp.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
-      return;
+    } catch (EventsLogException e) {
+      log.debug("Could not query from request parameters", e);
     }
   }
 

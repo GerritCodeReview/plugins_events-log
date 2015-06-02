@@ -14,50 +14,50 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
-public class ServiceUnavailableException extends EventsLogException {
+public class EventsLogException extends Exception {
   private static final long serialVersionUID = 1L;
 
-  public static final String MESSAGE =
-      "Database server disconnected, cannot query events";
+  public static final String MSG =
+      "Error in events-log plugin";
 
   /**
-   * Constructs a <code>ServiceUnavailableException</code> object with the default
+   * Constructs a <code>EventsLogException</code> object with the default
    * message.
    */
-  public ServiceUnavailableException() {
-    super(MESSAGE);
+  public EventsLogException() {
+    super(MSG);
   }
 
   /**
-   * Constructs a <code>ServiceUnavailableException</code> object with the default
+   * Constructs an <code>EventsLogException</code> object with the default
    * message and a given <code>cause</code>.
    *
    * @param cause the underlying reason for this
-   *        <code>ServiceUnavailableException</code>
+   *        <code>EventsLogException</code>
    */
-  public ServiceUnavailableException(Throwable cause) {
-    super(MESSAGE, cause);
+  public EventsLogException(Throwable cause) {
+    super(MSG, cause);
   }
 
   /**
-   * Constructs a <code>ServiceUnavailableException</code> object with a given
+   * Constructs an <code>EventsLogException</code> object with a given
    * <code>message</code>.
    *
    * @param message a description of the exception
    */
-  public ServiceUnavailableException(String message) {
+  public EventsLogException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a <code>ServiceUnavailableException</code> object with a given
+   * Constructs an <code>EventsLogException</code> object with a given
    * <code>message</code> and a given <code>cause</code>.
    *
    * @param message a description of the exception
    * @param cause the underlying reason for this
-   *        <code>ServiceUnavailableException</code>
+   *        <code>EventsLogException</code>
    */
-  public ServiceUnavailableException(String message, Throwable cause) {
+  public EventsLogException(String message, Throwable cause) {
     super(message, cause);
   }
 }
