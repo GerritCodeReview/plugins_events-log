@@ -20,7 +20,7 @@ import com.google.inject.Inject;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-public class EventQueue  implements LifecycleListener {
+public class EventQueue implements LifecycleListener {
   private final WorkQueue workQueue;
   private WorkQueue.Executor pool;
 

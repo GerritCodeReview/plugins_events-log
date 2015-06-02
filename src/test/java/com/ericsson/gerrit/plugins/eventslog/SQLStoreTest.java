@@ -14,10 +14,24 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
+import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 import static org.junit.Assert.assertEquals;
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
+
+import com.google.gerrit.reviewdb.client.Change.Key;
+import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.server.CurrentUser;
+import com.google.gerrit.server.events.ChangeEvent;
+import com.google.gerrit.server.project.NoSuchProjectException;
+import com.google.gerrit.server.project.ProjectControl;
+import com.google.gson.Gson;
+import com.google.inject.Provider;
+
+import org.easymock.EasyMock;
+import org.easymock.EasyMockSupport;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -31,24 +45,6 @@ import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import org.easymock.EasyMock;
-import org.easymock.EasyMockSupport;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.google.gerrit.reviewdb.client.Change.Key;
-import com.google.gerrit.reviewdb.client.Project;
-import com.google.gerrit.server.CurrentUser;
-import com.google.gerrit.server.events.ChangeEvent;
-import com.google.gerrit.server.project.NoSuchProjectException;
-import com.google.gerrit.server.project.ProjectControl;
-import com.google.gson.Gson;
-import com.google.inject.Provider;
-
-import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
-import com.ericsson.gerrit.plugins.eventslog.SQLClient.SQLEntry;
-import com.ericsson.gerrit.plugins.eventslog.SQLStore;
 
 public class SQLStoreTest {
   private static final String TEST_PATH = "jdbc:h2:mem:";
