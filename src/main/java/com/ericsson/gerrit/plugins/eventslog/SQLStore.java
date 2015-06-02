@@ -242,6 +242,10 @@ public class SQLStore implements EventStore, LifecycleListener {
     List<SQLEntry> entries;
     try {
       entries = localEventsDb.getAll();
+      if (entries.isEmpty()) {
+        log.debug("No events to restore from local");
+        return;
+      }
       for (SQLEntry entry : entries) {
         restoreEvent(entry);
       }
