@@ -111,6 +111,8 @@ public class SQLStore implements EventStore, LifecycleListener {
    * {@inheritDoc}
    * The events returned are restricted to the projects which are visible to the
    * user.
+   * @throws MalformedQueryException if the given query can't be processed
+   * @throws ServiceUnavailableException if working in offline mode
    */
   @Override
   public List<String> queryChangeEvents(String query) throws EventsLogException {
