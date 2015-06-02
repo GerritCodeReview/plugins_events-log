@@ -20,4 +20,7 @@ final class SQLTable {
   protected static final String PROJECT_ENTRY = "project";
   protected static final String DATE_ENTRY = "date_created";
   protected static final String EVENT_ENTRY = "event_info";
+
+  private SQLTable() {
+  }
 }

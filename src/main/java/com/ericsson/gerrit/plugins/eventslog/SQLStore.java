@@ -167,20 +167,24 @@ public class SQLStore implements EventStore, LifecycleListener {
         if (e.getCause() instanceof ConnectException
             || e.getMessage().contains("terminating connection")) {
           done = false;
-          if (failedConnections < maxTries - 1) {
-            failedConnections++;
-            log.info("Retrying store event");
-            try {
-              Thread.sleep(waitTime);
-            } catch (InterruptedException e1) {
-              continue;
-            }
-          } else {
-            log.error("Failed to store event " + maxTries + " times");
-            setOnline(false);
-          }
+          retryIfAllowed(failedConnections);
+          failedConnections++;
         }
       }
+    }
+  }
+
+  private void retryIfAllowed(int failedConnections) {
+    if (failedConnections < maxTries - 1) {
+      log.info("Retrying store event");
+      try {
+        Thread.sleep(waitTime);
+      } catch (InterruptedException e1) {
+        return;
+      }
+    } else {
+      log.error("Failed to store event " + maxTries + " times");
+      setOnline(false);
     }
   }
 
@@ -239,12 +243,7 @@ public class SQLStore implements EventStore, LifecycleListener {
     try {
       entries = localEventsDb.getAll();
       for (SQLEntry entry : entries) {
-        try {
-          eventsDb.storeEvent(entry.getName(),
-              entry.getTimestamp(), entry.getEvent());
-        } catch (SQLException e) {
-          log.warn("Could not restore events from local", e);
-        }
+        restoreEvent(entry);
       }
     } catch (SQLException e) {
       log.warn("Could not query all events from local", e);
@@ -253,6 +252,15 @@ public class SQLStore implements EventStore, LifecycleListener {
       localEventsDb.removeOldEvents(0);
     } catch (SQLException e) {
       log.warn("Could not destroy local database", e);
+    }
+  }
+
+  private void restoreEvent(SQLEntry entry) {
+    try {
+      eventsDb.storeEvent(entry.getName(),
+          entry.getTimestamp(), entry.getEvent());
+    } catch (SQLException e) {
+      log.warn("Could not restore events from local", e);
     }
   }
 
@@ -290,7 +298,8 @@ public class SQLStore implements EventStore, LifecycleListener {
     File file = localPath.resolve(TABLE_NAME + H2_DB_SUFFIX).toFile();
     File copyFile =
         localPath.resolve(
-            TABLE_NAME + (TimeUtil.nowMs() / 1000L) + H2_DB_SUFFIX).toFile();
+            TABLE_NAME + (TimeUnit.MILLISECONDS.toSeconds(TimeUtil.nowMs()))
+                + H2_DB_SUFFIX).toFile();
     try {
       Files.copy(file, copyFile);
     } catch (IOException e) {

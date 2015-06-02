@@ -41,7 +41,6 @@ import com.google.gson.Gson;
 import com.google.inject.Inject;
 
 public class SQLClient {
-
   private static final Logger log = LoggerFactory.getLogger(SQLClient.class);
 
   private BasicDataSource ds;
@@ -93,28 +92,13 @@ public class SQLClient {
       throws EventsLogException {
     Connection conn = null;
     Statement stat = null;
-    ResultSet rs = null;
     try {
       conn = ds.getConnection();
       stat = conn.createStatement();
-      try {
-        rs = stat.executeQuery(query);
-        ListMultimap<String, SQLEntry> result = ArrayListMultimap.create();
-        while (rs.next()) {
-          result.put(
-              rs.getString(PROJECT_ENTRY),
-              new SQLEntry(rs.getString(PROJECT_ENTRY), rs
-                  .getTimestamp(DATE_ENTRY), rs.getString(EVENT_ENTRY), rs
-                  .getInt(PRIMARY_ENTRY)));
-        }
-        return result;
-      } catch (SQLException e) {
-        throw new MalformedQueryException(e);
-      }
+      return listEvents(stat, query);
     } catch (SQLException e) {
       throw new EventsLogException("Cannot query database", e);
     } finally {
-      closeResultSet(rs);
       closeStatement(stat);
       closeConnection(conn);
     }
@@ -128,14 +112,15 @@ public class SQLClient {
       stat.execute(format("INSERT INTO %s(%s, %s, %s) ", TABLE_NAME,
           PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
           + format("VALUES('%s', '%s', '%s')", event.getProjectNameKey().get(),
-              new Timestamp(event.eventCreatedOn * 1000L), json));
+              new Timestamp(TimeUnit.SECONDS.toMillis(event.eventCreatedOn)), json));
     } finally {
       closeStatement(stat);
       closeConnection(conn);
     }
   }
 
-  public void storeEvent(String projectName, Timestamp timestamp, String event) throws SQLException {
+  public void storeEvent(String projectName, Timestamp timestamp, String event)
+      throws SQLException {
     Connection conn = ds.getConnection();
     Statement stat = conn.createStatement();
     try {
@@ -196,14 +181,36 @@ public class SQLClient {
       stat = conn.createStatement();
       rs = stat.executeQuery("SELECT * FROM " + TABLE_NAME);
       while (rs.next()) {
-        entries.add(new SQLEntry(rs.getString(PROJECT_ENTRY), rs.getTimestamp(DATE_ENTRY),
-            rs.getString(EVENT_ENTRY), rs.getInt(PRIMARY_ENTRY)));
+        entries.add(new SQLEntry(rs.getString(PROJECT_ENTRY), rs
+            .getTimestamp(DATE_ENTRY), rs.getString(EVENT_ENTRY), rs
+            .getInt(PRIMARY_ENTRY)));
       }
       return entries;
     } finally {
       closeResultSet(rs);
       closeStatement(stat);
       closeConnection(conn);
+    }
+  }
+
+  private ListMultimap<String, SQLEntry> listEvents(Statement stat, String query)
+      throws MalformedQueryException {
+    ResultSet rs = null;
+    try {
+      rs = stat.executeQuery(query);
+      ListMultimap<String, SQLEntry> result = ArrayListMultimap.create();
+      while (rs.next()) {
+        result.put(
+            rs.getString(PROJECT_ENTRY),
+            new SQLEntry(rs.getString(PROJECT_ENTRY), rs
+                .getTimestamp(DATE_ENTRY), rs.getString(EVENT_ENTRY), rs
+                .getInt(PRIMARY_ENTRY)));
+      }
+      return result;
+    } catch (SQLException e) {
+      throw new MalformedQueryException(e);
+    } finally {
+      closeResultSet(rs);
     }
   }
 
@@ -243,7 +250,7 @@ public class SQLClient {
     private String event;
     private int id;
 
-    SQLEntry(String name, Timestamp timestamp, String event, int id){
+    SQLEntry(String name, Timestamp timestamp, String event, int id) {
       this.name = name;
       this.timestamp = timestamp;
       this.event = event;
@@ -265,6 +272,20 @@ public class SQLClient {
     @Override
     public int compareTo(SQLEntry o) {
       return this.id - o.id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      return this.id == ((SQLEntry) o).id;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + SQLClient.this.hashCode();
+      result = prime * result + id;
+      return result;
     }
   }
 }
