@@ -14,21 +14,15 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
+import static com.google.common.truth.Truth.assertThat;
 import static org.easymock.EasyMock.expect;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import org.easymock.EasyMockSupport;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
-import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
-import com.ericsson.gerrit.plugins.eventslog.SQLQueryMaker;
+import java.util.HashMap;
+import java.util.Map;
 
 public class QueryMakerTest {
   private static QueryMaker queryMaker;
@@ -46,7 +40,7 @@ public class QueryMakerTest {
 
   @Test
   public void returnDefaultforNullMap() throws Exception {
-    assertEquals(defaultQuery, queryMaker.formQueryFromRequestParameters(null));
+    assertThat(queryMaker.formQueryFromRequestParameters(null)).isEqualTo(defaultQuery);
   }
 
   @Test(expected = MalformedQueryException.class)
@@ -63,7 +57,7 @@ public class QueryMakerTest {
     String oldDate = "1990-10-10 10:00:00";
     params.put("t1", oldDate);
     String query = queryMaker.formQueryFromRequestParameters(params);
-    assertTrue(query.contains(String.format("'%s' and ", oldDate)));
+    assertThat(query).contains(String.format("'%s' and ", oldDate));
   }
 
   @Test
@@ -72,7 +66,7 @@ public class QueryMakerTest {
     String oldDate = "1990-10-10 10:00:00";
     params.put("t2", oldDate);
     String query = queryMaker.formQueryFromRequestParameters(params);
-    assertTrue(query.contains(String.format("'%s' and ", oldDate)));
+    assertThat(query).contains(String.format("'%s' and ", oldDate));
   }
 
   @Test(expected = MalformedQueryException.class)
@@ -91,14 +85,14 @@ public class QueryMakerTest {
     params.put("t1", olderDate);
     params.put("t2", newerDate);
     query = queryMaker.formQueryFromRequestParameters(params);
-    assertTrue(query.contains(String.format("'%s' and '%s'",
-        olderDate, newerDate)));
+    assertThat(query).contains(String.format("'%s' and '%s'",
+        olderDate, newerDate));
 
     params.put("t1", newerDate);
     params.put("t2", olderDate);
     query = queryMaker.formQueryFromRequestParameters(params);
-    assertTrue(query.contains(String.format("'%s' and '%s'",
-        olderDate, newerDate)));
+    assertThat(query).contains(String.format("'%s' and '%s'",
+        olderDate, newerDate));
   }
 
   @Test
@@ -107,7 +101,7 @@ public class QueryMakerTest {
     params.put("t1", "2013-10-10 10:00:00");
     params.put("t2", "2014-10-10 10:00:00");
     String query = queryMaker.formQueryFromRequestParameters(params);
-    assertFalse(query.equals(defaultQuery));
+    assertThat(query).isNotEqualTo(defaultQuery);
   }
 
   @Test
@@ -116,6 +110,6 @@ public class QueryMakerTest {
     params.put("t1", "2013-10-10");
     params.put("t2", "2014-10-10");
     String query = queryMaker.formQueryFromRequestParameters(params);
-    assertFalse(query.equals(defaultQuery));
+    assertThat(query).isNotEqualTo(defaultQuery);
   }
 }

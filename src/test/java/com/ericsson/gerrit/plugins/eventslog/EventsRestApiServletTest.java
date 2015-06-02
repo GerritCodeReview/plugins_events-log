@@ -14,10 +14,10 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
+import static com.google.common.truth.Truth.assertThat;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
-import static org.junit.Assert.assertEquals;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -85,9 +85,7 @@ public class EventsRestApiServletTest {
     easyMock.replayAll();
     eventServlet.doGet(reqMock, rspMock);
     Map<String, String> capturedParam = catcher.getValue();
-    assertEquals(paramMock.size(), capturedParam.size());
-    assertEquals(paramMock.get("a"), capturedParam.get("a"));
-    assertEquals(paramMock.get("b"), capturedParam.get("b"));
+    assertThat(paramMock).isEqualTo(capturedParam);
   }
 
   @Test
@@ -105,7 +103,7 @@ public class EventsRestApiServletTest {
     easyMock.replayAll();
     eventServlet.doGet(reqMock, rspMock);
     Map<String, String> capturedParam = catcher.getValue();
-    assertEquals(0, capturedParam.size());
+    assertThat(capturedParam).isEmpty();
   }
 
   @Test

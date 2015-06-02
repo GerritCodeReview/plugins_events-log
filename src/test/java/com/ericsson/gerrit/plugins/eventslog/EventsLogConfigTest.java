@@ -14,6 +14,7 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
+import static com.google.common.truth.Truth.assertThat;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_CONN_TIME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_COPY_LOCAL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_DRIVER;
@@ -30,7 +31,6 @@ import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_MAX_
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_RETURN_LIMIT;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_URL;
 import static org.easymock.EasyMock.expect;
-import static org.junit.Assert.assertEquals;
 
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
@@ -95,28 +95,28 @@ public class EventsLogConfigTest {
   @Test
   public void shouldReturnDefaultsWhenMissingConfig() {
     config = new EventsLogConfig(cfgFactoryMock, site, null);
-    assertEquals(false, config.getCopyLocal());
-    assertEquals(30, config.getMaxAge());
-    assertEquals(5000, config.getReturnLimit());
-    assertEquals(1000, config.getConnectTime());
-    assertEquals("org.h2.Driver", config.getStoreDriver());
-    assertEquals("jdbc:h2:~/db/", config.getStoreUrl());
-    assertEquals("", config.getUrlOptions());
-    assertEquals(null, config.getStoreUsername());
-    assertEquals(null, config.getStorePassword());
+    assertThat(config.getCopyLocal()).isFalse();
+    assertThat(config.getMaxAge()).isEqualTo(30);
+    assertThat(config.getReturnLimit()).isEqualTo(5000);
+    assertThat(config.getConnectTime()).isEqualTo(1000);
+    assertThat(config.getStoreDriver()).isEqualTo("org.h2.Driver");
+    assertThat(config.getStoreUrl()).isEqualTo("jdbc:h2:~/db/");
+    assertThat(config.getUrlOptions()).isEmpty();
+    assertThat(config.getStoreUsername()).isNull();
+    assertThat(config.getStorePassword()).isNull();
   }
 
   @Test
   public void shouldReturnConfigValues() {
     config = new EventsLogConfig(cfgFactoryMock2, site, null);
-    assertEquals(true, config.getCopyLocal());
-    assertEquals(20, config.getMaxAge());
-    assertEquals(10000, config.getReturnLimit());
-    assertEquals(5000, config.getConnectTime());
-    assertEquals("org.h2.Driver2", config.getStoreDriver());
-    assertEquals("jdbc:h2:~/gerrit/db", config.getStoreUrl());
-    assertEquals("DB_CLOSE_DELAY=10", config.getUrlOptions());
-    assertEquals("testUsername", config.getStoreUsername());
-    assertEquals("testPassword", config.getStorePassword());
+    assertThat(config.getCopyLocal()).isTrue();
+    assertThat(config.getMaxAge()).isEqualTo(20);
+    assertThat(config.getReturnLimit()).isEqualTo(10000);
+    assertThat(config.getConnectTime()).isEqualTo(5000);
+    assertThat(config.getStoreDriver()).isEqualTo("org.h2.Driver2");
+    assertThat(config.getStoreUrl()).isEqualTo("jdbc:h2:~/gerrit/db");
+    assertThat(config.getUrlOptions()).isEqualTo("DB_CLOSE_DELAY=10");
+    assertThat(config.getStoreUsername()).isEqualTo("testUsername");
+    assertThat(config.getStorePassword()).isEqualTo("testPassword");
   }
 }
