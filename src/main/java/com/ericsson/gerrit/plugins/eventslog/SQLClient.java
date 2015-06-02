@@ -53,14 +53,27 @@ public class SQLClient {
     ds.setUrl(storeUrl + TABLE_NAME + ";" + urlOptions);
   }
 
+  /**
+   * Set the username to connect to the database
+   * @param username
+   */
   public void setUsername(String username) {
     ds.setUsername(username);
   }
 
+  /**
+   * Set the password to connect to the database
+   * @param password
+   */
   public void setPassword(String password) {
     ds.setPassword(password);
   }
 
+  /**
+   * Create the database if it has not yet been created.
+   *
+   * @throws SQLException
+   */
   public void createDBIfNotCreated() throws SQLException {
     Connection conn = ds.getConnection();
 
@@ -88,6 +101,15 @@ public class SQLClient {
     ds.close();
   }
 
+  /**
+   * Get events as a multimap list of Strings and SQLEntries. The String
+   * represents the project name, and the SQLEntry is the event information.
+   *
+   * @param query
+   * @return multimap list of Strings (project names) and SQLEntries (events)
+   * @throws EventsLogException if there was an problem with the database
+   * @throws MalformedQueryException if there was a bad query request
+   */
   public ListMultimap<String, SQLEntry> getEvents(String query)
       throws EventsLogException {
     Connection conn = null;
@@ -104,6 +126,12 @@ public class SQLClient {
     }
   }
 
+  /**
+   * Store the event in the database
+   *
+   * @param event The event to store
+   * @throws SQLException If there was a problem with the database
+   */
   public void storeEvent(ProjectEvent event) throws SQLException {
     String json = gson.toJson(event);
     Connection conn = ds.getConnection();
@@ -119,6 +147,14 @@ public class SQLClient {
     }
   }
 
+  /**
+   * Store the event in the database
+   *
+   * @param projectName The project in which this event happened
+   * @param timestamp The time at which this event took place
+   * @param event The event as a string
+   * @throws SQLException If there was a problem with the database
+   */
   public void storeEvent(String projectName, Timestamp timestamp, String event)
       throws SQLException {
     Connection conn = ds.getConnection();
@@ -133,6 +169,12 @@ public class SQLClient {
     }
   }
 
+  /**
+   * Remove all events that are older than maxAge
+   *
+   * @param maxAge The maximum age to keep events
+   * @throws SQLException If there was a problem with the database
+   */
   public void removeOldEvents(int maxAge) throws SQLException {
     Connection conn = ds.getConnection();
     Statement stat = conn.createStatement();
@@ -146,6 +188,12 @@ public class SQLClient {
     }
   }
 
+  /**
+   * Remove all events corresponding to this project
+   *
+   * @param project Events attributed to this project should be removed
+   * @throws SQLException If there was a problem with the database
+   */
   public void removeProjectEvents(String project) throws SQLException {
     Connection conn = ds.getConnection();
     Statement stat = conn.createStatement();
@@ -158,6 +206,12 @@ public class SQLClient {
     }
   }
 
+  /**
+   * Do a simple query on the database. This is used to determine whether or not
+   * the main database is online.
+   *
+   * @throws SQLException If there was a problem with the database
+   */
   public void queryOne() throws SQLException {
     Connection conn = null;
     Statement stat = null;
@@ -171,6 +225,12 @@ public class SQLClient {
     }
   }
 
+  /**
+   * Get all events from the database as a list of database entries.
+   *
+   * @return List of all events retrieved from the database
+   * @throws SQLException If there was a problem with the database
+   */
   public List<SQLEntry> getAll() throws SQLException {
     List<SQLEntry> entries = new ArrayList<>();
     Connection conn = null;
