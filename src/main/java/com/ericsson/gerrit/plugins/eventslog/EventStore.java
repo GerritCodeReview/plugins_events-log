@@ -32,8 +32,7 @@ public interface EventStore {
    *
    * @param query the query used to get events
    * @return a list of events in String format.
-   * @throws MalformedQueryException if the given query can't be processed
-   * @throws ServiceUnavailableException if working in offline mode
+   * @throws EventsLogException
    */
   List<String> queryChangeEvents(String query) throws EventsLogException;
 }
