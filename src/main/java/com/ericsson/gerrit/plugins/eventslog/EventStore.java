@@ -35,6 +35,5 @@ public interface EventStore {
    * @throws MalformedQueryException if the given query can't be processed
    * @throws ServiceUnavailableException if working in offline mode
    */
-  List<String> queryChangeEvents(String query)
-      throws MalformedQueryException, ServiceUnavailableException;
+  List<String> queryChangeEvents(String query) throws EventsLogException;
 }

@@ -98,12 +98,12 @@ public class SQLStore implements EventStore, LifecycleListener {
     try {
       eventsDb.close();
     } catch (SQLException e) {
-      throw new RuntimeException("Cannot close datasource ", e);
+      log.warn("Cannot close datasource ", e);
     }
     try {
       localEventsDb.close();
     } catch (SQLException e) {
-      throw new RuntimeException("Cannot close datasource ", e);
+      log.warn("Cannot close datasource ", e);
     }
   }
 
@@ -113,8 +113,7 @@ public class SQLStore implements EventStore, LifecycleListener {
    * user.
    */
   @Override
-  public List<String> queryChangeEvents(String query)
-      throws MalformedQueryException, ServiceUnavailableException {
+  public List<String> queryChangeEvents(String query) throws EventsLogException {
     if (!online) {
       throw new ServiceUnavailableException();
     }
@@ -244,16 +243,16 @@ public class SQLStore implements EventStore, LifecycleListener {
           eventsDb.storeEvent(entry.getName(),
               entry.getTimestamp(), entry.getEvent());
         } catch (SQLException e) {
-          log.warn("Could not restore events from local");
+          log.warn("Could not restore events from local", e);
         }
       }
     } catch (SQLException e) {
-      log.warn("Could not query all events from local");
+      log.warn("Could not query all events from local", e);
     }
     try {
       localEventsDb.removeOldEvents(0);
     } catch (SQLException e) {
-      log.warn("Could not destroy local database");
+      log.warn("Could not destroy local database", e);
     }
   }
 
@@ -263,6 +262,7 @@ public class SQLStore implements EventStore, LifecycleListener {
       eventsDb.queryOne();
       return true;
     } catch (SQLException e) {
+      log.debug("Problem checking database connection", e);
       return false;
     }
   }
@@ -294,7 +294,7 @@ public class SQLStore implements EventStore, LifecycleListener {
     try {
       Files.copy(file, copyFile);
     } catch (IOException e) {
-      log.warn("Could not copy local database file with timestamp");
+      log.warn("Could not copy local database file with timestamp", e);
     }
   }
 }
