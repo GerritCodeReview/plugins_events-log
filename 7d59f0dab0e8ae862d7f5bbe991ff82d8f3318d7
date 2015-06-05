@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "399d8870_11052c4a",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/SQLStoreTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-06-05T13:07:35Z",
+      "side": 1,
+      "message": "Would have the .andThrow and its parameter on the same (indented) line.",
+      "revId": "7d59f0dab0e8ae862d7f5bbe991ff82d8f3318d7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
