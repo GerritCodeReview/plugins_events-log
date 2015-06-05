@@ -19,6 +19,69 @@
     },
     {
       "key": {
+        "uuid": "399d8870_31bcf00b",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsRestApiServlet.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-06-05T04:33:21Z",
+      "side": 1,
+      "message": "Too long line.",
+      "revId": "dbda6cd10c04bb764556d9ec9a22bddcd173bfa9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "399d8870_11b7ec29",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsRestApiServlet.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-06-05T04:33:21Z",
+      "side": 1,
+      "message": "error",
+      "range": {
+        "startLine": 73,
+        "startChar": 10,
+        "endLine": 73,
+        "endChar": 15
+      },
+      "revId": "dbda6cd10c04bb764556d9ec9a22bddcd173bfa9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "399d8870_51c17472",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-06-05T04:33:21Z",
+      "side": 1,
+      "message": "error",
+      "range": {
+        "startLine": 265,
+        "startChar": 10,
+        "endLine": 265,
+        "endChar": 15
+      },
+      "revId": "dbda6cd10c04bb764556d9ec9a22bddcd173bfa9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99c2f455_94f124e2",
         "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/QueryMakerTest.java",
         "patchSetId": 1
