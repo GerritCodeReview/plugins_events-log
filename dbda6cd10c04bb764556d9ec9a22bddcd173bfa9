@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "399d8870_f1d18841",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsLogException.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-06-05T13:26:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79e460f7_dbd4b334",
+      "revId": "dbda6cd10c04bb764556d9ec9a22bddcd173bfa9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "399d8870_31bcf00b",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsRestApiServlet.java",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2015-06-05T04:33:21Z",
       "side": 1,
       "message": "Too long line.",
+      "revId": "dbda6cd10c04bb764556d9ec9a22bddcd173bfa9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "399d8870_11de0c52",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsRestApiServlet.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-06-05T13:26:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "399d8870_31bcf00b",
       "revId": "dbda6cd10c04bb764556d9ec9a22bddcd173bfa9",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
@@ -83,6 +119,54 @@
     },
     {
       "key": {
+        "uuid": "19a444b9_10de0452",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsRestApiServlet.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-06-05T13:26:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "399d8870_11b7ec29",
+      "range": {
+        "startLine": 73,
+        "startChar": 10,
+        "endLine": 73,
+        "endChar": 15
+      },
+      "revId": "dbda6cd10c04bb764556d9ec9a22bddcd173bfa9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "399d8870_31e3101b",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsRestApiServlet.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-06-05T13:26:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99c2f455_d4eb9ceb",
+      "range": {
+        "startLine": 73,
+        "startChar": 10,
+        "endLine": 73,
+        "endChar": 15
+      },
+      "revId": "dbda6cd10c04bb764556d9ec9a22bddcd173bfa9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "399d8870_51c17472",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
         "patchSetId": 1
@@ -106,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "399d8870_71dd9851",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-06-05T13:26:03Z",
+      "side": 1,
+      "message": "I think this one can remain as is, since this is only used once the connection has already been lost and is trying to reconnect. We only really care if it succeeds and don\u0027t care about the reason why it is failing.",
+      "parentUuid": "399d8870_51c17472",
+      "range": {
+        "startLine": 265,
+        "startChar": 10,
+        "endLine": 265,
+        "endChar": 15
+      },
+      "revId": "dbda6cd10c04bb764556d9ec9a22bddcd173bfa9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99c2f455_94f124e2",
         "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/QueryMakerTest.java",
         "patchSetId": 1
@@ -117,6 +225,30 @@
       "writtenOn": "2015-06-05T01:53:41Z",
       "side": 1,
       "message": "We usually declare test methods to throw the base Exception type.",
+      "range": {
+        "startLine": 53,
+        "startChar": 37,
+        "endLine": 53,
+        "endChar": 55
+      },
+      "revId": "dbda6cd10c04bb764556d9ec9a22bddcd173bfa9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "19a444b9_70dd9051",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/QueryMakerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-06-05T13:26:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99c2f455_94f124e2",
       "range": {
         "startLine": 53,
         "startChar": 37,
