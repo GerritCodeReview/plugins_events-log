@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "399d8870_d1d48434",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-06-05T12:52:19Z",
+      "side": 1,
+      "message": "could merge these 2 lines into one \u003d\u003e more verbose slogan",
+      "revId": "792bc8a182fcdcd23a91aed92993a4ce2eab471b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "19a444b9_f0d18041",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLClient.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-06-05T12:52:19Z",
+      "side": 1,
+      "message": "Would make the above new an actual local variable, moved above this rs.getString statement. Would then fix its indentation, while not wrapping between \"rs\" and \".get*\"",
+      "revId": "792bc8a182fcdcd23a91aed92993a4ce2eab471b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "19a444b9_30e3081b",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLClient.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 247,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-06-05T12:52:19Z",
+      "side": 1,
+      "message": "Would move this class outside of this file (to its own file). Should make sonar happier as well, file complexity-wise.",
+      "revId": "792bc8a182fcdcd23a91aed92993a4ce2eab471b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "19a444b9_50d88c62",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-06-05T12:52:19Z",
+      "side": 1,
+      "message": "Should wrap after entry.getTimestamp()",
+      "revId": "792bc8a182fcdcd23a91aed92993a4ce2eab471b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
