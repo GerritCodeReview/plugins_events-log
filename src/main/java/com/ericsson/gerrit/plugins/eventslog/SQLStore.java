@@ -93,6 +93,9 @@ public class SQLStore implements EventStore, LifecycleListener {
 
   @Override
   public void stop() {
+    if (task != null) {
+      task.cancel(true);
+    }
     try {
       eventsDb.close();
     } catch (SQLException e) {
