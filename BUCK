@@ -1,3 +1,5 @@
+include_defs('//bucklets/gerrit_plugin.bucklet')
+
 gerrit_plugin(
   name = 'events-log',
   srcs = glob(['src/main/java/**/*.java']),
@@ -11,4 +13,9 @@ gerrit_plugin(
     '//lib:gson',
     '//lib/commons:dbcp'
   ],
+)
+
+java_library(
+  name = 'classpath',
+  deps = [':events-log__plugin'],
 )
