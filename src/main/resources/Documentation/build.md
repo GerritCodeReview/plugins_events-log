@@ -1,7 +1,7 @@
 Build
 =====
 
-This plugin can be built with Buck or Maven.
+This plugin is built with Buck.
 
 Buck
 ----
@@ -82,20 +82,5 @@ To execute the tests run:
   buck test --include events-log
 ```
 
-Maven
------
-
-Note that the Maven build is provided for compatibility reasons, but
-it is considered to be deprecated and will be removed in a future
-version of this plugin.
-
-To build with Maven, run
-
-```
-  mvn clean package
-```
-
-When building with Maven, the Gerrit Plugin API must be available.
-
-How to build the Gerrit Plugin API is described in the [Gerrit
-documentation](../../../Documentation/dev-buck.html#_extension_and_plugin_api_jar_files).
+More information about Buck can be found in the [Gerrit
+documentation](../../../Documentation/dev-buck.html).
