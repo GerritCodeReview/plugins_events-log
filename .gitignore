@@ -2,7 +2,6 @@
 .project
 .settings
 bin
-target/
 /.buckconfig.local
 /.buckd
 /buck-cache
