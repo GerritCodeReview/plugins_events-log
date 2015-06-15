@@ -253,12 +253,12 @@ public class SQLStore implements EventStore, LifecycleListener {
         restoreEvent(entry);
       }
     } catch (SQLException e) {
-      log.warn("Could not query all events from local", e);
+      log.debug("Could not query all events from local", e);
     }
     try {
       localEventsDb.removeOldEvents(0);
     } catch (SQLException e) {
-      log.warn("Could not destroy local database", e);
+      log.debug("Could not destroy local database", e);
     }
   }
 
