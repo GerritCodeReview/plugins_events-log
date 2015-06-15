@@ -6,6 +6,8 @@ gerrit_plugin(
   resources = glob(['src/main/resources/**/*']),
   manifest_entries = [
     'Gerrit-PluginName: events-log',
+    'Implementation-Vendor: Ericsson',
+    'Implementation-URL: https://gerrit-review.googlesource.com/#/admin/projects/plugins/events-log',
     'Gerrit-Module: com.ericsson.gerrit.plugins.eventslog.Module',
     'Gerrit-HttpModule: com.ericsson.gerrit.plugins.eventslog.HttpModule',
   ],
