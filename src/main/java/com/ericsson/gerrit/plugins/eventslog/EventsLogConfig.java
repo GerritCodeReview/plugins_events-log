@@ -21,15 +21,19 @@ import com.google.gerrit.server.config.SitePaths;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @Singleton
-public class EventsLogConfig {
+class EventsLogConfig {
+  static final String H2_DB_SUFFIX = ".h2.db";
   static final String CONFIG_COPY_LOCAL = "copyLocal";
   static final String CONFIG_MAX_AGE = "maxAge";
   static final String CONFIG_MAX_TRIES = "maxTries";
   static final String CONFIG_RETURN_LIMIT = "returnLimit";
   static final String CONFIG_DRIVER = "storeDriver";
   static final String CONFIG_URL = "storeUrl";
-  static final String CONFIG_LOCAL_URL = "localStoreUrl";
+  static final String CONFIG_LOCAL_PATH = "localStorePath";
   static final String CONFIG_URL_OPTIONS = "urlOptions";
   static final String CONFIG_USERNAME = "storeUsername";
   static final String CONFIG_PASSWORD = "storePassword";
@@ -44,7 +48,7 @@ public class EventsLogConfig {
   static final int DEFAULT_CONN_TIME = 1000;
   static final String DEFAULT_DRIVER = "org.h2.Driver";
   static final String DEFAULT_URL = "jdbc:h2:~/db/";
-  static String DEFAULT_LOCAL_URL;
+  static String DEFAULT_LOCAL_PATH;
 
   private boolean copyLocal = DEFAULT_COPY_LOCAL;
   private int maxAge = DEFAULT_MAX_AGE;
@@ -54,7 +58,7 @@ public class EventsLogConfig {
   private int connectTime = DEFAULT_CONN_TIME;
   private String storeDriver;
   private String storeUrl;
-  private String localStoreUrl;
+  private Path localStorePath;
   private String urlOptions;
   private String storeUsername;
   private String storePassword;
@@ -62,7 +66,7 @@ public class EventsLogConfig {
   @Inject
   public EventsLogConfig(PluginConfigFactory cfgFactory, SitePaths site,
       @PluginName String pluginName) {
-    DEFAULT_LOCAL_URL = "jdbc:h2:" + site.site_path.toString() + "/events-db/";
+    DEFAULT_LOCAL_PATH = site.site_path.toString() + "/events-db/";
     PluginConfig cfg = cfgFactory.getFromGerritConfig(pluginName, true);
     copyLocal = cfg.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL);
     maxAge = cfg.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE);
@@ -72,7 +76,7 @@ public class EventsLogConfig {
     connectTime = cfg.getInt(CONFIG_CONN_TIME, DEFAULT_CONN_TIME);
     storeDriver = cfg.getString(CONFIG_DRIVER, DEFAULT_DRIVER);
     storeUrl = cfg.getString(CONFIG_URL, DEFAULT_URL);
-    localStoreUrl = cfg.getString(CONFIG_LOCAL_URL, DEFAULT_LOCAL_URL);
+    localStorePath = Paths.get(cfg.getString(CONFIG_LOCAL_PATH, DEFAULT_LOCAL_PATH));
     urlOptions = cfg.getString(CONFIG_URL_OPTIONS, "");
     storeUsername = cfg.getString(CONFIG_USERNAME);
     storePassword = cfg.getString(CONFIG_PASSWORD);
@@ -122,8 +126,8 @@ public class EventsLogConfig {
     return DEFAULT_DRIVER;
   }
 
-  public String getLocalStoreUrl() {
-    return localStoreUrl;
+  public Path getLocalStorePath() {
+    return localStorePath;
   }
 
   public boolean getCopyLocal() {
