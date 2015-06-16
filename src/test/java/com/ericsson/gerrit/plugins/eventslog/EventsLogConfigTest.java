@@ -13,7 +13,6 @@
 // limitations under the License.
 
 package com.ericsson.gerrit.plugins.eventslog;
-
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_CONN_TIME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_COPY_LOCAL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_DRIVER;
@@ -92,7 +91,7 @@ public class EventsLogConfigTest {
   }
 
   private void setUpCustom() {
-    localStoreUrl = "jdbc:h2:~/gerrit/events-db/";
+    localStoreUrl = "~/gerrit/events-db/";
     expect(configMock.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL)).andReturn(true);
     expect(configMock.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE)).andReturn(20);
     expect(configMock.getInt(CONFIG_MAX_TRIES, DEFAULT_MAX_TRIES)).andReturn(5);
@@ -120,6 +119,7 @@ public class EventsLogConfigTest {
     assertThat(config.getConnectTime()).isEqualTo(1000);
     assertThat(config.getWaitTime()).isEqualTo(1000);
     assertThat(config.getLocalStoreDriver()).isEqualTo(DEFAULT_DRIVER);
+    assertThat(config.getLocalStorePath().toString() + "/").isEqualTo(defaultStoreUrl);
     assertThat(config.getLocalStoreUrl()).isEqualTo(defaultStoreUrl);
     assertThat(config.getStoreDriver()).isEqualTo(DEFAULT_DRIVER);
     assertThat(config.getStoreUrl()).isEqualTo(DEFAULT_URL);
@@ -139,7 +139,8 @@ public class EventsLogConfigTest {
     assertThat(config.getConnectTime()).isEqualTo(5000);
     assertThat(config.getWaitTime()).isEqualTo(5000);
     assertThat(config.getLocalStoreDriver()).isEqualTo(DEFAULT_DRIVER);
-    assertThat(config.getLocalStoreUrl()).isEqualTo(localStoreUrl);
+    assertThat(config.getLocalStorePath().toString() + "/").isEqualTo(localStoreUrl);
+    assertThat(config.getLocalStoreUrl()).isEqualTo("jdbc:h2:" + localStoreUrl);
     assertThat(config.getStoreDriver()).isEqualTo("org.h2.Driver2");
     assertThat(config.getStoreUrl()).isEqualTo("jdbc:h2:~/gerrit/db");
     assertThat(config.getUrlOptions()).isEqualTo("DB_CLOSE_DELAY=10");
