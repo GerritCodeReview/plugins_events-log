@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "d9a1cc0d_aefe177b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-06-16T17:23:54Z",
+      "side": 1,
+      "message": "It can be fixed in this commit. See my comment on Buck.",
+      "parentUuid": "b9c5f8ce_45730ac6",
+      "range": {
+        "startLine": 7,
+        "startChar": 32,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "5aaf681d2db0b28ebab9c3d29799b9667c1aefd4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9c5f8ce_657606b8",
         "filename": "BUCK",
         "patchSetId": 3
@@ -60,6 +84,30 @@
       "writtenOn": "2015-06-16T17:00:09Z",
       "side": 1,
       "message": "this is working only in standalone, must be replaced by \u0027//gerrit-plugin-api:lib\u0027 to make it work in gerrit tree but then its not working in stadalone, I am not sure yet how to do it that works for both mode.",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 29
+      },
+      "revId": "5aaf681d2db0b28ebab9c3d29799b9667c1aefd4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9a1cc0d_4e7333c6",
+        "filename": "BUCK",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-06-16T17:23:54Z",
+      "side": 1,
+      "message": "Yeah. That what this define is for: GERRIT_PLUGIN_API, in both modes.\n\nCheck how it\u0027s solved in quota plugin:\n\n  java_test(\n  name \u003d \u0027quota_tests\u0027,\n  srcs \u003d glob([\u0027src/test/java/**/*.java\u0027]),\n  labels \u003d [\u0027quota-plugin\u0027],\n  deps \u003d GERRIT_PLUGIN_API + [\n    \u0027:quota__plugin\u0027,\n    \u0027//lib:junit\u0027,\n    \u0027//lib/easymock:easymock\u0027,\n    \u0027//lib/log:log4j\u0027,\n    \u0027//lib/log:impl_log4j\u0027,\n  ],",
+      "parentUuid": "b9c5f8ce_657606b8",
       "range": {
         "startLine": 30,
         "startChar": 4,
