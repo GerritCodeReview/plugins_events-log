@@ -21,8 +21,13 @@ import com.google.gerrit.server.config.SitePaths;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @Singleton
-public class EventsLogConfig {
+class EventsLogConfig {
+  static final String H2_DB_PREFIX = "jdbc:h2:";
+  static final String H2_DB_SUFFIX = ".h2.db";
   static final String CONFIG_COPY_LOCAL = "copyLocal";
   static final String CONFIG_MAX_AGE = "maxAge";
   static final String CONFIG_MAX_TRIES = "maxTries";
@@ -122,8 +127,16 @@ public class EventsLogConfig {
     return DEFAULT_DRIVER;
   }
 
+  //We only support h2 databases for local storage
   public String getLocalStoreUrl() {
+    if (!localStoreUrl.startsWith("jdbc:h2:")) {
+      localStoreUrl = "jdbc:h2:" + localStoreUrl;
+    }
     return localStoreUrl;
+  }
+
+  public Path getLocalStorePath() {
+    return Paths.get(localStoreUrl);
   }
 
   public boolean getCopyLocal() {
