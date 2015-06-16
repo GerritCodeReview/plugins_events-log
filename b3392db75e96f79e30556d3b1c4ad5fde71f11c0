@@ -22,6 +22,30 @@
       "revId": "b3392db75e96f79e30556d3b1c4ad5fde71f11c0",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d91c6c21_16101c56",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-06-16T20:14:11Z",
+      "side": 1,
+      "message": "Okay I\u0027m working on a different approach so I\u0027ll abandon this one and upload a new change",
+      "parentUuid": "b9c5f8ce_254ece8b",
+      "range": {
+        "startLine": 256,
+        "startChar": 10,
+        "endLine": 256,
+        "endChar": 15
+      },
+      "revId": "b3392db75e96f79e30556d3b1c4ad5fde71f11c0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
