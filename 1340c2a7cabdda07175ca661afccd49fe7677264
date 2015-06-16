@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9972f48f_3437f0ec",
+        "filename": "lib/BUCK",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-06-16T18:46:18Z",
+      "side": 1,
+      "message": "This is not needed. It\u0027s needed in 4.11 though.",
+      "range": {
+        "startLine": 22,
+        "startChar": 2,
+        "endLine": 22,
+        "endChar": 28
+      },
+      "revId": "1340c2a7cabdda07175ca661afccd49fe7677264",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9a1cc0d_ee081f33",
+        "filename": "lib/BUCK",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-06-16T18:46:18Z",
+      "side": 1,
+      "message": "In which case this would be unused, and can be removed.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 1
+      },
+      "revId": "1340c2a7cabdda07175ca661afccd49fe7677264",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
