@@ -19,3 +19,14 @@ java_library(
   name = 'classpath',
   deps = [':events-log__plugin'],
 )
+
+java_test(
+  name = 'events-log_tests',
+  srcs = glob(['src/test/java/**/*.java']),
+  deps = [
+    ':events-log__plugin',
+    '//lib/gerrit:plugin-api',
+    '//lib:truth',
+    '//lib/easymock:easymock',
+  ],
+)
