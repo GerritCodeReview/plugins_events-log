@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b9c5f8ce_c586da1a",
+        "filename": "BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-06-16T16:16:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9972f48f_741a4878",
+      "revId": "edb407ebf9bf310afdd7e4eb3b23a7fea2751192",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9972f48f_541d4c6d",
         "filename": "lib/BUCK",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2015-06-16T16:07:14Z",
       "side": 1,
       "message": "4.11? It was upgraded recently on master.",
+      "range": {
+        "startLine": 19,
+        "startChar": 20,
+        "endLine": 19,
+        "endChar": 24
+      },
+      "revId": "edb407ebf9bf310afdd7e4eb3b23a7fea2751192",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b9c5f8ce_e5815605",
+        "filename": "lib/BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-06-16T16:16:27Z",
+      "side": 1,
+      "message": "Yes, but I want to be compliant with 2.11 branch, once the 3 open changes including this one will be merged, I will create stable-2.11 branch and then I will update dependencies to match master",
+      "parentUuid": "9972f48f_541d4c6d",
       "range": {
         "startLine": 19,
         "startChar": 20,
