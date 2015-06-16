@@ -35,7 +35,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,8 +48,7 @@ import java.util.concurrent.TimeUnit;
 @Singleton
 public class SQLStore implements EventStore, LifecycleListener {
   private static final Logger log = LoggerFactory.getLogger(SQLStore.class);
-  private static final String H2_DB_PREFIX = "jdbc:h2:";
-  private static final String H2_DB_SUFFIX = ".h2.db";
+  public static final String H2_DB_SUFFIX = ".h2.db";
 
   private final ProjectControl.GenericFactory projectControlFactory;
   private final Provider<CurrentUser> userProvider;
@@ -64,7 +62,7 @@ public class SQLStore implements EventStore, LifecycleListener {
   private boolean copyLocal;
   private final ScheduledThreadPoolExecutor pool;
   private ScheduledFuture<?> task;
-  private String localUrl;
+  private Path localPath;
 
   @Inject
   SQLStore(ProjectControl.GenericFactory projectControlFactory,
@@ -83,7 +81,7 @@ public class SQLStore implements EventStore, LifecycleListener {
     this.eventsDb = eventsDb;
     this.localEventsDb = localEventsDb;
     this.pool = pool;
-    this.localUrl = cfg.getLocalStoreUrl();
+    this.localPath = cfg.getLocalStorePath();
   }
 
   @Override
@@ -239,6 +237,18 @@ public class SQLStore implements EventStore, LifecycleListener {
   }
 
   private void restoreEventsFromLocal() {
+
+    boolean localDbExists = false;
+    try {
+      localDbExists = localEventsDb.dbExists();
+    } catch (SQLException e) {
+      log.warn(
+          "Could not check existence of local database, assume that it does exists",
+          e);
+    }
+    if (!localDbExists) {
+      return;
+    }
     if (copyLocal) {
       copyFile();
     }
@@ -301,7 +311,6 @@ public class SQLStore implements EventStore, LifecycleListener {
   }
 
   private void copyFile() {
-    Path localPath = Paths.get(localUrl.substring(H2_DB_PREFIX.length()));
     File file = localPath.resolve(TABLE_NAME + H2_DB_SUFFIX).toFile();
     File copyFile =
         localPath.resolve(
