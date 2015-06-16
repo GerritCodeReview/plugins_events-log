@@ -27,6 +27,8 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 class Module extends AbstractModule {
 
+  private static final String H2_DB_PREFIX = "jdbc:h2:";
+
   @Override
   protected void configure() {
     bind(EventQueue.class).in(Scopes.SINGLETON);
@@ -64,7 +66,9 @@ class Module extends AbstractModule {
   @Singleton
   @LocalEventsDb
   SQLClient provideLocalSqlClient(EventsLogConfig cfg) {
-    return new SQLClient(cfg.getLocalStoreDriver(), cfg.getLocalStoreUrl(),
-        cfg.getUrlOptions());
+    String path = cfg.getLocalStorePath().toString();
+    path = path.endsWith("/") ? path : path + "/";
+    return new SQLClient(cfg.getLocalStoreDriver(), H2_DB_PREFIX
+        + path, cfg.getUrlOptions());
   }
 }

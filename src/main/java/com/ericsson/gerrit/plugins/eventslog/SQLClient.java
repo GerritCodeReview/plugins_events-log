@@ -21,6 +21,16 @@ import static com.ericsson.gerrit.plugins.eventslog.SQLTable.PROJECT_ENTRY;
 import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
 import static java.lang.String.format;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ListMultimap;
+import com.google.gerrit.server.events.ProjectEvent;
+import com.google.gson.Gson;
+import com.google.inject.Inject;
+
+import org.apache.commons.dbcp.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,16 +39,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.dbcp.BasicDataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ListMultimap;
-import com.google.gerrit.server.events.ProjectEvent;
-import com.google.gson.Gson;
-import com.google.inject.Inject;
 
 public class SQLClient {
   private static final Logger log = LoggerFactory.getLogger(SQLClient.class);
@@ -93,6 +93,26 @@ public class SQLClient {
       stat.execute(query.toString());
     } finally {
       closeStatement(stat);
+      closeConnection(conn);
+    }
+  }
+
+  /**
+   * Return if the database exists.
+   * @return true if it exist otherwise return false
+   * @throws SQLException
+   */
+  public boolean dbExists() throws SQLException {
+    Connection conn = null;
+    ResultSet tables = null;
+    try {
+      conn = ds.getConnection();
+      tables =
+          conn.getMetaData().getTables(null, null, TABLE_NAME.toUpperCase(),
+              null);
+      return tables.next();
+    } finally {
+      closeResultSet(tables);
       closeConnection(conn);
     }
   }
