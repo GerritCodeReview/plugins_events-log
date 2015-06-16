@@ -6,3 +6,28 @@ maven_jar(
   sha1 = 'ecb6e1f8e4b0e84c4b886c2f14a1500caf309757',
   license = 'Apache2.0',
 )
+
+maven_jar(
+  name = 'guava',
+  id = 'com.google.guava:guava:18.0',
+  sha1 = 'cce0823396aa693798f8882e64213b1772032b09',
+  license = 'Apache2.0',
+)
+
+maven_jar(
+  name = 'junit',
+  id = 'junit:junit:4.10',
+  sha1 = 'e4f1766ce7404a08f45d859fb9c226fc9e41a861',
+  license = 'DO_NOT_DISTRIBUTE',
+)
+
+maven_jar(
+  name = 'truth',
+  id = 'com.google.truth:truth:0.25',
+  sha1 = '503ba892e8482976b81eb2b2df292858fbac3782',
+  license = 'DO_NOT_DISTRIBUTE',
+  exported_deps = [
+    ':guava',
+    ':junit',
+  ],
+)

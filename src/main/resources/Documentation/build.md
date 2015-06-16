@@ -49,6 +49,12 @@ The output is created in
   buck-out/gen/events-log.jar
 ```
 
+To execute the tests run:
+
+```
+  buck test
+```
+
 ### Build in Gerrit tree
 
 Clone or link this plugin to the plugins directory of Gerrit's source
@@ -68,6 +74,12 @@ This project can be imported into the Eclipse IDE:
 
 ```
   ./tools/eclipse/project.py
+```
+
+To execute the tests run:
+
+```
+  buck test --include events-log
 ```
 
 Maven
