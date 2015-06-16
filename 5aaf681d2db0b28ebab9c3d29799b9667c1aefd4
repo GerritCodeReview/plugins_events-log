@@ -192,6 +192,30 @@
     },
     {
       "key": {
+        "uuid": "9972f48f_143af4d5",
+        "filename": "BUCK",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-06-16T18:43:05Z",
+      "side": 1,
+      "message": "| Question: shouldn\u0027t the java_library generating \u003cplugin_name\u003e__plugin export the its dependencies instead?\n\nNo. Because GERRIT_PLUGIN_API is not normal dependency, but provided_deps. Why? Because, if it would be transitive dependency it would be included in the final artifact:\n\n  java_library(\n    name \u003d name + \u0027__plugin\u0027,\n    srcs \u003d srcs,\n    resources \u003d resources,\n    deps \u003d deps,\n    provided_deps \u003d [\u0027//gerrit-%s-api:lib\u0027 % type],\n  [...]\n\nAnd Buck doesn\u0027t support provided_deps_exported.",
+      "parentUuid": "b9c5f8ce_85034215",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 29
+      },
+      "revId": "5aaf681d2db0b28ebab9c3d29799b9667c1aefd4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d9a1cc0d_2e7ce797",
         "filename": "src/main/resources/Documentation/build.md",
         "patchSetId": 3
