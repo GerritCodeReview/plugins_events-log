@@ -14,6 +14,9 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
+import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
+
+import com.google.gerrit.common.TimeUtil;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
@@ -21,8 +24,15 @@ import com.google.gerrit.server.config.SitePaths;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.concurrent.TimeUnit;
+
 @Singleton
-public class EventsLogConfig {
+class EventsLogConfig {
+  static final String H2_DB_PREFIX = "jdbc:h2:";
+  static final String H2_DB_SUFFIX = ".h2.db";
   static final String CONFIG_COPY_LOCAL = "copyLocal";
   static final String CONFIG_MAX_AGE = "maxAge";
   static final String CONFIG_MAX_TRIES = "maxTries";
@@ -128,5 +138,19 @@ public class EventsLogConfig {
 
   public boolean getCopyLocal() {
     return copyLocal;
+  }
+
+  public File getLocalDBFile() {
+    String path = localStoreUrl.substring(H2_DB_PREFIX.length());
+    Path localPath = Paths.get(path);
+    return localPath.resolve(TABLE_NAME + H2_DB_SUFFIX).toFile();
+  }
+
+  public File getLocalCopyFile() {
+    String path = localStoreUrl.substring(H2_DB_PREFIX.length());
+    Path localPath = Paths.get(path);
+    return localPath.resolve(
+        TABLE_NAME + (TimeUnit.MILLISECONDS.toSeconds(TimeUtil.nowMs()))
+        + H2_DB_SUFFIX).toFile();
   }
 }

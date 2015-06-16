@@ -13,7 +13,6 @@
 // limitations under the License.
 
 package com.ericsson.gerrit.plugins.eventslog;
-
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_CONN_TIME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_COPY_LOCAL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_DRIVER;
@@ -34,6 +33,8 @@ import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_MAX_
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_RETURN_LIMIT;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_URL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_WAIT_TIME;
+import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.H2_DB_SUFFIX;
+import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
 import static com.google.common.truth.Truth.assertThat;
 import static org.easymock.EasyMock.expect;
 
@@ -145,5 +146,13 @@ public class EventsLogConfigTest {
     assertThat(config.getUrlOptions()).isEqualTo("DB_CLOSE_DELAY=10");
     assertThat(config.getStoreUsername()).isEqualTo("testUsername");
     assertThat(config.getStorePassword()).isEqualTo("testPassword");
+  }
+
+  @Test
+  public void testGetFiles() {
+    setUpDefaults();
+    config = new EventsLogConfig(cfgFactoryMock, site, null);
+    assertThat(config.getLocalDBFile().getName()).isEqualTo(TABLE_NAME + H2_DB_SUFFIX);
+    assertThat(config.getLocalCopyFile().getName()).containsMatch("[0-9]{10}");
   }
 }

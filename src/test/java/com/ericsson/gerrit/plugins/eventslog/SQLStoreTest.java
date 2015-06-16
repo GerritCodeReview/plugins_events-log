@@ -31,7 +31,9 @@ import com.google.inject.Provider;
 import org.easymock.EasyMock;
 import org.easymock.EasyMockSupport;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,6 +73,9 @@ public class SQLStoreTest {
   private Connection conn;
   private Statement stat;
   private List<SQLEntry> results;
+
+  @Rule
+  public TemporaryFolder testFolder = new TemporaryFolder();
 
   @SuppressWarnings("unchecked")
   @Before
@@ -230,6 +235,7 @@ public class SQLStoreTest {
   public void noRetryOnMessage() throws Exception {
     MockEvent mockEvent = new MockEvent();
     setUpClientMock();
+    expect(cfgMock.getLocalDBFile()).andReturn(testFolder.newFile("test.txt"));
     expect(cfgMock.getMaxTries()).andReturn(3).once();
     eventsDb.storeEvent(mockEvent);
     expectLastCall().andThrow(new SQLException(MSG)).once();
@@ -290,6 +296,7 @@ public class SQLStoreTest {
     NoSuchProjectException e =
         easyMock.createNiceMock(NoSuchProjectException.class);
     easyMock.resetAll();
+    expect(cfgMock.getLocalDBFile()).andReturn(testFolder.newFile("test.txt"));
     expect(cfgMock.getMaxAge()).andReturn(5);
     expect(
         pcFactoryMock.controlFor(EasyMock.anyObject(Project.NameKey.class),
@@ -375,15 +382,17 @@ public class SQLStoreTest {
 
   /**
    * For this test we expect that if we can connect to main database, then we
-   * should come back online and try setting up again. This involves trying to
-   * restore events from the local database.
+   * should come back online and try setting up again. We just want to make sure
+   * that restoreEventsFromLocal gets called, so verifying that getLocalDBFile
+   * is called is sufficient.
    */
   @Test
   public void testConnectionTask() throws Exception {
     eventsDb = new SQLClient(TEST_DRIVER, TEST_PATH, TEST_OPTIONS);
     localEventsDb = easyMock.createMock(SQLClient.class);
-    expect(localEventsDb.getAll()).andReturn(new ArrayList<SQLEntry>());
-    EasyMock.replay(localEventsDb);
+    EasyMock.reset(cfgMock);
+    expect(cfgMock.getLocalDBFile()).andReturn(null);
+    EasyMock.replay(localEventsDb, cfgMock);
     store =
         new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb,
             localEventsDb, poolMock);
@@ -411,6 +420,7 @@ public class SQLStoreTest {
     localEventsDb.createDBIfNotCreated();
     localEventsDb.storeEvent(mockEvent);
     expect(cfgMock.getMaxAge()).andReturn(5);
+    expect(cfgMock.getLocalDBFile()).andReturn(testFolder.newFile("test.txt"));
     eventsDb.createDBIfNotCreated();
     expectLastCall().andThrow(new SQLException(new ConnectException())).once();
     eventsDb.queryOne();
@@ -433,9 +443,9 @@ public class SQLStoreTest {
     easyMock.verifyAll();
   }
 
-  private void testCopyLocal() {
+  private void testCopyLocal() throws IOException {
     expect(cfgMock.getCopyLocal()).andReturn(true).once();
-    expect(cfgMock.getLocalStoreUrl()).andReturn(TEST_LOCAL_PATH).once();
+    expect(cfgMock.getLocalCopyFile()).andReturn(testFolder.newFile("test2.txt"));
   }
 
   public class MockEvent extends ChangeEvent {

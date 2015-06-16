@@ -14,10 +14,7 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
-
 import com.google.common.io.Files;
-import com.google.gerrit.common.TimeUtil;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.CurrentUser;
@@ -34,8 +31,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,8 +44,6 @@ import java.util.concurrent.TimeUnit;
 @Singleton
 public class SQLStore implements EventStore, LifecycleListener {
   private static final Logger log = LoggerFactory.getLogger(SQLStore.class);
-  private static final String H2_DB_PREFIX = "jdbc:h2:";
-  private static final String H2_DB_SUFFIX = ".h2.db";
 
   private final ProjectControl.GenericFactory projectControlFactory;
   private final Provider<CurrentUser> userProvider;
@@ -64,7 +57,7 @@ public class SQLStore implements EventStore, LifecycleListener {
   private boolean copyLocal;
   private final ScheduledThreadPoolExecutor pool;
   private ScheduledFuture<?> task;
-  private String localUrl;
+  private EventsLogConfig cfg;
 
   @Inject
   SQLStore(ProjectControl.GenericFactory projectControlFactory,
@@ -83,7 +76,7 @@ public class SQLStore implements EventStore, LifecycleListener {
     this.eventsDb = eventsDb;
     this.localEventsDb = localEventsDb;
     this.pool = pool;
-    this.localUrl = cfg.getLocalStoreUrl();
+    this.cfg = cfg;
   }
 
   @Override
@@ -239,9 +232,11 @@ public class SQLStore implements EventStore, LifecycleListener {
   }
 
   private void restoreEventsFromLocal() {
-    if (copyLocal) {
-      copyFile();
+    File file = cfg.getLocalDBFile();
+    if (file == null || !file.exists() || file.isDirectory()) {
+      return;
     }
+    copyFileIfConfigured(file);
     List<SQLEntry> entries;
     try {
       entries = localEventsDb.getAll();
@@ -300,13 +295,11 @@ public class SQLStore implements EventStore, LifecycleListener {
     }
   }
 
-  private void copyFile() {
-    Path localPath = Paths.get(localUrl.substring(H2_DB_PREFIX.length()));
-    File file = localPath.resolve(TABLE_NAME + H2_DB_SUFFIX).toFile();
-    File copyFile =
-        localPath.resolve(
-            TABLE_NAME + (TimeUnit.MILLISECONDS.toSeconds(TimeUtil.nowMs()))
-                + H2_DB_SUFFIX).toFile();
+  private void copyFileIfConfigured(File file) {
+    if (!copyLocal) {
+      return;
+    }
+    File copyFile = cfg.getLocalCopyFile();
     try {
       Files.copy(file, copyFile);
     } catch (IOException e) {
