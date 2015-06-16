@@ -25,6 +25,53 @@
     },
     {
       "key": {
+        "uuid": "b9c5f8ce_45730ac6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-06-16T17:00:09Z",
+      "side": 1,
+      "message": "I agree, I will fix it in next ps but I cannot get the tests working for both modes, see my comment in the BUCK file.",
+      "parentUuid": "9972f48f_d41f9c61",
+      "range": {
+        "startLine": 7,
+        "startChar": 32,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "5aaf681d2db0b28ebab9c3d29799b9667c1aefd4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b9c5f8ce_657606b8",
+        "filename": "BUCK",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-06-16T17:00:09Z",
+      "side": 1,
+      "message": "this is working only in standalone, must be replaced by \u0027//gerrit-plugin-api:lib\u0027 to make it work in gerrit tree but then its not working in stadalone, I am not sure yet how to do it that works for both mode.",
+      "range": {
+        "startLine": 30,
+        "startChar": 4,
+        "endLine": 30,
+        "endChar": 29
+      },
+      "revId": "5aaf681d2db0b28ebab9c3d29799b9667c1aefd4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d9a1cc0d_2e7ce797",
         "filename": "src/main/resources/Documentation/build.md",
         "patchSetId": 3
