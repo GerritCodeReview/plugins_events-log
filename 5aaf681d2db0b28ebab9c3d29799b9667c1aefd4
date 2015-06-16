@@ -73,6 +73,54 @@
     },
     {
       "key": {
+        "uuid": "d91c6c21_f6aac08c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-06-16T17:49:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9972f48f_d41f9c61",
+      "range": {
+        "startLine": 7,
+        "startChar": 32,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "5aaf681d2db0b28ebab9c3d29799b9667c1aefd4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d91c6c21_d6afc49a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-06-16T17:49:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9a1cc0d_aefe177b",
+      "range": {
+        "startLine": 7,
+        "startChar": 32,
+        "endLine": 7,
+        "endChar": 42
+      },
+      "revId": "5aaf681d2db0b28ebab9c3d29799b9667c1aefd4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9c5f8ce_657606b8",
         "filename": "BUCK",
         "patchSetId": 3
@@ -167,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "b9c5f8ce_c50d3a41",
+        "filename": "src/main/resources/Documentation/build.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-06-16T17:49:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9a1cc0d_2e7ce797",
+      "range": {
+        "startLine": 55,
+        "startChar": 11,
+        "endLine": 55,
+        "endChar": 17
+      },
+      "revId": "5aaf681d2db0b28ebab9c3d29799b9667c1aefd4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9972f48f_b42a2085",
         "filename": "src/main/resources/Documentation/build.md",
         "patchSetId": 3
@@ -178,6 +250,30 @@
       "writtenOn": "2015-06-16T16:38:43Z",
       "side": 1,
       "message": "Not needed",
+      "range": {
+        "startLine": 82,
+        "startChar": 12,
+        "endLine": 82,
+        "endChar": 18
+      },
+      "revId": "5aaf681d2db0b28ebab9c3d29799b9667c1aefd4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d91c6c21_96a54cbf",
+        "filename": "src/main/resources/Documentation/build.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-06-16T17:49:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9972f48f_b42a2085",
       "range": {
         "startLine": 82,
         "startChar": 12,
