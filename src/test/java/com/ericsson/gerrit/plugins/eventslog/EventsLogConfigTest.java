@@ -14,7 +14,6 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
-import static com.google.common.truth.Truth.assertThat;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_CONN_TIME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_COPY_LOCAL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_DRIVER;
@@ -30,6 +29,7 @@ import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_DRIV
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_MAX_AGE;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_RETURN_LIMIT;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_URL;
+import static com.google.common.truth.Truth.assertThat;
 import static org.easymock.EasyMock.expect;
 
 import com.google.gerrit.server.config.PluginConfig;
@@ -43,7 +43,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class EventsLogConfigTest {
   private SitePaths site;
@@ -57,10 +57,10 @@ public class EventsLogConfigTest {
   public TemporaryFolder gerrit_site = new TemporaryFolder();
 
   @Before
-  public void setUp() throws FileNotFoundException {
+  public void setUp() throws IOException {
     EasyMockSupport easyMock = new EasyMockSupport();
-    site = new SitePaths(gerrit_site.getRoot());
-    site.etc_dir.mkdirs();
+    site = new SitePaths(gerrit_site.getRoot().toPath());
+    site.etc_dir.toFile().mkdirs();
     configMock = easyMock.createNiceMock(PluginConfig.class);
     expect(configMock.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL)).andReturn(DEFAULT_COPY_LOCAL);
     expect(configMock.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE)).andReturn(DEFAULT_MAX_AGE);
