@@ -292,11 +292,14 @@ public class SQLStoreTest {
     easyMock.resetAll();
     expect(cfgMock.getMaxAge()).andReturn(5);
     expect(
-        pcFactoryMock.controlFor(EasyMock.anyObject(Project.NameKey.class),
-            EasyMock.anyObject(CurrentUser.class))).andReturn(pc).times(2);
+        pcFactoryMock.controlFor(EasyMock.eq(mockEvent.getProjectNameKey()),
+            EasyMock.anyObject(CurrentUser.class))).andReturn(pc).once();
+    expect(
+        pcFactoryMock.controlFor(EasyMock.eq(mockEvent2.getProjectNameKey()),
+            EasyMock.anyObject(CurrentUser.class))).andReturn(pc).once();
     expect(pc.isVisible()).andReturn(true).times(2);
     expect(
-        pcFactoryMock.controlFor(EasyMock.anyObject(Project.NameKey.class),
+        pcFactoryMock.controlFor(EasyMock.eq(mockEvent3.getProjectNameKey()),
             EasyMock.anyObject(CurrentUser.class))).andThrow(e);
     easyMock.replayAll();
 
