@@ -15,6 +15,7 @@
 package com.ericsson.gerrit.plugins.eventslog;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.easymock.EasyMock.newCapture;
 import static org.easymock.EasyMock.capture;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
@@ -73,7 +74,7 @@ public class EventsRestApiServletTest {
     Map<String, String> paramMock = new HashMap<>();
     paramMock.put("a", "1");
     paramMock.put("b", "2");
-    Capture<Map<String, String>> catcher = new Capture<>();
+    Capture<Map<String, String>> catcher = newCapture();
     easyMock.resetAll();
     expect(userProviderMock.get()).andStubReturn(userMock);
     expect(userMock.isIdentifiedUser()).andStubReturn(true);
@@ -91,7 +92,7 @@ public class EventsRestApiServletTest {
   @Test
   public void badQueryString() throws Exception {
     String queryStringMock = "a;b";
-    Capture<Map<String, String>> catcher = new Capture<>();
+    Capture<Map<String, String>> catcher = newCapture();
     easyMock.resetAll();
     expect(userProviderMock.get()).andStubReturn(userMock);
     expect(userMock.isIdentifiedUser()).andStubReturn(true);
