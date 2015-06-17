@@ -16,15 +16,24 @@ maven_jar(
 
 maven_jar(
   name = 'junit',
-  id = 'junit:junit:4.10',
-  sha1 = 'e4f1766ce7404a08f45d859fb9c226fc9e41a861',
+  id = 'junit:junit:4.11',
+  sha1 = '4e031bb61df09069aeb2bffb4019e7a5034a4ee0',
   license = 'DO_NOT_DISTRIBUTE',
+  exported_deps = [':hamcrest-core'],
+)
+
+maven_jar(
+  name = 'hamcrest-core',
+  id = 'org.hamcrest:hamcrest-core:1.3',
+  sha1 = '42a25dc3219429f0e5d060061f71acb49bf010a0',
+  license = 'DO_NOT_DISTRIBUTE',
+  visibility = ['//lib:junit'],
 )
 
 maven_jar(
   name = 'truth',
-  id = 'com.google.truth:truth:0.25',
-  sha1 = '503ba892e8482976b81eb2b2df292858fbac3782',
+  id = 'com.google.truth:truth:0.26',
+  sha1 = 'b5802815625d82f39c33219299771f3d64301b06',
   license = 'DO_NOT_DISTRIBUTE',
   exported_deps = [
     ':guava',
