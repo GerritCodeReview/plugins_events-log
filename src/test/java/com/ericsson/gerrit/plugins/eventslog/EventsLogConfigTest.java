@@ -43,7 +43,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 
 public class EventsLogConfigTest {
   private SitePaths site;
@@ -57,10 +58,10 @@ public class EventsLogConfigTest {
   public TemporaryFolder gerrit_site = new TemporaryFolder();
 
   @Before
-  public void setUp() throws FileNotFoundException {
+  public void setUp() throws IOException {
     EasyMockSupport easyMock = new EasyMockSupport();
-    site = new SitePaths(gerrit_site.getRoot());
-    site.etc_dir.mkdirs();
+    site = new SitePaths(gerrit_site.getRoot().toPath());
+    Files.createDirectories(site.etc_dir);
     configMock = easyMock.createNiceMock(PluginConfig.class);
     expect(configMock.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL)).andReturn(DEFAULT_COPY_LOCAL);
     expect(configMock.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE)).andReturn(DEFAULT_MAX_AGE);
