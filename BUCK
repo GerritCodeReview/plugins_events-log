@@ -31,7 +31,6 @@ java_test(
     ':events-log__plugin',
     '//lib/easymock:easymock',
     '//lib:gson',
-    '//lib:junit',
     '//lib:truth',
   ],
 )
