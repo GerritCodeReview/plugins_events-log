@@ -1,5 +1,18 @@
 include_defs('//bucklets/gerrit_plugin.bucklet')
 
+DEPS = [
+  '//lib:gson',
+  '//lib/commons:dbcp'
+]
+
+TEST_DEPS = GERRIT_PLUGIN_API + [
+  ':events-log__plugin',
+  '//lib/easymock:easymock',
+  '//lib:gson',
+  '//lib:junit',
+  '//lib:truth',
+]
+
 gerrit_plugin(
   name = 'events-log',
   srcs = glob(['src/main/java/**/*.java']),
@@ -11,15 +24,12 @@ gerrit_plugin(
     'Gerrit-Module: com.ericsson.gerrit.plugins.eventslog.Module',
     'Gerrit-HttpModule: com.ericsson.gerrit.plugins.eventslog.HttpModule',
   ],
-  provided_deps = [
-    '//lib:gson',
-    '//lib/commons:dbcp'
-  ],
+  provided_deps = PLUGIN_PROVIDED_DEPS,
 )
 
 java_library(
   name = 'classpath',
-  deps = [':events-log__plugin'],
+  deps = list(set(PLUGIN_PROVIDED_DEPS) | set(TEST_DEPS))
 )
 
 java_test(
@@ -27,11 +37,5 @@ java_test(
   srcs = glob(['src/test/java/**/*.java']),
   labels = ['events-log'],
   source_under_test = [':events-log__plugin'],
-  deps = GERRIT_PLUGIN_API + [
-    ':events-log__plugin',
-    '//lib/easymock:easymock',
-    '//lib:gson',
-    '//lib:junit',
-    '//lib:truth',
-  ],
+  deps = TEST_DEPS,
 )
