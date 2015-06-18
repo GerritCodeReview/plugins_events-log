@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ea81a5d_a4d0623e",
+        "filename": "BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-06-18T18:49:01Z",
+      "side": 1,
+      "message": "Just DEPS? We are here in plugin. provided_deps already tells us, its provided.",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 20
+      },
+      "revId": "ce445cfc650ae77508f7706a7d67ea60590f7d5d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ea81a5d_44df2e4d",
+        "filename": "BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-06-18T18:49:01Z",
+      "side": 1,
+      "message": "Nit: Extra space",
+      "range": {
+        "startLine": 8,
+        "startChar": 11,
+        "endLine": 8,
+        "endChar": 13
+      },
+      "revId": "ce445cfc650ae77508f7706a7d67ea60590f7d5d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fe6916e5_f7ef00f8",
+        "filename": "BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-06-18T18:49:01Z",
+      "side": 1,
+      "message": "Nice hack.",
+      "range": {
+        "startLine": 32,
+        "startChar": 9,
+        "endLine": 32,
+        "endChar": 57
+      },
+      "revId": "ce445cfc650ae77508f7706a7d67ea60590f7d5d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
