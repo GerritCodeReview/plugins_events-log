@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5e306212_2232ae30",
+        "filename": "BUCK",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-06-18T19:00:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ea81a5d_c4f23ee5",
+      "range": {
+        "startLine": 5,
+        "startChar": 2,
+        "endLine": 5,
+        "endChar": 22
+      },
+      "revId": "d62fbbbb8e901902a5656c9120d6c3866460d99c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ea81a5d_04d93665",
         "filename": "BUCK",
         "patchSetId": 2
@@ -36,6 +60,30 @@
       "writtenOn": "2015-06-18T18:56:34Z",
       "side": 1,
       "message": "May be rename this and the one on line 32 below to DEPS?",
+      "range": {
+        "startLine": 27,
+        "startChar": 18,
+        "endLine": 27,
+        "endChar": 38
+      },
+      "revId": "d62fbbbb8e901902a5656c9120d6c3866460d99c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ea36680_030e0e6d",
+        "filename": "BUCK",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-06-18T19:00:21Z",
+      "side": 1,
+      "message": "Done, and tested this time :)",
+      "parentUuid": "9ea81a5d_04d93665",
       "range": {
         "startLine": 27,
         "startChar": 18,
