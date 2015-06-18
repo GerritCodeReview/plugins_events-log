@@ -49,6 +49,12 @@ The output is created in
   buck-out/gen/events-log.jar
 ```
 
+This project can be imported into the Eclipse IDE:
+
+```
+  ./bucklets/tools/eclipse.py
+```
+
 To execute the tests run:
 
 ```
