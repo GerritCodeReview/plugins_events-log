@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "9ea81a5d_c4f23ee5",
+        "filename": "BUCK",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-06-18T18:57:35Z",
+      "side": 1,
+      "message": "Nit: always add comma, even on last element in the list.",
+      "range": {
+        "startLine": 5,
+        "startChar": 2,
+        "endLine": 5,
+        "endChar": 22
+      },
+      "revId": "d62fbbbb8e901902a5656c9120d6c3866460d99c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ea81a5d_04d93665",
         "filename": "BUCK",
         "patchSetId": 2
