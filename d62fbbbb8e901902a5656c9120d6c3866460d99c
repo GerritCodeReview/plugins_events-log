@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9ea81a5d_04d93665",
+        "filename": "BUCK",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2015-06-18T18:56:34Z",
+      "side": 1,
+      "message": "May be rename this and the one on line 32 below to DEPS?",
+      "range": {
+        "startLine": 27,
+        "startChar": 18,
+        "endLine": 27,
+        "endChar": 38
+      },
+      "revId": "d62fbbbb8e901902a5656c9120d6c3866460d99c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
