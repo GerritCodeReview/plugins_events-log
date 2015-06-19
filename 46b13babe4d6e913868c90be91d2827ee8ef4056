@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "de43727f_7ed9f164",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfig.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-06-19T14:50:33Z",
+      "side": 1,
+      "message": "As discussed, replace those 2 methods by one returning the folder where to put local db and let the SQLStore handle the h2 db file. We also need to update the documentation.",
+      "range": {
+        "startLine": 143,
+        "startChar": 2,
+        "endLine": 155,
+        "endChar": 3
+      },
+      "revId": "46b13babe4d6e913868c90be91d2827ee8ef4056",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
