@@ -25,7 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Singleton
-class EventsLogConfig {
+public class EventsLogConfig {
   static final String H2_DB_SUFFIX = ".h2.db";
   static final String CONFIG_COPY_LOCAL = "copyLocal";
   static final String CONFIG_MAX_AGE = "maxAge";

@@ -21,7 +21,7 @@ gerrit_plugin(
     'Gerrit-PluginName: events-log',
     'Implementation-Vendor: Ericsson',
     'Implementation-URL: https://gerrit-review.googlesource.com/#/admin/projects/plugins/events-log',
-    'Gerrit-Module: com.ericsson.gerrit.plugins.eventslog.Module',
+    'Gerrit-Module: com.ericsson.gerrit.plugins.eventslog.sql.SqlModule',
     'Gerrit-HttpModule: com.ericsson.gerrit.plugins.eventslog.HttpModule',
   ],
   provided_deps = DEPS,
