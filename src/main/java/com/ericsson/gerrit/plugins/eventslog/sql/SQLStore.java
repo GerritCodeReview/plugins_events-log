@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.ericsson.gerrit.plugins.eventslog;
+package com.ericsson.gerrit.plugins.eventslog.sql;
 
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
+import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.TABLE_NAME;
 
 import com.google.common.io.Files;
 import com.google.gerrit.common.TimeUtil;
@@ -27,6 +27,13 @@ import com.google.gerrit.server.project.ProjectControl;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
+
+import com.ericsson.gerrit.plugins.eventslog.EventPool;
+import com.ericsson.gerrit.plugins.eventslog.EventStore;
+import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
+import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
+import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
+import com.ericsson.gerrit.plugins.eventslog.ServiceUnavailableException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +53,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 @Singleton
-public class SQLStore implements EventStore, LifecycleListener {
+class SQLStore implements EventStore, LifecycleListener {
   private static final Logger log = LoggerFactory.getLogger(SQLStore.class);
   public static final String H2_DB_SUFFIX = ".h2.db";
 

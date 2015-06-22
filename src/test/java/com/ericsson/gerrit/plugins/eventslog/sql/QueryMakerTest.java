@@ -12,10 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.ericsson.gerrit.plugins.eventslog;
+package com.ericsson.gerrit.plugins.eventslog.sql;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.easymock.EasyMock.expect;
+
+import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
+import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
+import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
+import com.ericsson.gerrit.plugins.eventslog.sql.SQLQueryMaker;
 
 import org.easymock.EasyMockSupport;
 import org.junit.BeforeClass;
