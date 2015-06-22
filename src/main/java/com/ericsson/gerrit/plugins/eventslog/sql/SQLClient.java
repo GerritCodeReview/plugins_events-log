@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.ericsson.gerrit.plugins.eventslog;
+package com.ericsson.gerrit.plugins.eventslog.sql;
 
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.DATE_ENTRY;
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.EVENT_ENTRY;
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.PRIMARY_ENTRY;
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.PROJECT_ENTRY;
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
+import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.DATE_ENTRY;
+import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.EVENT_ENTRY;
+import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.PRIMARY_ENTRY;
+import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.PROJECT_ENTRY;
+import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.TABLE_NAME;
 import static java.lang.String.format;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -26,6 +26,9 @@ import com.google.common.collect.ListMultimap;
 import com.google.gerrit.server.events.ProjectEvent;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
+
+import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
+import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
@@ -40,7 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class SQLClient {
+class SQLClient {
   private static final Logger log = LoggerFactory.getLogger(SQLClient.class);
 
   private BasicDataSource ds;

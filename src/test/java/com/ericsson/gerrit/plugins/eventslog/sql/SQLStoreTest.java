@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.ericsson.gerrit.plugins.eventslog;
+package com.ericsson.gerrit.plugins.eventslog.sql;
 
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
+import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.TABLE_NAME;
 import static com.google.common.truth.Truth.assertThat;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
@@ -27,6 +27,13 @@ import com.google.gerrit.server.project.NoSuchProjectException;
 import com.google.gerrit.server.project.ProjectControl;
 import com.google.gson.Gson;
 import com.google.inject.Provider;
+
+import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
+import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
+import com.ericsson.gerrit.plugins.eventslog.ServiceUnavailableException;
+import com.ericsson.gerrit.plugins.eventslog.sql.SQLClient;
+import com.ericsson.gerrit.plugins.eventslog.sql.SQLEntry;
+import com.ericsson.gerrit.plugins.eventslog.sql.SQLStore;
 
 import org.easymock.EasyMock;
 import org.easymock.EasyMockSupport;
