@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fe3cb6f3_1f40a358",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-06-22T14:52:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe3cb6f3_df6c7bfd",
+      "range": {
+        "startLine": 9,
+        "startChar": 49,
+        "endLine": 9,
+        "endChar": 53
+      },
+      "revId": "c04a65b9fa12faa76d13a1a91a8f564a58b9b459",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de43727f_1e570d2e",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/Module.java",
         "patchSetId": 7
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "de43727f_5e619506",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/Module.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-06-22T14:52:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de43727f_1e570d2e",
+      "range": {
+        "startLine": 69,
+        "startChar": 52,
+        "endLine": 70,
+        "endChar": 33
+      },
+      "revId": "c04a65b9fa12faa76d13a1a91a8f564a58b9b459",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de43727f_7e5c514e",
         "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/SQLStoreTest.java",
         "patchSetId": 7
@@ -59,6 +107,30 @@
       "writtenOn": "2015-06-22T14:44:10Z",
       "side": 1,
       "message": "move this back to a private static final string",
+      "range": {
+        "startLine": 83,
+        "startChar": 4,
+        "endLine": 83,
+        "endChar": 35
+      },
+      "revId": "c04a65b9fa12faa76d13a1a91a8f564a58b9b459",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de43727f_be653915",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/SQLStoreTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-06-22T14:52:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de43727f_7e5c514e",
       "range": {
         "startLine": 83,
         "startChar": 4,
