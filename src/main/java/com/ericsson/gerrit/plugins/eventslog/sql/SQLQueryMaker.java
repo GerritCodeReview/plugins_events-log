@@ -12,14 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.ericsson.gerrit.plugins.eventslog;
+package com.ericsson.gerrit.plugins.eventslog.sql;
 
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.DATE_ENTRY;
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.PRIMARY_ENTRY;
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
+import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.DATE_ENTRY;
+import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.PRIMARY_ENTRY;
+import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.TABLE_NAME;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+
+import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
+import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
+import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -29,7 +33,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Singleton
-public class SQLQueryMaker implements QueryMaker {
+class SQLQueryMaker implements QueryMaker {
   private static final String TIME_ONE = "t1";
   private static final String TIME_TWO = "t2";
   private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat(
