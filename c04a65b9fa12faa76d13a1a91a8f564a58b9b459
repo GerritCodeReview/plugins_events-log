@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe3cb6f3_df6c7bfd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-06-22T14:44:10Z",
+      "side": 1,
+      "message": "table",
+      "range": {
+        "startLine": 9,
+        "startChar": 49,
+        "endLine": 9,
+        "endChar": 53
+      },
+      "revId": "c04a65b9fa12faa76d13a1a91a8f564a58b9b459",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de43727f_1e570d2e",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/Module.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-06-22T14:44:10Z",
+      "side": 1,
+      "message": "The path .toString() method removes the separator at the end of the name (\"/\"). So SQLClient will create the default local db as events-dbChangeEvents.h2.db directly in gerrit_site.\nWe could add on the separator in the SQLClient constructor.",
+      "range": {
+        "startLine": 69,
+        "startChar": 52,
+        "endLine": 70,
+        "endChar": 33
+      },
+      "revId": "c04a65b9fa12faa76d13a1a91a8f564a58b9b459",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de43727f_7e5c514e",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/SQLStoreTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-06-22T14:44:10Z",
+      "side": 1,
+      "message": "move this back to a private static final string",
+      "range": {
+        "startLine": 83,
+        "startChar": 4,
+        "endLine": 83,
+        "endChar": 35
+      },
+      "revId": "c04a65b9fa12faa76d13a1a91a8f564a58b9b459",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
