@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fe3cb6f3_ff485f7d",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SqlModule.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1018662
+      },
+      "writtenOn": "2015-06-22T15:49:38Z",
+      "side": 1,
+      "message": "SQL",
+      "range": {
+        "startLine": 28,
+        "startChar": 6,
+        "endLine": 28,
+        "endChar": 9
+      },
+      "revId": "c6e920cfe027bc85b87b628f825c7f2a83589601",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
