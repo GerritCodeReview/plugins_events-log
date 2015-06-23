@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.ericsson.gerrit.plugins.eventslog;
+package com.ericsson.gerrit.plugins.eventslog.sql;
 
 import java.sql.Timestamp;
 
-public class SQLEntry implements Comparable<SQLEntry> {
+class SQLEntry implements Comparable<SQLEntry> {
   private String name;
   private Timestamp timestamp;
   private String event;

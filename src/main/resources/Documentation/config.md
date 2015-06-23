@@ -28,9 +28,9 @@ plugin.@PLUGIN@.storeUrl
 :    Specify the path to the directory in which to keep the database. When not
      specified, the default path is jdbc:h2:~/db/.
 
-plugin.@PLUGIN@.localStoreUrl
+plugin.@PLUGIN@.localStorePath
 :    Specify the path to the directory in which to keep the back up database.
-     When not specified, the default path is jdbc:h2:<gerrit_site>/events-db/.
+     When not specified, the default path is <gerrit_site>/events-db/.
 
 plugin.@PLUGIN@.storeUsername
 :    Username to connect to the database, not defined by default. This value can
