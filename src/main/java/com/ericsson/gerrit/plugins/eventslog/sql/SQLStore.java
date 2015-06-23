@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.ericsson.gerrit.plugins.eventslog;
+package com.ericsson.gerrit.plugins.eventslog.sql;
 
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
+import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.TABLE_NAME;
 
 import com.google.common.io.Files;
 import com.google.gerrit.common.TimeUtil;
@@ -28,6 +28,13 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
+import com.ericsson.gerrit.plugins.eventslog.EventPool;
+import com.ericsson.gerrit.plugins.eventslog.EventStore;
+import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
+import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
+import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
+import com.ericsson.gerrit.plugins.eventslog.ServiceUnavailableException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +42,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,10 +53,9 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 @Singleton
-public class SQLStore implements EventStore, LifecycleListener {
+class SQLStore implements EventStore, LifecycleListener {
   private static final Logger log = LoggerFactory.getLogger(SQLStore.class);
-  private static final String H2_DB_PREFIX = "jdbc:h2:";
-  private static final String H2_DB_SUFFIX = ".h2.db";
+  public static final String H2_DB_SUFFIX = ".h2.db";
 
   private final ProjectControl.GenericFactory projectControlFactory;
   private final Provider<CurrentUser> userProvider;
@@ -64,7 +69,7 @@ public class SQLStore implements EventStore, LifecycleListener {
   private boolean copyLocal;
   private final ScheduledThreadPoolExecutor pool;
   private ScheduledFuture<?> task;
-  private String localUrl;
+  private Path localPath;
 
   @Inject
   SQLStore(ProjectControl.GenericFactory projectControlFactory,
@@ -83,7 +88,7 @@ public class SQLStore implements EventStore, LifecycleListener {
     this.eventsDb = eventsDb;
     this.localEventsDb = localEventsDb;
     this.pool = pool;
-    this.localUrl = cfg.getLocalStoreUrl();
+    this.localPath = cfg.getLocalStorePath();
   }
 
   @Override
@@ -239,9 +244,19 @@ public class SQLStore implements EventStore, LifecycleListener {
   }
 
   private void restoreEventsFromLocal() {
-    if (copyLocal) {
-      copyFile();
+
+    boolean localDbExists = false;
+    try {
+      localDbExists = localEventsDb.dbExists();
+    } catch (SQLException e) {
+      log.warn(
+          "Could not check existence of local database, assume that it doesn't exist",
+          e);
     }
+    if (!localDbExists) {
+      return;
+    }
+
     List<SQLEntry> entries;
     try {
       entries = localEventsDb.getAll();
@@ -256,6 +271,9 @@ public class SQLStore implements EventStore, LifecycleListener {
       log.warn("Could not query all events from local", e);
     }
     try {
+      if (copyLocal) {
+        copyFile();
+      }
       localEventsDb.removeOldEvents(0);
     } catch (SQLException e) {
       log.warn("Could not destroy local database", e);
@@ -301,7 +319,6 @@ public class SQLStore implements EventStore, LifecycleListener {
   }
 
   private void copyFile() {
-    Path localPath = Paths.get(localUrl.substring(H2_DB_PREFIX.length()));
     File file = localPath.resolve(TABLE_NAME + H2_DB_SUFFIX).toFile();
     File copyFile =
         localPath.resolve(
