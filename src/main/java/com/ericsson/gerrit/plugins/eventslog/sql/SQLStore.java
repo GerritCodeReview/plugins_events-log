@@ -256,9 +256,7 @@ class SQLStore implements EventStore, LifecycleListener {
     if (!localDbExists) {
       return;
     }
-    if (copyLocal) {
-      copyFile();
-    }
+
     List<SQLEntry> entries;
     try {
       entries = localEventsDb.getAll();
@@ -273,6 +271,9 @@ class SQLStore implements EventStore, LifecycleListener {
       log.warn("Could not query all events from local", e);
     }
     try {
+      if (copyLocal) {
+        copyFile();
+      }
       localEventsDb.removeOldEvents(0);
     } catch (SQLException e) {
       log.warn("Could not destroy local database", e);
