@@ -21,14 +21,17 @@ import com.google.inject.Inject;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+/**
+ * Listen to Events and store them into the EventStore
+ */
 public class EventHandler implements EventListener {
 
-  private final EventStore database;
+  private final EventStore store;
   private final ScheduledThreadPoolExecutor pool;
 
   @Inject
-  EventHandler(EventStore database, @EventPool ScheduledThreadPoolExecutor pool) {
-    this.database = database;
+  EventHandler(EventStore store, @EventPool ScheduledThreadPoolExecutor pool) {
+    this.store = store;
     this.pool = pool;
   }
 
@@ -48,7 +51,7 @@ public class EventHandler implements EventListener {
 
     @Override
     public void run() {
-      database.storeEvent(event);
+      store.storeEvent(event);
     }
 
     @Override

@@ -13,11 +13,10 @@
 // limitations under the License.
 
 package com.ericsson.gerrit.plugins.eventslog;
-
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_CONN_TIME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_COPY_LOCAL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_DRIVER;
-import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_LOCAL_URL;
+import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_LOCAL_PATH;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_MAX_AGE;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_MAX_TRIES;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_PASSWORD;
@@ -57,8 +56,8 @@ public class EventsLogConfigTest {
   private PluginConfigFactory cfgFactoryMock;
   private PluginConfig configMock;
   private EasyMockSupport easyMock;
-  private String defaultStoreUrl;
-  private String localStoreUrl;
+  private String defaultLocalStorePath;
+  private String localStorePath;
 
   @Rule
   public TemporaryFolder gerrit_site = new TemporaryFolder();
@@ -68,7 +67,7 @@ public class EventsLogConfigTest {
     easyMock = new EasyMockSupport();
     site = new SitePaths(gerrit_site.getRoot().toPath());
     Files.createDirectories(site.etc_dir);
-    defaultStoreUrl = "jdbc:h2:" + site.site_path.toString() + "/events-db/";
+    defaultLocalStorePath = site.site_path.toString() + "/events-db/";
     configMock = easyMock.createMock(PluginConfig.class);
     cfgFactoryMock = easyMock.createMock(PluginConfigFactory.class);
     expect(cfgFactoryMock.getFromGerritConfig(EasyMock.anyString(),
@@ -84,7 +83,7 @@ public class EventsLogConfigTest {
     expect(configMock.getInt(CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME)).andReturn(DEFAULT_WAIT_TIME);
     expect(configMock.getString(CONFIG_DRIVER, DEFAULT_DRIVER)).andReturn(DEFAULT_DRIVER);
     expect(configMock.getString(CONFIG_URL, DEFAULT_URL)).andReturn(DEFAULT_URL);
-    expect(configMock.getString(CONFIG_LOCAL_URL, defaultStoreUrl)).andReturn(defaultStoreUrl);
+    expect(configMock.getString(CONFIG_LOCAL_PATH, defaultLocalStorePath)).andReturn(defaultLocalStorePath);
     expect(configMock.getString(CONFIG_URL_OPTIONS, "")).andReturn("");
     expect(configMock.getString(CONFIG_USERNAME)).andReturn(null);
     expect(configMock.getString(CONFIG_PASSWORD)).andReturn(null);
@@ -93,7 +92,7 @@ public class EventsLogConfigTest {
   }
 
   private void setUpCustom() {
-    localStoreUrl = "jdbc:h2:~/gerrit/events-db/";
+    localStorePath = "~/gerrit/events-db/";
     expect(configMock.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL)).andReturn(true);
     expect(configMock.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE)).andReturn(20);
     expect(configMock.getInt(CONFIG_MAX_TRIES, DEFAULT_MAX_TRIES)).andReturn(5);
@@ -102,7 +101,7 @@ public class EventsLogConfigTest {
     expect(configMock.getInt(CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME)).andReturn(5000);
     expect(configMock.getString(CONFIG_DRIVER, DEFAULT_DRIVER)).andReturn("org.h2.Driver2");
     expect(configMock.getString(CONFIG_URL, DEFAULT_URL)).andReturn("jdbc:h2:~/gerrit/db");
-    expect(configMock.getString(CONFIG_LOCAL_URL, defaultStoreUrl)).andReturn(localStoreUrl);
+    expect(configMock.getString(CONFIG_LOCAL_PATH, defaultLocalStorePath)).andReturn(localStorePath);
     expect(configMock.getString(CONFIG_URL_OPTIONS, "")).andReturn("DB_CLOSE_DELAY=10");
     expect(configMock.getString(CONFIG_USERNAME)).andReturn("testUsername");
     expect(configMock.getString(CONFIG_PASSWORD)).andReturn("testPassword");
@@ -121,7 +120,7 @@ public class EventsLogConfigTest {
     assertThat(config.getConnectTime()).isEqualTo(1000);
     assertThat(config.getWaitTime()).isEqualTo(1000);
     assertThat(config.getLocalStoreDriver()).isEqualTo(DEFAULT_DRIVER);
-    assertThat(config.getLocalStoreUrl()).isEqualTo(defaultStoreUrl);
+    assertThat(config.getLocalStorePath().toString() + "/").isEqualTo(defaultLocalStorePath);
     assertThat(config.getStoreDriver()).isEqualTo(DEFAULT_DRIVER);
     assertThat(config.getStoreUrl()).isEqualTo(DEFAULT_URL);
     assertThat(config.getUrlOptions()).isEmpty();
@@ -140,7 +139,7 @@ public class EventsLogConfigTest {
     assertThat(config.getConnectTime()).isEqualTo(5000);
     assertThat(config.getWaitTime()).isEqualTo(5000);
     assertThat(config.getLocalStoreDriver()).isEqualTo(DEFAULT_DRIVER);
-    assertThat(config.getLocalStoreUrl()).isEqualTo(localStoreUrl);
+    assertThat(config.getLocalStorePath().toString() + "/").isEqualTo(localStorePath);
     assertThat(config.getStoreDriver()).isEqualTo("org.h2.Driver2");
     assertThat(config.getStoreUrl()).isEqualTo("jdbc:h2:~/gerrit/db");
     assertThat(config.getUrlOptions()).isEqualTo("DB_CLOSE_DELAY=10");

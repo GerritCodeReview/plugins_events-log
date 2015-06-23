@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.ericsson.gerrit.plugins.eventslog;
+package com.ericsson.gerrit.plugins.eventslog.sql;
 
-import static com.ericsson.gerrit.plugins.eventslog.SQLTable.TABLE_NAME;
+import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.TABLE_NAME;
 import static com.google.common.truth.Truth.assertThat;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
@@ -28,10 +28,19 @@ import com.google.gerrit.server.project.ProjectControl;
 import com.google.gson.Gson;
 import com.google.inject.Provider;
 
+import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
+import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
+import com.ericsson.gerrit.plugins.eventslog.ServiceUnavailableException;
+import com.ericsson.gerrit.plugins.eventslog.sql.SQLClient;
+import com.ericsson.gerrit.plugins.eventslog.sql.SQLEntry;
+import com.ericsson.gerrit.plugins.eventslog.sql.SQLStore;
+
 import org.easymock.EasyMock;
 import org.easymock.EasyMockSupport;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,8 +59,8 @@ import java.util.concurrent.TimeUnit;
 
 public class SQLStoreTest {
   private static final Logger log = LoggerFactory.getLogger(SQLStoreTest.class);
-  private static final String TEST_PATH = "jdbc:h2:mem:";
-  private static final String TEST_LOCAL_PATH = "jdbc:h2:mem:test:";
+  private static final String TEST_URL = "jdbc:h2:mem:";
+  private static final String TEST_LOCAL_URL = "jdbc:h2:mem:test:";
   private static final String TEST_DRIVER = "org.h2.Driver";
   private static final String TEST_OPTIONS = "DB_CLOSE_DELAY=-1";
   private static final String TERM_CONN_MSG = "terminating connection";
@@ -67,10 +76,13 @@ public class SQLStoreTest {
   private SQLStore store;
   private ScheduledThreadPoolExecutor poolMock;
 
-  private String path = TEST_PATH + TABLE_NAME + ";" + TEST_OPTIONS;
+  private String path = TEST_URL + TABLE_NAME + ";" + TEST_OPTIONS;
   private Connection conn;
   private Statement stat;
   private List<SQLEntry> results;
+
+  @Rule
+  public TemporaryFolder testFolder = new TemporaryFolder();
 
   @SuppressWarnings("unchecked")
   @Before
@@ -83,7 +95,8 @@ public class SQLStoreTest {
     pcFactoryMock = easyMock.createNiceMock(ProjectControl.GenericFactory.class);
     userProviderMock = easyMock.createNiceMock(Provider.class);
     cfgMock = easyMock.createNiceMock(EventsLogConfig.class);
-    easyMock.replayAll();
+    expect(cfgMock.getMaxAge()).andReturn(5);
+    expect(cfgMock.getLocalStorePath()).andReturn(testFolder.getRoot().toPath()).atLeastOnce();
   }
 
   public void tearDown() throws Exception {
@@ -92,32 +105,34 @@ public class SQLStoreTest {
   }
 
   private void setUpClient() {
-    eventsDb = new SQLClient(TEST_DRIVER, TEST_PATH, TEST_OPTIONS);
-    localEventsDb = new SQLClient(TEST_DRIVER, TEST_LOCAL_PATH, TEST_OPTIONS);
+    eventsDb = new SQLClient(TEST_DRIVER, TEST_URL, TEST_OPTIONS);
+    localEventsDb = new SQLClient(TEST_DRIVER, TEST_LOCAL_URL, TEST_OPTIONS);
     store =
         new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb,
             localEventsDb, poolMock);
     store.start();
   }
 
-  private void setUpClientMock() {
+  private void setUpClientMock(boolean reset) throws SQLException {
     eventsDb = easyMock.createNiceMock(SQLClient.class);
     localEventsDb = easyMock.createNiceMock(SQLClient.class);
-    easyMock.resetAll();
+    expect(localEventsDb.dbExists()).andReturn(true).anyTimes();
+    if (reset) {
+      easyMock.resetAll();
+    }
   }
 
   @Test
   public void storeThenQueryVisible() throws Exception {
-    setUpClient();
     MockEvent mockEvent = new MockEvent();
     ProjectControl pcMock = easyMock.createNiceMock(ProjectControl.class);
     CurrentUser userMock = easyMock.createNiceMock(CurrentUser.class);
-    easyMock.resetAll();
     expect(userProviderMock.get()).andStubReturn(userMock);
     expect(pcFactoryMock.controlFor(mockEvent.getProjectNameKey(), userMock))
         .andStubReturn(pcMock);
     expect(pcMock.isVisible()).andStubReturn(true);
     easyMock.replayAll();
+    setUpClient();
     store.storeEvent(mockEvent);
     List<String> events = store.queryChangeEvents(GENERIC_QUERY);
     Gson gson = new Gson();
@@ -128,16 +143,15 @@ public class SQLStoreTest {
 
   @Test
   public void storeThenQueryNotVisible() throws Exception {
-    setUpClient();
     MockEvent mockEvent = new MockEvent();
     ProjectControl pcMock = easyMock.createNiceMock(ProjectControl.class);
     CurrentUser userMock = easyMock.createNiceMock(CurrentUser.class);
-    easyMock.resetAll();
     expect(userProviderMock.get()).andStubReturn(userMock);
     expect(pcFactoryMock.controlFor(mockEvent.getProjectNameKey(), userMock))
         .andStubReturn(pcMock);
     expect(pcMock.isVisible()).andStubReturn(false);
     easyMock.replayAll();
+    setUpClient();
     store.storeEvent(mockEvent);
     List<String> events = store.queryChangeEvents(GENERIC_QUERY);
     assertThat(events).isEmpty();
@@ -146,26 +160,24 @@ public class SQLStoreTest {
 
   @Test(expected = MalformedQueryException.class)
   public void throwBadRequestTriggerOnBadQuery() throws Exception {
+    easyMock.replayAll();
     setUpClient();
     String badQuery = "bad query";
-    easyMock.resetAll();
-    easyMock.replayAll();
     store.queryChangeEvents(badQuery);
     easyMock.verifyAll();
   }
 
   @Test
   public void notReturnEventOfNonExistingProject() throws Exception {
-    setUpClient();
     MockEvent mockEvent = new MockEvent();
     Project.NameKey projectMock = easyMock.createMock(Project.NameKey.class);
-    easyMock.resetAll();
     expect(projectMock.get()).andStubReturn(" ");
     expect(
         pcFactoryMock.controlFor(EasyMock.anyObject(Project.NameKey.class),
             EasyMock.anyObject(CurrentUser.class)))
               .andThrow(new NoSuchProjectException(projectMock));
     easyMock.replayAll();
+    setUpClient();
     store.storeEvent(mockEvent);
     List<String> events = store.queryChangeEvents(GENERIC_QUERY);
     assertThat(events).isEmpty();
@@ -174,15 +186,14 @@ public class SQLStoreTest {
 
   @Test
   public void notReturnEventWithNoVisibilityInfo() throws Exception {
-    setUpClient();
     MockEvent mockEvent = new MockEvent();
     Project.NameKey projectMock = easyMock.createMock(Project.NameKey.class);
-    easyMock.resetAll();
     expect(projectMock.get()).andStubReturn(" ");
     expect(
         pcFactoryMock.controlFor(EasyMock.anyObject(Project.NameKey.class),
             EasyMock.anyObject(CurrentUser.class))).andThrow(new IOException());
     easyMock.replayAll();
+    setUpClient();
     store.storeEvent(mockEvent);
     List<String> events = store.queryChangeEvents(GENERIC_QUERY);
     assertThat(events).isEmpty();
@@ -192,7 +203,8 @@ public class SQLStoreTest {
   @Test
   public void retryOnConnectException() throws Exception {
     MockEvent mockEvent = new MockEvent();
-    setUpClientMock();
+    setUpClientMock(false);
+    EasyMock.reset(eventsDb, localEventsDb);
     expect(cfgMock.getMaxTries()).andReturn(3).once();
     eventsDb.storeEvent(mockEvent);
     expectLastCall().andThrow(new SQLException(new ConnectException()))
@@ -211,7 +223,7 @@ public class SQLStoreTest {
   @Test
   public void retryOnMessage() throws Exception {
     MockEvent mockEvent = new MockEvent();
-    setUpClientMock();
+    setUpClientMock(false);
     expect(cfgMock.getMaxTries()).andReturn(3).once();
     eventsDb.storeEvent(mockEvent);
     expectLastCall().andThrow(new SQLException(TERM_CONN_MSG)).times(3);
@@ -229,7 +241,7 @@ public class SQLStoreTest {
   @Test
   public void noRetryOnMessage() throws Exception {
     MockEvent mockEvent = new MockEvent();
-    setUpClientMock();
+    setUpClientMock(false);
     expect(cfgMock.getMaxTries()).andReturn(3).once();
     eventsDb.storeEvent(mockEvent);
     expectLastCall().andThrow(new SQLException(MSG)).once();
@@ -247,7 +259,7 @@ public class SQLStoreTest {
   @Test
   public void noRetryOnZeroMaxTries() throws Exception {
     MockEvent mockEvent = new MockEvent();
-    setUpClientMock();
+    setUpClientMock(false);
     expect(cfgMock.getMaxTries()).andReturn(0).once();
     eventsDb.storeEvent(mockEvent);
     expectLastCall().andThrow(new SQLException(new ConnectException())).once();
@@ -265,7 +277,7 @@ public class SQLStoreTest {
   @Test (expected = ServiceUnavailableException.class)
   public void throwSQLExceptionIfNotOnline() throws Exception {
     MockEvent mockEvent = new MockEvent();
-    setUpClientMock();
+    setUpClientMock(true);
     eventsDb.createDBIfNotCreated();
     expectLastCall().andThrow(new SQLException(new ConnectException())).once();
     eventsDb.queryOne();
@@ -289,8 +301,6 @@ public class SQLStoreTest {
     ProjectControl pc = easyMock.createNiceMock(ProjectControl.class);
     NoSuchProjectException e =
         easyMock.createNiceMock(NoSuchProjectException.class);
-    easyMock.resetAll();
-    expect(cfgMock.getMaxAge()).andReturn(5);
     expect(
         pcFactoryMock.controlFor(EasyMock.eq(mockEvent.getProjectNameKey()),
             EasyMock.anyObject(CurrentUser.class))).andReturn(pc).once();
@@ -303,8 +313,8 @@ public class SQLStoreTest {
             EasyMock.anyObject(CurrentUser.class))).andThrow(e);
     easyMock.replayAll();
 
-    eventsDb = new SQLClient(TEST_DRIVER, TEST_PATH, TEST_OPTIONS);
-    localEventsDb = new SQLClient(TEST_DRIVER, TEST_LOCAL_PATH, TEST_OPTIONS);
+    eventsDb = new SQLClient(TEST_DRIVER, TEST_URL, TEST_OPTIONS);
+    localEventsDb = new SQLClient(TEST_DRIVER, TEST_LOCAL_URL, TEST_OPTIONS);
     store =
         new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb,
             localEventsDb, poolMock);
@@ -325,7 +335,7 @@ public class SQLStoreTest {
 
   @Test
   public void offlineUponStart() throws Exception {
-    setUpClientMock();
+    setUpClientMock(true);
     eventsDb.createDBIfNotCreated();
     expectLastCall().andThrow(new SQLException(new ConnectException())).once();
     eventsDb.queryOne();
@@ -341,7 +351,7 @@ public class SQLStoreTest {
   @Test
   public void storeLocalOffline() throws Exception {
     MockEvent mockEvent = new MockEvent();
-    setUpClientMock();
+    setUpClientMock(true);
     eventsDb.createDBIfNotCreated();
     expectLastCall().andThrow(new SQLException(new ConnectException())).once();
     localEventsDb.storeEvent(mockEvent);
@@ -361,7 +371,7 @@ public class SQLStoreTest {
   @Test
   public void storeLocalOfflineAfterNoRetry() throws Exception {
     MockEvent mockEvent = new MockEvent();
-    setUpClientMock();
+    setUpClientMock(false);
     expect(cfgMock.getMaxTries()).andReturn(0).once();
     eventsDb.storeEvent(mockEvent);
     expectLastCall().andThrow(new SQLException(new ConnectException())).once();
@@ -378,15 +388,17 @@ public class SQLStoreTest {
 
   /**
    * For this test we expect that if we can connect to main database, then we
-   * should come back online and try setting up again. This involves trying to
-   * restore events from the local database.
+   * should come back online and try setting up again. We just want to make sure
+   * that restoreEventsFromLocal gets called, so verifying that getLocalDBFile
+   * is called is sufficient.
    */
   @Test
   public void testConnectionTask() throws Exception {
-    eventsDb = new SQLClient(TEST_DRIVER, TEST_PATH, TEST_OPTIONS);
+    eventsDb = new SQLClient(TEST_DRIVER, TEST_URL, TEST_OPTIONS);
     localEventsDb = easyMock.createMock(SQLClient.class);
+    expect(localEventsDb.dbExists()).andReturn(true).once();
     expect(localEventsDb.getAll()).andReturn(new ArrayList<SQLEntry>());
-    EasyMock.replay(localEventsDb);
+    easyMock.replayAll();
     store =
         new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb,
             localEventsDb, poolMock);
@@ -409,11 +421,9 @@ public class SQLStoreTest {
   private void checkConnectionAndRestore(boolean copy) throws Exception {
     MockEvent mockEvent = new MockEvent();
     eventsDb = easyMock.createNiceMock(SQLClient.class);
-    easyMock.resetAll();
-    localEventsDb = new SQLClient(TEST_DRIVER, TEST_LOCAL_PATH, TEST_OPTIONS);
+    localEventsDb = new SQLClient(TEST_DRIVER, TEST_LOCAL_URL, TEST_OPTIONS);
     localEventsDb.createDBIfNotCreated();
     localEventsDb.storeEvent(mockEvent);
-    expect(cfgMock.getMaxAge()).andReturn(5);
     eventsDb.createDBIfNotCreated();
     expectLastCall().andThrow(new SQLException(new ConnectException())).once();
     eventsDb.queryOne();
@@ -438,7 +448,6 @@ public class SQLStoreTest {
 
   private void testCopyLocal() {
     expect(cfgMock.getCopyLocal()).andReturn(true).once();
-    expect(cfgMock.getLocalStoreUrl()).andReturn(TEST_LOCAL_PATH).once();
   }
 
   public class MockEvent extends ChangeEvent {
