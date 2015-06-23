@@ -25,7 +25,7 @@ import com.ericsson.gerrit.plugins.eventslog.EventStore;
 import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
 
-class SqlModule extends AbstractModule {
+class SQLModule extends AbstractModule {
 
   private static final String H2_DB_PREFIX = "jdbc:h2:";
 
