@@ -31,8 +31,6 @@ import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -44,8 +42,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 class SQLClient {
-  private static final Logger log = LoggerFactory.getLogger(SQLClient.class);
-
   private BasicDataSource ds;
   private final Gson gson = new Gson();
 
@@ -58,6 +54,7 @@ class SQLClient {
 
   /**
    * Set the username to connect to the database
+   *
    * @param username
    */
   public void setUsername(String username) {
@@ -66,6 +63,7 @@ class SQLClient {
 
   /**
    * Set the password to connect to the database
+   *
    * @param password
    */
   public void setPassword(String password) {
@@ -78,8 +76,6 @@ class SQLClient {
    * @throws SQLException
    */
   public void createDBIfNotCreated() throws SQLException {
-    Connection conn = ds.getConnection();
-
     StringBuilder query = new StringBuilder();
     query.append(format("CREATE TABLE IF NOT EXISTS %s(", TABLE_NAME));
     if (ds.getDriverClassName().contains("postgresql")) {
@@ -91,32 +87,24 @@ class SQLClient {
     query.append(format("%s TIMESTAMP DEFAULT NOW(),", DATE_ENTRY));
     query.append(format("%s TEXT)", EVENT_ENTRY));
 
-    Statement stat = conn.createStatement();
-    try {
+    try (Connection conn = ds.getConnection();
+        Statement stat = conn.createStatement()) {
       stat.execute(query.toString());
-    } finally {
-      closeStatement(stat);
-      closeConnection(conn);
     }
   }
 
   /**
    * Return if the database exists.
+   *
    * @return true if it exist otherwise return false
    * @throws SQLException
    */
   public boolean dbExists() throws SQLException {
-    Connection conn = null;
-    ResultSet tables = null;
-    try {
-      conn = ds.getConnection();
-      tables =
-          conn.getMetaData().getTables(null, null, TABLE_NAME.toUpperCase(),
-              null);
+    try (Connection conn = ds.getConnection();
+        ResultSet tables =
+            conn.getMetaData().getTables(null, null, TABLE_NAME.toUpperCase(),
+                null)) {
       return tables.next();
-    } finally {
-      closeResultSet(tables);
-      closeConnection(conn);
     }
   }
 
@@ -135,17 +123,11 @@ class SQLClient {
    */
   public ListMultimap<String, SQLEntry> getEvents(String query)
       throws EventsLogException {
-    Connection conn = null;
-    Statement stat = null;
-    try {
-      conn = ds.getConnection();
-      stat = conn.createStatement();
+    try (Connection conn = ds.getConnection();
+        Statement stat = conn.createStatement()) {
       return listEvents(stat, query);
     } catch (SQLException e) {
       throw new EventsLogException("Cannot query database", e);
-    } finally {
-      closeStatement(stat);
-      closeConnection(conn);
     }
   }
 
@@ -157,16 +139,13 @@ class SQLClient {
    */
   public void storeEvent(ProjectEvent event) throws SQLException {
     String json = gson.toJson(event);
-    Connection conn = ds.getConnection();
-    Statement stat = conn.createStatement();
-    try {
+    try (Connection conn = ds.getConnection();
+        Statement stat = conn.createStatement()) {
       stat.execute(format("INSERT INTO %s(%s, %s, %s) ", TABLE_NAME,
           PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
           + format("VALUES('%s', '%s', '%s')", event.getProjectNameKey().get(),
-              new Timestamp(TimeUnit.SECONDS.toMillis(event.eventCreatedOn)), json));
-    } finally {
-      closeStatement(stat);
-      closeConnection(conn);
+              new Timestamp(TimeUnit.SECONDS.toMillis(event.eventCreatedOn)),
+              json));
     }
   }
 
@@ -180,15 +159,11 @@ class SQLClient {
    */
   public void storeEvent(String projectName, Timestamp timestamp, String event)
       throws SQLException {
-    Connection conn = ds.getConnection();
-    Statement stat = conn.createStatement();
-    try {
+    try (Connection conn = ds.getConnection();
+        Statement stat = conn.createStatement()) {
       stat.execute(format("INSERT INTO %s(%s, %s, %s) ", TABLE_NAME,
           PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
           + format("VALUES('%s', '%s', '%s')", projectName, timestamp, event));
-    } finally {
-      closeStatement(stat);
-      closeConnection(conn);
     }
   }
 
@@ -199,15 +174,11 @@ class SQLClient {
    * @throws SQLException If there was a problem with the database
    */
   public void removeOldEvents(int maxAge) throws SQLException {
-    Connection conn = ds.getConnection();
-    Statement stat = conn.createStatement();
-    try {
+    try (Connection conn = ds.getConnection();
+        Statement stat = conn.createStatement()) {
       stat.execute(format("DELETE FROM %s WHERE %s < '%s'", TABLE_NAME,
           DATE_ENTRY, new Timestamp(System.currentTimeMillis()
               - TimeUnit.MILLISECONDS.convert(maxAge, TimeUnit.DAYS))));
-    } finally {
-      closeStatement(stat);
-      closeConnection(conn);
     }
   }
 
@@ -218,14 +189,10 @@ class SQLClient {
    * @throws SQLException If there was a problem with the database
    */
   public void removeProjectEvents(String project) throws SQLException {
-    Connection conn = ds.getConnection();
-    Statement stat = conn.createStatement();
-    try {
+    try (Connection conn = ds.getConnection();
+        Statement stat = conn.createStatement()) {
       stat.execute(String.format("DELETE FROM %s WHERE project = '%s'",
           TABLE_NAME, project));
-    } finally {
-      closeStatement(stat);
-      closeConnection(conn);
     }
   }
 
@@ -236,15 +203,9 @@ class SQLClient {
    * @throws SQLException If there was a problem with the database
    */
   public void queryOne() throws SQLException {
-    Connection conn = null;
-    Statement stat = null;
-    try {
-      conn = ds.getConnection();
-      stat = conn.createStatement();
+    try (Connection conn = ds.getConnection();
+        Statement stat = conn.createStatement()) {
       stat.executeQuery("SELECT * FROM " + TABLE_NAME + " LIMIT 1");
-    } finally {
-      closeStatement(stat);
-      closeConnection(conn);
     }
   }
 
@@ -256,31 +217,21 @@ class SQLClient {
    */
   public List<SQLEntry> getAll() throws SQLException {
     List<SQLEntry> entries = new ArrayList<>();
-    Connection conn = null;
-    Statement stat = null;
-    ResultSet rs = null;
-    try {
-      conn = ds.getConnection();
-      stat = conn.createStatement();
-      rs = stat.executeQuery("SELECT * FROM " + TABLE_NAME);
+    try (Connection conn = ds.getConnection();
+        Statement stat = conn.createStatement();
+        ResultSet rs = stat.executeQuery("SELECT * FROM " + TABLE_NAME)) {
       while (rs.next()) {
         entries.add(new SQLEntry(rs.getString(PROJECT_ENTRY), rs
             .getTimestamp(DATE_ENTRY), rs.getString(EVENT_ENTRY), rs
             .getInt(PRIMARY_ENTRY)));
       }
       return entries;
-    } finally {
-      closeResultSet(rs);
-      closeStatement(stat);
-      closeConnection(conn);
     }
   }
 
   private ListMultimap<String, SQLEntry> listEvents(Statement stat, String query)
       throws MalformedQueryException {
-    ResultSet rs = null;
-    try {
-      rs = stat.executeQuery(query);
+    try (ResultSet rs = stat.executeQuery(query)) {
       ListMultimap<String, SQLEntry> result = ArrayListMultimap.create();
       while (rs.next()) {
         SQLEntry entry =
@@ -292,38 +243,6 @@ class SQLClient {
       return result;
     } catch (SQLException e) {
       throw new MalformedQueryException(e);
-    } finally {
-      closeResultSet(rs);
-    }
-  }
-
-  private void closeResultSet(ResultSet resultSet) {
-    if (resultSet != null) {
-      try {
-        resultSet.close();
-      } catch (SQLException e) {
-        log.warn("Cannot close result set", e);
-      }
-    }
-  }
-
-  private void closeStatement(Statement stat) {
-    if (stat != null) {
-      try {
-        stat.close();
-      } catch (SQLException e) {
-        log.warn("Cannot close statement", e);
-      }
-    }
-  }
-
-  private void closeConnection(Connection conn) {
-    if (conn != null) {
-      try {
-        conn.close();
-      } catch (SQLException e) {
-        log.warn("Cannot close connection", e);
-      }
     }
   }
 }
