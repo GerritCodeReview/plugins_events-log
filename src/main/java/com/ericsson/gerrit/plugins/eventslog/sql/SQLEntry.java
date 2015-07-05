@@ -43,19 +43,22 @@ class SQLEntry implements Comparable<SQLEntry> {
 
   @Override
   public int compareTo(SQLEntry o) {
-    return this.id - o.id;
+    return Integer.compare(this.id, o.id);
   }
 
   @Override
   public boolean equals(Object o) {
+    if (o == null) {
+      return false;
+    }
+    if (this.getClass() != o.getClass()) {
+      return false;
+    }
     return this.id == ((SQLEntry) o).id;
   }
 
   @Override
   public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + id;
-    return result;
+    return 31 + id;
   }
 }
