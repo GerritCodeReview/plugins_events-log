@@ -20,6 +20,9 @@ import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.PRIMARY_ENTRY;
 import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.PROJECT_ENTRY;
 import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.TABLE_NAME;
 import static java.lang.String.format;
+import static java.util.concurrent.TimeUnit.DAYS;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.SECONDS;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -39,11 +42,9 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 class SQLClient {
   private BasicDataSource ds;
-  private final Gson gson = new Gson();
 
   @Inject
   SQLClient(String storeDriver, String storeUrl, String urlOptions) {
@@ -87,10 +88,7 @@ class SQLClient {
     query.append(format("%s TIMESTAMP DEFAULT NOW(),", DATE_ENTRY));
     query.append(format("%s TEXT)", EVENT_ENTRY));
 
-    try (Connection conn = ds.getConnection();
-        Statement stat = conn.createStatement()) {
-      stat.execute(query.toString());
-    }
+    execute(query.toString());
   }
 
   /**
@@ -138,15 +136,10 @@ class SQLClient {
    * @throws SQLException If there was a problem with the database
    */
   public void storeEvent(ProjectEvent event) throws SQLException {
-    String json = gson.toJson(event);
-    try (Connection conn = ds.getConnection();
-        Statement stat = conn.createStatement()) {
-      stat.execute(format("INSERT INTO %s(%s, %s, %s) ", TABLE_NAME,
-          PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
-          + format("VALUES('%s', '%s', '%s')", event.getProjectNameKey().get(),
-              new Timestamp(TimeUnit.SECONDS.toMillis(event.eventCreatedOn)),
-              json));
-    }
+    storeEvent(event.getProjectNameKey().get(),
+        new Timestamp(SECONDS.toMillis(event.eventCreatedOn)),
+        new Gson().toJson(event));
+
   }
 
   /**
@@ -159,12 +152,9 @@ class SQLClient {
    */
   public void storeEvent(String projectName, Timestamp timestamp, String event)
       throws SQLException {
-    try (Connection conn = ds.getConnection();
-        Statement stat = conn.createStatement()) {
-      stat.execute(format("INSERT INTO %s(%s, %s, %s) ", TABLE_NAME,
-          PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
-          + format("VALUES('%s', '%s', '%s')", projectName, timestamp, event));
-    }
+    execute(format("INSERT INTO %s(%s, %s, %s) ", TABLE_NAME, PROJECT_ENTRY,
+        DATE_ENTRY, EVENT_ENTRY)
+        + format("VALUES('%s', '%s', '%s')", projectName, timestamp, event));
   }
 
   /**
@@ -174,12 +164,12 @@ class SQLClient {
    * @throws SQLException If there was a problem with the database
    */
   public void removeOldEvents(int maxAge) throws SQLException {
-    try (Connection conn = ds.getConnection();
-        Statement stat = conn.createStatement()) {
-      stat.execute(format("DELETE FROM %s WHERE %s < '%s'", TABLE_NAME,
-          DATE_ENTRY, new Timestamp(System.currentTimeMillis()
-              - TimeUnit.MILLISECONDS.convert(maxAge, TimeUnit.DAYS))));
-    }
+    execute(format(
+        "DELETE FROM %s WHERE %s < '%s'",
+        TABLE_NAME,
+        DATE_ENTRY,
+        new Timestamp(System.currentTimeMillis()
+            - MILLISECONDS.convert(maxAge, DAYS))));
   }
 
   /**
@@ -189,11 +179,7 @@ class SQLClient {
    * @throws SQLException If there was a problem with the database
    */
   public void removeProjectEvents(String project) throws SQLException {
-    try (Connection conn = ds.getConnection();
-        Statement stat = conn.createStatement()) {
-      stat.execute(String.format("DELETE FROM %s WHERE project = '%s'",
-          TABLE_NAME, project));
-    }
+    execute(format("DELETE FROM %s WHERE project = '%s'", TABLE_NAME, project));
   }
 
   /**
@@ -203,10 +189,7 @@ class SQLClient {
    * @throws SQLException If there was a problem with the database
    */
   public void queryOne() throws SQLException {
-    try (Connection conn = ds.getConnection();
-        Statement stat = conn.createStatement()) {
-      stat.executeQuery("SELECT * FROM " + TABLE_NAME + " LIMIT 1");
-    }
+    execute("SELECT * FROM " + TABLE_NAME + " LIMIT 1");
   }
 
   /**
@@ -243,6 +226,13 @@ class SQLClient {
       return result;
     } catch (SQLException e) {
       throw new MalformedQueryException(e);
+    }
+  }
+
+  private void execute(String query) throws SQLException {
+    try (Connection conn = ds.getConnection();
+        Statement stat = conn.createStatement()) {
+      stat.execute(query);
     }
   }
 }
