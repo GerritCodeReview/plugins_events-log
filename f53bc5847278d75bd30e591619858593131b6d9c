@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "98059200_9c000537",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntryTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-07-07T18:31:20Z",
+      "side": 1,
+      "message": "event4",
+      "range": {
+        "startLine": 39,
+        "startChar": 47,
+        "endLine": 39,
+        "endChar": 53
+      },
+      "revId": "f53bc5847278d75bd30e591619858593131b6d9c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "98059200_bc03c142",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntryTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-07-07T18:31:20Z",
+      "side": 1,
+      "message": "name4",
+      "range": {
+        "startLine": 39,
+        "startChar": 27,
+        "endLine": 39,
+        "endChar": 32
+      },
+      "revId": "f53bc5847278d75bd30e591619858593131b6d9c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
