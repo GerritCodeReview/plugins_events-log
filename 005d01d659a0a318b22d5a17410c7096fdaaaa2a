@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "333689c8_6902853f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2015-07-07T13:10:51Z",
+      "side": 1,
+      "message": "overridden",
+      "parentUuid": "9347353e_0c97574f",
+      "range": {
+        "startLine": 7,
+        "startChar": 16,
+        "endLine": 7,
+        "endChar": 25
+      },
+      "revId": "005d01d659a0a318b22d5a17410c7096fdaaaa2a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9347353e_2c941348",
         "filename": "/COMMIT_MSG",
         "patchSetId": 1
@@ -118,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "333689c8_892df9d2",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2015-07-07T13:10:51Z",
+      "side": 1,
+      "message": "Does the license text need to be EXACTLY as stated in [1]?  If so, it should be fixed here and in the other files too (perhaps in a follow up commit).\n\n[1] http://www.apache.org/licenses/LICENSE-2.0",
+      "parentUuid": "b8f6d649_5de27b19",
+      "range": {
+        "startLine": 3,
+        "startChar": 65,
+        "endLine": 3,
+        "endChar": 66
+      },
+      "revId": "005d01d659a0a318b22d5a17410c7096fdaaaa2a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98059200_dcc44d86",
         "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntryTest.java",
         "patchSetId": 1
@@ -129,6 +177,30 @@
       "writtenOn": "2015-07-07T12:57:02Z",
       "side": 1,
       "message": "Would check if these hereby test methods (each) need to throw Exception; if not, would remove such throws.",
+      "range": {
+        "startLine": 41,
+        "startChar": 29,
+        "endLine": 41,
+        "endChar": 45
+      },
+      "revId": "005d01d659a0a318b22d5a17410c7096fdaaaa2a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "132d0577_882df7d2",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2015-07-07T13:10:51Z",
+      "side": 1,
+      "message": "IIRC they do need to declare this, because the assertThat methods will throw if the test fails.",
+      "parentUuid": "98059200_dcc44d86",
       "range": {
         "startLine": 41,
         "startChar": 29,
