@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "9347353e_0c97574f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-07-07T12:57:02Z",
+      "side": 1,
+      "message": "overriden",
+      "range": {
+        "startLine": 7,
+        "startChar": 16,
+        "endLine": 7,
+        "endChar": 25
+      },
+      "revId": "005d01d659a0a318b22d5a17410c7096fdaaaa2a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9347353e_2c941348",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-07-07T12:57:02Z",
+      "side": 1,
+      "message": "class validation",
+      "range": {
+        "startLine": 9,
+        "startChar": 42,
+        "endLine": 9,
+        "endChar": 56
+      },
+      "revId": "005d01d659a0a318b22d5a17410c7096fdaaaa2a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "132d0577_e8daf357",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
         "patchSetId": 1
@@ -19,6 +65,69 @@
         "endLine": 63,
         "endChar": 22
       },
+      "revId": "005d01d659a0a318b22d5a17410c7096fdaaaa2a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9347353e_4ca15fad",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-07-07T12:57:02Z",
+      "side": 1,
+      "message": "; (no sonar involved in test code)",
+      "range": {
+        "startLine": 3,
+        "startChar": 65,
+        "endLine": 3,
+        "endChar": 66
+      },
+      "revId": "005d01d659a0a318b22d5a17410c7096fdaaaa2a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "98059200_dcc44d86",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-07-07T12:57:02Z",
+      "side": 1,
+      "message": "Would check if these hereby test methods (each) need to throw Exception; if not, would remove such throws.",
+      "range": {
+        "startLine": 41,
+        "startChar": 29,
+        "endLine": 41,
+        "endChar": 45
+      },
+      "revId": "005d01d659a0a318b22d5a17410c7096fdaaaa2a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b8f6d649_bdd17f42",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-07-07T12:57:02Z",
+      "side": 1,
+      "message": "Missing the test case where entry1 would equal entry4 since they both have the same id value? (albeit not being the same object)",
       "revId": "005d01d659a0a318b22d5a17410c7096fdaaaa2a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
