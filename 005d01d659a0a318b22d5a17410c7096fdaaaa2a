@@ -94,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "b8f6d649_5de27b19",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntryTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2015-07-07T13:00:24Z",
+      "side": 1,
+      "message": "I would prefer to keep the coma to have the same header in all files.",
+      "parentUuid": "9347353e_4ca15fad",
+      "range": {
+        "startLine": 3,
+        "startChar": 65,
+        "endLine": 3,
+        "endChar": 66
+      },
+      "revId": "005d01d659a0a318b22d5a17410c7096fdaaaa2a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98059200_dcc44d86",
         "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntryTest.java",
         "patchSetId": 1
