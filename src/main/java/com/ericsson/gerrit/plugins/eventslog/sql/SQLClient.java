@@ -77,18 +77,8 @@ class SQLClient {
    * @throws SQLException
    */
   public void createDBIfNotCreated() throws SQLException {
-    StringBuilder query = new StringBuilder();
-    query.append(format("CREATE TABLE IF NOT EXISTS %s(", TABLE_NAME));
-    if (ds.getDriverClassName().contains("postgresql")) {
-      query.append(format("%s SERIAL PRIMARY KEY,", PRIMARY_ENTRY));
-    } else {
-      query.append(format("%s INT AUTO_INCREMENT PRIMARY KEY,", PRIMARY_ENTRY));
-    }
-    query.append(format("%s VARCHAR(255),", PROJECT_ENTRY));
-    query.append(format("%s TIMESTAMP DEFAULT NOW(),", DATE_ENTRY));
-    query.append(format("%s TEXT)", EVENT_ENTRY));
-
-    execute(query.toString());
+    boolean postgresql = ds.getDriverClassName().contains("postgresql");
+    execute(SQLTable.createTableQuery(postgresql));
   }
 
   /**

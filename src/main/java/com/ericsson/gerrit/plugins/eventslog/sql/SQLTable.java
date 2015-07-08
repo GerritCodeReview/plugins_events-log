@@ -14,13 +14,29 @@
 
 package com.ericsson.gerrit.plugins.eventslog.sql;
 
+import static java.lang.String.format;
+
 final class SQLTable {
-  protected static final String TABLE_NAME = "ChangeEvents";
-  protected static final String PRIMARY_ENTRY = "id";
-  protected static final String PROJECT_ENTRY = "project";
-  protected static final String DATE_ENTRY = "date_created";
-  protected static final String EVENT_ENTRY = "event_info";
+  static final String TABLE_NAME = "ChangeEvents";
+  static final String PRIMARY_ENTRY = "id";
+  static final String PROJECT_ENTRY = "project";
+  static final String DATE_ENTRY = "date_created";
+  static final String EVENT_ENTRY = "event_info";
 
   private SQLTable() {
+  }
+
+  static String createTableQuery(boolean postgresql) {
+    StringBuilder query = new StringBuilder();
+    query.append(format("CREATE TABLE IF NOT EXISTS %s(", TABLE_NAME));
+    if (postgresql) {
+      query.append(format("%s SERIAL PRIMARY KEY,", PRIMARY_ENTRY));
+    } else {
+      query.append(format("%s INT AUTO_INCREMENT PRIMARY KEY,", PRIMARY_ENTRY));
+    }
+    query.append(format("%s VARCHAR(255),", PROJECT_ENTRY));
+    query.append(format("%s TIMESTAMP DEFAULT NOW(),", DATE_ENTRY));
+    query.append(format("%s TEXT)", EVENT_ENTRY));
+    return query.toString();
   }
 }
