@@ -77,7 +77,7 @@ class SQLStore implements EventStore, LifecycleListener {
       EventsLogConfig cfg,
       @EventsDb SQLClient eventsDb,
       @LocalEventsDb SQLClient localEventsDb,
-      @EventPool ScheduledThreadPoolExecutor pool ) {
+      @EventPool ScheduledThreadPoolExecutor pool) {
     this.maxAge = cfg.getMaxAge();
     this.maxTries = cfg.getMaxTries();
     this.waitTime = cfg.getWaitTime();
@@ -101,16 +101,8 @@ class SQLStore implements EventStore, LifecycleListener {
     if (task != null) {
       task.cancel(true);
     }
-    try {
-      eventsDb.close();
-    } catch (SQLException e) {
-      log.warn("Cannot close datasource ", e);
-    }
-    try {
-      localEventsDb.close();
-    } catch (SQLException e) {
-      log.warn("Cannot close datasource ", e);
-    }
+    eventsDb.close();
+    localEventsDb.close();
   }
 
   /**
@@ -139,7 +131,7 @@ class SQLStore implements EventStore, LifecycleListener {
       } catch (NoSuchProjectException e) {
         log.warn("Database contains a non-existing project, " + project.get()
             + ", removing project from database", e);
-        removeProjectEvents(project.get());
+        eventsDb.removeProjectEvents(project.get());
       } catch (IOException e) {
         log.warn("Cannot get project visibility info for " + project.get()
             + " from cache", e);
@@ -207,27 +199,11 @@ class SQLStore implements EventStore, LifecycleListener {
     if (online) {
       restoreEventsFromLocal();
     }
-    removeOldEvents();
-  }
-
-  private void removeOldEvents() {
-    try {
-      getEventsDb().removeOldEvents(maxAge);
-    } catch (SQLException e) {
-      log.warn("Cannot remove old entries from database", e);
-    }
+    getEventsDb().removeOldEvents(maxAge);
   }
 
   private SQLClient getEventsDb() {
     return online ? eventsDb : localEventsDb;
-  }
-
-  private void removeProjectEvents(String project) {
-    try {
-      eventsDb.removeProjectEvents(project);
-    } catch (SQLException e) {
-      log.warn("Cannot remove project " + project + " from database", e);
-    }
   }
 
   private void setOnline(boolean online) {
@@ -270,14 +246,10 @@ class SQLStore implements EventStore, LifecycleListener {
     } catch (SQLException e) {
       log.warn("Could not query all events from local", e);
     }
-    try {
-      if (copyLocal) {
-        copyFile();
-      }
-      localEventsDb.removeOldEvents(0);
-    } catch (SQLException e) {
-      log.warn("Could not destroy local database", e);
+    if (copyLocal) {
+      copyFile();
     }
+    localEventsDb.removeOldEvents(0);
   }
 
   private void restoreEvent(SQLEntry entry) {
