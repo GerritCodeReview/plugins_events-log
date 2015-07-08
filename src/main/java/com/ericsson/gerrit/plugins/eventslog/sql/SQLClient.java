@@ -34,6 +34,8 @@ import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -44,6 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class SQLClient {
+  private static final Logger log = LoggerFactory.getLogger(SQLClient.class);
   private BasicDataSource ds;
 
   @Inject
@@ -58,7 +61,7 @@ class SQLClient {
    *
    * @param username
    */
-  public void setUsername(String username) {
+  void setUsername(String username) {
     ds.setUsername(username);
   }
 
@@ -67,7 +70,7 @@ class SQLClient {
    *
    * @param password
    */
-  public void setPassword(String password) {
+  void setPassword(String password) {
     ds.setPassword(password);
   }
 
@@ -76,7 +79,7 @@ class SQLClient {
    *
    * @throws SQLException
    */
-  public void createDBIfNotCreated() throws SQLException {
+  void createDBIfNotCreated() throws SQLException {
     boolean postgresql = ds.getDriverClassName().contains("postgresql");
     execute(SQLTable.createTableQuery(postgresql));
   }
@@ -87,7 +90,7 @@ class SQLClient {
    * @return true if it exist otherwise return false
    * @throws SQLException
    */
-  public boolean dbExists() throws SQLException {
+  boolean dbExists() throws SQLException {
     try (Connection conn = ds.getConnection();
         ResultSet tables =
             conn.getMetaData().getTables(null, null, TABLE_NAME.toUpperCase(),
@@ -96,8 +99,12 @@ class SQLClient {
     }
   }
 
-  public void close() throws SQLException {
-    ds.close();
+  void close() {
+    try {
+      ds.close();
+    } catch (SQLException e) {
+      log.warn("Cannot close datasource", e);
+    }
   }
 
   /**
@@ -109,7 +116,7 @@ class SQLClient {
    * @throws EventsLogException if there was an problem with the database
    * @throws MalformedQueryException if there was a bad query request
    */
-  public ListMultimap<String, SQLEntry> getEvents(String query)
+  ListMultimap<String, SQLEntry> getEvents(String query)
       throws EventsLogException {
     try (Connection conn = ds.getConnection();
         Statement stat = conn.createStatement()) {
@@ -125,7 +132,7 @@ class SQLClient {
    * @param event The event to store
    * @throws SQLException If there was a problem with the database
    */
-  public void storeEvent(ProjectEvent event) throws SQLException {
+  void storeEvent(ProjectEvent event) throws SQLException {
     storeEvent(event.getProjectNameKey().get(),
         new Timestamp(SECONDS.toMillis(event.eventCreatedOn)),
         new Gson().toJson(event));
@@ -140,7 +147,7 @@ class SQLClient {
    * @param event The event as a string
    * @throws SQLException If there was a problem with the database
    */
-  public void storeEvent(String projectName, Timestamp timestamp, String event)
+  void storeEvent(String projectName, Timestamp timestamp, String event)
       throws SQLException {
     execute(format("INSERT INTO %s(%s, %s, %s) ", TABLE_NAME, PROJECT_ENTRY,
         DATE_ENTRY, EVENT_ENTRY)
@@ -151,25 +158,33 @@ class SQLClient {
    * Remove all events that are older than maxAge
    *
    * @param maxAge The maximum age to keep events
-   * @throws SQLException If there was a problem with the database
    */
-  public void removeOldEvents(int maxAge) throws SQLException {
-    execute(format(
-        "DELETE FROM %s WHERE %s < '%s'",
-        TABLE_NAME,
-        DATE_ENTRY,
-        new Timestamp(System.currentTimeMillis()
-            - MILLISECONDS.convert(maxAge, DAYS))));
+  void removeOldEvents(int maxAge) {
+    try {
+      execute(format(
+          "DELETE FROM %s WHERE %s < '%s'",
+          TABLE_NAME,
+          DATE_ENTRY,
+          new Timestamp(System.currentTimeMillis()
+              - MILLISECONDS.convert(maxAge, DAYS))));
+    } catch (SQLException e) {
+      log.warn("Cannot remove old event entries from database", e);
+    }
   }
 
   /**
    * Remove all events corresponding to this project
    *
    * @param project Events attributed to this project should be removed
-   * @throws SQLException If there was a problem with the database
    */
-  public void removeProjectEvents(String project) throws SQLException {
-    execute(format("DELETE FROM %s WHERE project = '%s'", TABLE_NAME, project));
+  void removeProjectEvents(String project) {
+    try {
+      execute(
+          format("DELETE FROM %s WHERE project = '%s'", TABLE_NAME, project));
+    } catch (SQLException e) {
+      log.warn(
+          "Cannot remove project " + project + " events from database", e);
+    }
   }
 
   /**
@@ -178,7 +193,7 @@ class SQLClient {
    *
    * @throws SQLException If there was a problem with the database
    */
-  public void queryOne() throws SQLException {
+  void queryOne() throws SQLException {
     execute("SELECT * FROM " + TABLE_NAME + " LIMIT 1");
   }
 
@@ -188,7 +203,7 @@ class SQLClient {
    * @return List of all events retrieved from the database
    * @throws SQLException If there was a problem with the database
    */
-  public List<SQLEntry> getAll() throws SQLException {
+  List<SQLEntry> getAll() throws SQLException {
     List<SQLEntry> entries = new ArrayList<>();
     try (Connection conn = ds.getConnection();
         Statement stat = conn.createStatement();
