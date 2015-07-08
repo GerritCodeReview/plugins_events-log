@@ -68,7 +68,7 @@ class SQLStore implements EventStore, LifecycleListener {
   private boolean online = true;
   private boolean copyLocal;
   private final ScheduledThreadPoolExecutor pool;
-  private ScheduledFuture<?> task;
+  private ScheduledFuture<?> checkConnTask;
   private Path localPath;
 
   @Inject
@@ -98,9 +98,7 @@ class SQLStore implements EventStore, LifecycleListener {
 
   @Override
   public void stop() {
-    if (task != null) {
-      task.cancel(true);
-    }
+    cancelCheckConnectionTaskIfScheduled(true);
     eventsDb.close();
     localEventsDb.close();
   }
@@ -210,17 +208,20 @@ class SQLStore implements EventStore, LifecycleListener {
     this.online = online;
     setUp();
     if (!online) {
-      task = pool.scheduleWithFixedDelay(
+      checkConnTask = pool.scheduleWithFixedDelay(
           new CheckConnectionTask(), 0, connectTime, TimeUnit.MILLISECONDS);
     } else {
-      if (task != null) {
-        task.cancel(false);
-      }
+      cancelCheckConnectionTaskIfScheduled(false);
+    }
+  }
+
+  private void cancelCheckConnectionTaskIfScheduled(boolean mayInterrupt) {
+    if (checkConnTask != null) {
+      checkConnTask.cancel(mayInterrupt);
     }
   }
 
   private void restoreEventsFromLocal() {
-
     boolean localDbExists = false;
     try {
       localDbExists = localEventsDb.dbExists();
