@@ -34,6 +34,7 @@ import java.util.Map;
 
 @Singleton
 class SQLQueryMaker implements QueryMaker {
+  private static final int TWO = 2;
   private static final String TIME_ONE = "t1";
   private static final String TIME_TWO = "t2";
   private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat(
@@ -85,7 +86,7 @@ class SQLQueryMaker implements QueryMaker {
     if (dateOne == null & dateTwo == null) {
       throw new MalformedQueryException();
     }
-    Date[] dates = new Date[2];
+    Date[] dates = new Date[TWO];
     Date dOne =
         dateOne == null && dateTwo != null ? cal.getTime() : parseDate(dateOne);
     Date dTwo =

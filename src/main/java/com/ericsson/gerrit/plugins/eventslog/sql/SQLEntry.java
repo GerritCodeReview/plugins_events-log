@@ -17,6 +17,7 @@ package com.ericsson.gerrit.plugins.eventslog.sql;
 import java.sql.Timestamp;
 
 class SQLEntry implements Comparable<SQLEntry> {
+  private static final int SEED = 31;
   private String name;
   private Timestamp timestamp;
   private String event;
@@ -59,6 +60,6 @@ class SQLEntry implements Comparable<SQLEntry> {
 
   @Override
   public int hashCode() {
-    return 31 + id;
+    return SEED + id;
   }
 }
