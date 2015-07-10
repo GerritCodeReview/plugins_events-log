@@ -45,13 +45,10 @@ class SQLQueryMaker implements QueryMaker {
   private final int returnLimit;
 
   @Inject
-  public SQLQueryMaker(EventsLogConfig config) {
+  SQLQueryMaker(EventsLogConfig config) {
     this.returnLimit = config.getReturnLimit();
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public String formQueryFromRequestParameters(Map<String, String> params)
       throws MalformedQueryException {
@@ -70,9 +67,6 @@ class SQLQueryMaker implements QueryMaker {
         DATE_TIME_FORMAT.format(dates[1]), returnLimit);
   }
 
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public String getDefaultQuery() {
     return "SELECT * FROM(SELECT * FROM " + TABLE_NAME

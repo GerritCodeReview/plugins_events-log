@@ -34,9 +34,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Singleton
-public class EventsRestApiServlet extends HttpServlet {
-  private static final Logger log = LoggerFactory
-      .getLogger(EventsRestApiServlet.class);
+class EventsRestApiServlet extends HttpServlet {
+  private static final Logger log =
+      LoggerFactory.getLogger(EventsRestApiServlet.class);
   private static final long serialVersionUID = 1L;
 
   private final EventStore store;
