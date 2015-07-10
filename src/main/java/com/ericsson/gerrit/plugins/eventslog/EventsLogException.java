@@ -17,27 +17,6 @@ package com.ericsson.gerrit.plugins.eventslog;
 public class EventsLogException extends Exception {
   private static final long serialVersionUID = 1L;
 
-  public static final String MSG = "Error in events-log plugin";
-
-  /**
-   * Constructs a <code>EventsLogException</code> object with the default
-   * message.
-   */
-  public EventsLogException() {
-    super(MSG);
-  }
-
-  /**
-   * Constructs an <code>EventsLogException</code> object with the default
-   * message and a given <code>cause</code>.
-   *
-   * @param cause the underlying reason for this
-   *        <code>EventsLogException</code>
-   */
-  public EventsLogException(Throwable cause) {
-    super(MSG, cause);
-  }
-
   /**
    * Constructs an <code>EventsLogException</code> object with a given
    * <code>message</code>.
