@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+/** A queue for events to store. */
 public class EventQueue implements LifecycleListener {
   private final WorkQueue workQueue;
   private WorkQueue.Executor pool;
@@ -46,7 +47,7 @@ public class EventQueue implements LifecycleListener {
     }
   }
 
-  public ScheduledThreadPoolExecutor getPool() {
+  ScheduledThreadPoolExecutor getPool() {
     return this.pool;
   }
 }

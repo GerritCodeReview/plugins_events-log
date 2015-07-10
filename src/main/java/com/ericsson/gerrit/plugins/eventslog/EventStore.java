@@ -18,6 +18,7 @@ import com.google.gerrit.server.events.ProjectEvent;
 
 import java.util.List;
 
+/** A store for change events to query. */
 public interface EventStore {
 
   /**

@@ -16,8 +16,7 @@ package com.ericsson.gerrit.plugins.eventslog;
 
 public class MalformedQueryException extends EventsLogException {
   private static final long serialVersionUID = 1L;
-
-  public static final String MESSAGE =
+  private static final String MESSAGE =
       "Query doesn't conform with the format required by the database";
 
   /**
@@ -37,27 +36,5 @@ public class MalformedQueryException extends EventsLogException {
    */
   public MalformedQueryException(Throwable cause) {
     super(MESSAGE, cause);
-  }
-
-  /**
-   * Constructs a <code>MalformedQueryException</code> object with a given
-   * <code>message</code>.
-   *
-   * @param message a description of the exception
-   */
-  public MalformedQueryException(String message) {
-    super(message);
-  }
-
-  /**
-   * Constructs a <code>MalformedQueryException</code> object with a given
-   * <code>message</code> and a given <code>cause</code>.
-   *
-   * @param message a description of the exception
-   * @param cause the underlying reason for this
-   *        <code>MalformedQueryException</code>
-   */
-  public MalformedQueryException(String message, Throwable cause) {
-    super(message, cause);
   }
 }
