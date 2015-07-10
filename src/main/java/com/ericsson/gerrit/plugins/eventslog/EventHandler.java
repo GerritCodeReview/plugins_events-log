@@ -24,13 +24,13 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 /**
  * Listen to Events and store them into the EventStore
  */
-public class EventHandler implements EventListener {
-
+class EventHandler implements EventListener {
   private final EventStore store;
   private final ScheduledThreadPoolExecutor pool;
 
   @Inject
-  EventHandler(EventStore store, @EventPool ScheduledThreadPoolExecutor pool) {
+  EventHandler(EventStore store,
+      @EventPool ScheduledThreadPoolExecutor pool) {
     this.store = store;
     this.pool = pool;
   }
