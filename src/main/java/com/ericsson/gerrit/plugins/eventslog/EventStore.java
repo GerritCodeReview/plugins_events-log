@@ -32,7 +32,7 @@ public interface EventStore {
    *
    * @param query the query used to get events
    * @return a list of events in String format.
-   * @throws EventsLogException
+   * @throws EventsLogException if the given query can't be processed
    */
   List<String> queryChangeEvents(String query) throws EventsLogException;
 }
