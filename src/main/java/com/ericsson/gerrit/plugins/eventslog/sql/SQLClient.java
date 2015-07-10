@@ -57,18 +57,18 @@ class SQLClient {
   }
 
   /**
-   * Set the username to connect to the database
+   * Set the username to connect to the database.
    *
-   * @param username
+   * @param username the username as a string
    */
   void setUsername(String username) {
     ds.setUsername(username);
   }
 
   /**
-   * Set the password to connect to the database
+   * Set the password to connect to the database.
    *
-   * @param password
+   * @param password the password as a string
    */
   void setPassword(String password) {
     ds.setPassword(password);
@@ -77,7 +77,7 @@ class SQLClient {
   /**
    * Create the database if it has not yet been created.
    *
-   * @throws SQLException
+   * @throws SQLException If there was a problem with the database
    */
   void createDBIfNotCreated() throws SQLException {
     boolean postgresql = ds.getDriverClassName().contains("postgresql");
@@ -87,8 +87,8 @@ class SQLClient {
   /**
    * Return if the database exists.
    *
-   * @return true if it exist otherwise return false
-   * @throws SQLException
+   * @return true if it exists, otherwise return false
+   * @throws SQLException If there was a problem with the database
    */
   boolean dbExists() throws SQLException {
     try (Connection conn = ds.getConnection();
@@ -111,10 +111,9 @@ class SQLClient {
    * Get events as a multimap list of Strings and SQLEntries. The String
    * represents the project name, and the SQLEntry is the event information.
    *
-   * @param query
-   * @return multimap list of Strings (project names) and SQLEntries (events)
-   * @throws EventsLogException if there was an problem with the database
-   * @throws MalformedQueryException if there was a bad query request
+   * @param query the query as a string
+   * @return Multimap list of Strings (project names) and SQLEntries (events)
+   * @throws EventsLogException If there was a problem with the database
    */
   ListMultimap<String, SQLEntry> getEvents(String query)
       throws EventsLogException {
@@ -127,7 +126,7 @@ class SQLClient {
   }
 
   /**
-   * Store the event in the database
+   * Store the event in the database.
    *
    * @param event The event to store
    * @throws SQLException If there was a problem with the database
@@ -140,7 +139,7 @@ class SQLClient {
   }
 
   /**
-   * Store the event in the database
+   * Store the event in the database.
    *
    * @param projectName The project in which this event happened
    * @param timestamp The time at which this event took place
@@ -155,7 +154,7 @@ class SQLClient {
   }
 
   /**
-   * Remove all events that are older than maxAge
+   * Remove all events that are older than maxAge.
    *
    * @param maxAge The maximum age to keep events
    */
@@ -173,7 +172,7 @@ class SQLClient {
   }
 
   /**
-   * Remove all events corresponding to this project
+   * Remove all events corresponding to this project.
    *
    * @param project Events attributed to this project should be removed
    */
@@ -188,8 +187,8 @@ class SQLClient {
   }
 
   /**
-   * Do a simple query on the database. This is used to determine whether or not
-   * the main database is online.
+   * Do a simple query on the database. This is used to determine whether or
+   * not the main database is online.
    *
    * @throws SQLException If there was a problem with the database
    */
