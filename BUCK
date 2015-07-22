@@ -1,10 +1,12 @@
 include_defs('//bucklets/gerrit_plugin.bucklet')
+include_defs('//bucklets/java_sources.bucklet')
 
+SOURCES = glob(['src/main/java/**/*.java'])
+RESOURCES = glob(['src/main/resources/**/*'])
 DEPS = [
   '//lib:gson',
   '//lib/commons:dbcp',
 ]
-
 TEST_DEPS = GERRIT_PLUGIN_API + [
   ':events-log__plugin',
   '//lib/easymock:easymock',
@@ -15,8 +17,8 @@ TEST_DEPS = GERRIT_PLUGIN_API + [
 
 gerrit_plugin(
   name = 'events-log',
-  srcs = glob(['src/main/java/**/*.java']),
-  resources = glob(['src/main/resources/**/*']),
+  srcs = SOURCES,
+  resources = RESOURCES,
   manifest_entries = [
     'Gerrit-PluginName: events-log',
     'Implementation-Vendor: Ericsson',
@@ -38,4 +40,9 @@ java_test(
   labels = ['events-log'],
   source_under_test = [':events-log__plugin'],
   deps = TEST_DEPS,
+)
+
+java_sources(
+  name = 'events-log-sources',
+  srcs = SOURCES + RESOURCES,
 )

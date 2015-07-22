@@ -1,6 +1,7 @@
 [alias]
   events-log = //:events-log
   plugin = //:events-log
+  src = //:events-log-sources
 
 [java]
   src_roots = java, resources
