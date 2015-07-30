@@ -11,7 +11,6 @@ TEST_DEPS = GERRIT_PLUGIN_API + [
   ':events-log__plugin',
   '//lib/easymock:easymock',
   '//lib:gson',
-  '//lib:junit',
   '//lib:truth',
 ]
 
