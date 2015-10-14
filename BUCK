@@ -7,7 +7,7 @@ DEPS = [
   '//lib:gson',
   '//lib/commons:dbcp',
 ]
-TEST_DEPS = GERRIT_PLUGIN_API + [
+TEST_DEPS = GERRIT_PLUGIN_API + GERRIT_TESTS + [
   ':events-log__plugin',
   '//lib/easymock:easymock',
   '//lib:gson',
