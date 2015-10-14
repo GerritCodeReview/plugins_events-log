@@ -54,9 +54,7 @@ class SQLModule extends AbstractModule {
   @Singleton
   @LocalEventsDb
   SQLClient provideLocalSqlClient(EventsLogConfig cfg) {
-    String path = cfg.getLocalStorePath().toString();
-    path = path.endsWith("/") ? path : path + "/";
-    return new SQLClient(cfg.getLocalStoreDriver(), H2_DB_PREFIX
-        + path, cfg.getUrlOptions());
+    return new SQLClient(cfg.getLocalStoreDriver(),
+        H2_DB_PREFIX + cfg.getLocalStorePath() + "/", cfg.getUrlOptions());
   }
 }
