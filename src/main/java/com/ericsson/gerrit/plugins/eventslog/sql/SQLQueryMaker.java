@@ -76,15 +76,14 @@ class SQLQueryMaker implements QueryMaker {
 
   private Date[] parseDates(String dateOne, String dateTwo)
       throws MalformedQueryException, ParseException {
-    Calendar cal = Calendar.getInstance();
-    if (dateOne == null & dateTwo == null) {
+    if (dateOne == null && dateTwo == null) {
       throw new MalformedQueryException();
     }
+    Calendar cal = Calendar.getInstance();
+    Date dOne = dateOne == null ? cal.getTime() : parseDate(dateOne);
+    Date dTwo = dateTwo == null ? cal.getTime() : parseDate(dateTwo);
     Date[] dates = new Date[TWO];
-    Date dOne =
-        dateOne == null && dateTwo != null ? cal.getTime() : parseDate(dateOne);
-    Date dTwo =
-        dateTwo == null && dateOne != null ? cal.getTime() : parseDate(dateTwo);
+
     dates[0] = dOne.compareTo(dTwo) < 0 ? dOne : dTwo;
     dates[1] = dOne.compareTo(dTwo) < 0 ? dTwo : dOne;
     return dates;

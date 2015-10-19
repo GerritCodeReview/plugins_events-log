@@ -123,6 +123,7 @@ public class EventsLogConfig {
     return maxTries;
   }
 
+  /** @return the local-store (database) driver which happens to be h2 */
   public String getLocalStoreDriver() {
     return DEFAULT_DRIVER;
   }
