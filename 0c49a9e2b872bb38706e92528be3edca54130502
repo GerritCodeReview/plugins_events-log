@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb5c2765_f9a7d727",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-11-30T15:27:24Z",
+      "side": 1,
+      "message": "Am I right to understand that we do this \"no-op\" merge to stop noticing that commit as a diff between the branches?",
+      "revId": "0c49a9e2b872bb38706e92528be3edca54130502",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bb5c2765_d9a49326",
+        "filename": "lib/gerrit/BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-11-30T15:27:24Z",
+      "side": 1,
+      "message": "I fail to build this change in standalone from everything clean, since gerrit stable-2.12 has 2.12 as its VERSION, and gerrit master is at 2.13-SNAPSHOT. I don\u0027t have any 2-12.SNAPSHOT leftover in my local mvn repo, indeed.",
+      "range": {
+        "startLine": 3,
+        "startChar": 11,
+        "endLine": 3,
+        "endChar": 20
+      },
+      "revId": "0c49a9e2b872bb38706e92528be3edca54130502",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
