@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bb5c2765_999a1bde",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2015-11-30T14:55:59Z",
+      "side": 1,
+      "message": "Shouldn\u0027t we consider rc1 instead? Or wait for v2.12, assuming rc2+ might be needed (until proven otherwise)? Unless the idea is to use the sole \"constant\"/stable version available today, that is, neither snapshot (obviously) nor rc1+?",
+      "range": {
+        "startLine": 7,
+        "startChar": 28,
+        "endLine": 7,
+        "endChar": 31
+      },
+      "revId": "9efe1c25a01f9ef6670e72a04ecdee9a9bae09ab",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
