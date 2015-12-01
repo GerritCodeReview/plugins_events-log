@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7b062fd1_f7a760cb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2015-12-01T00:17:45Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "bb5c2765_f9a7d727",
+      "revId": "0c49a9e2b872bb38706e92528be3edca54130502",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bb5c2765_d9a49326",
         "filename": "lib/gerrit/BUCK",
         "patchSetId": 1
@@ -30,6 +48,30 @@
       "writtenOn": "2015-11-30T15:27:24Z",
       "side": 1,
       "message": "I fail to build this change in standalone from everything clean, since gerrit stable-2.12 has 2.12 as its VERSION, and gerrit master is at 2.13-SNAPSHOT. I don\u0027t have any 2-12.SNAPSHOT leftover in my local mvn repo, indeed.",
+      "range": {
+        "startLine": 3,
+        "startChar": 11,
+        "endLine": 3,
+        "endChar": 20
+      },
+      "revId": "0c49a9e2b872bb38706e92528be3edca54130502",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9b03e3be_f8a751cb",
+        "filename": "lib/gerrit/BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2015-12-01T00:17:45Z",
+      "side": 1,
+      "message": "Yes, I branched out stable-2.12 from the commit before master was updated to 2.13-SNAPSHOT. It\u0027s buildable with the following commit; these should both be submitted at the same time.",
+      "parentUuid": "bb5c2765_d9a49326",
       "range": {
         "startLine": 3,
         "startChar": 11,
