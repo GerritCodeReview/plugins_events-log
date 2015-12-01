@@ -22,6 +22,30 @@
       "revId": "9efe1c25a01f9ef6670e72a04ecdee9a9bae09ab",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7b062fd1_b79de87d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2015-12-01T00:16:06Z",
+      "side": 1,
+      "message": "I didn\u0027t build the API artifacts with rc1.  There should be no change from rc0 anyway.\n\nI\u0027ve been updating plugins to use rc0 on stable-2.12 branches just so we can get it building on CI; will update to 2.12 final when it\u0027s available.",
+      "parentUuid": "bb5c2765_999a1bde",
+      "range": {
+        "startLine": 7,
+        "startChar": 28,
+        "endLine": 7,
+        "endChar": 31
+      },
+      "revId": "9efe1c25a01f9ef6670e72a04ecdee9a9bae09ab",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
