@@ -19,10 +19,10 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.expectLastCall;
 
-import com.google.gerrit.reviewdb.client.Change.Key;
 import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.reviewdb.client.Project.NameKey;
 import com.google.gerrit.server.CurrentUser;
-import com.google.gerrit.server.events.ChangeEvent;
+import com.google.gerrit.server.events.ProjectEvent;
 import com.google.gerrit.server.project.NoSuchProjectException;
 import com.google.gerrit.server.project.ProjectControl;
 import com.google.gson.Gson;
@@ -450,7 +450,7 @@ public class SQLStoreTest {
     expect(cfgMock.getCopyLocal()).andReturn(true).once();
   }
 
-  public class MockEvent extends ChangeEvent {
+  public class MockEvent extends ProjectEvent {
     public String project = "mock project";
 
     MockEvent() {
@@ -463,18 +463,8 @@ public class SQLStoreTest {
     }
 
     @Override
-    public Project.NameKey getProjectNameKey() {
+    public NameKey getProjectNameKey() {
       return new Project.NameKey(project);
-    }
-
-    @Override
-    public Key getChangeKey() {
-      return null;
-    }
-
-    @Override
-    public String getRefName() {
-      return null;
     }
   }
 
