@@ -24,11 +24,14 @@ import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+import com.google.common.base.Supplier;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.gerrit.server.events.ProjectEvent;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
+import com.google.gerrit.server.events.SupplierSerializer;
 
 import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
@@ -132,10 +135,12 @@ class SQLClient {
    * @throws SQLException If there was a problem with the database
    */
   void storeEvent(ProjectEvent event) throws SQLException {
+    Gson gson = new GsonBuilder()
+        .registerTypeAdapter(Supplier.class, new SupplierSerializer())
+        .create();
     storeEvent(event.getProjectNameKey().get(),
         new Timestamp(SECONDS.toMillis(event.eventCreatedOn)),
-        new Gson().toJson(event));
-
+        gson.toJson(event));
   }
 
   /**
