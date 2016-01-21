@@ -24,11 +24,14 @@ import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+import com.google.common.base.Supplier;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.gerrit.server.events.ProjectEvent;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
+import com.google.gerrit.server.events.SupplierSerializer;
 
 import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
@@ -47,6 +50,7 @@ import java.util.List;
 
 class SQLClient {
   private static final Logger log = LoggerFactory.getLogger(SQLClient.class);
+  private final Gson gson;
   private BasicDataSource ds;
 
   @Inject
@@ -54,6 +58,8 @@ class SQLClient {
     ds = new BasicDataSource();
     ds.setDriverClassName(storeDriver);
     ds.setUrl(storeUrl + TABLE_NAME + ";" + urlOptions);
+    gson = new GsonBuilder()
+        .registerTypeAdapter(Supplier.class, new SupplierSerializer()).create();
   }
 
   /**
@@ -134,8 +140,7 @@ class SQLClient {
   void storeEvent(ProjectEvent event) throws SQLException {
     storeEvent(event.getProjectNameKey().get(),
         new Timestamp(SECONDS.toMillis(event.eventCreatedOn)),
-        new Gson().toJson(event));
-
+        gson.toJson(event));
   }
 
   /**
