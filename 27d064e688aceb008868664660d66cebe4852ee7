@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "74980634_deac65af",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLClient.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2016-01-21T20:57:52Z",
+      "side": 1,
+      "message": "Built every time there is a call to this very method (storeEvent). How about moving this elsewhere (likely constructor) so it gets created only once for \u0027this\u0027?",
+      "revId": "27d064e688aceb008868664660d66cebe4852ee7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
