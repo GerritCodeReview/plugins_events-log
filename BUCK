@@ -9,9 +9,6 @@ DEPS = [
 ]
 TEST_DEPS = GERRIT_PLUGIN_API + GERRIT_TESTS + [
   ':events-log__plugin',
-  '//lib/easymock:easymock',
-  '//lib:gson',
-  '//lib:truth',
 ]
 
 gerrit_plugin(
