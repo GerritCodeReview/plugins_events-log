@@ -16,6 +16,7 @@ package com.ericsson.gerrit.plugins.eventslog;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_CONN_TIME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_COPY_LOCAL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_DRIVER;
+import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_EVICT_IDLE_TIME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_LOCAL_PATH;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_MAX_AGE;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_MAX_TRIES;
@@ -28,6 +29,7 @@ import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_WAIT_
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_CONN_TIME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_COPY_LOCAL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_DRIVER;
+import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_EVICT_IDLE_TIME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_MAX_AGE;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_MAX_TRIES;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_RETURN_LIMIT;
@@ -59,6 +61,8 @@ public class EventsLogConfigTest {
   private String defaultLocalStorePath;
   private String localStorePath;
 
+  private static final int CUSTOM_EVICT_IDLE_TIME = 10000;
+
   @Rule
   public TemporaryFolder gerrit_site = new TemporaryFolder();
 
@@ -87,6 +91,7 @@ public class EventsLogConfigTest {
     expect(configMock.getString(CONFIG_URL_OPTIONS, "")).andReturn("");
     expect(configMock.getString(CONFIG_USERNAME)).andReturn(null);
     expect(configMock.getString(CONFIG_PASSWORD)).andReturn(null);
+    expect(configMock.getInt(CONFIG_EVICT_IDLE_TIME, DEFAULT_EVICT_IDLE_TIME)).andReturn(DEFAULT_EVICT_IDLE_TIME);
 
     easyMock.replayAll();
   }
@@ -105,6 +110,7 @@ public class EventsLogConfigTest {
     expect(configMock.getString(CONFIG_URL_OPTIONS, "")).andReturn("DB_CLOSE_DELAY=10");
     expect(configMock.getString(CONFIG_USERNAME)).andReturn("testUsername");
     expect(configMock.getString(CONFIG_PASSWORD)).andReturn("testPassword");
+    expect(configMock.getInt(CONFIG_EVICT_IDLE_TIME, DEFAULT_EVICT_IDLE_TIME)).andReturn(CUSTOM_EVICT_IDLE_TIME);
 
     easyMock.replayAll();
   }
@@ -126,6 +132,7 @@ public class EventsLogConfigTest {
     assertThat(config.getUrlOptions()).isEmpty();
     assertThat(config.getStoreUsername()).isNull();
     assertThat(config.getStorePassword()).isNull();
+    assertThat(config.getEvictIdleTime()).isEqualTo(DEFAULT_EVICT_IDLE_TIME);
   }
 
   @Test
@@ -145,5 +152,6 @@ public class EventsLogConfigTest {
     assertThat(config.getUrlOptions()).isEqualTo("DB_CLOSE_DELAY=10");
     assertThat(config.getStoreUsername()).isEqualTo("testUsername");
     assertThat(config.getStorePassword()).isEqualTo("testPassword");
+    assertThat(config.getEvictIdleTime()).isEqualTo(CUSTOM_EVICT_IDLE_TIME);
   }
 }

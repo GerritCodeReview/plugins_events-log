@@ -39,6 +39,7 @@ public class EventsLogConfig {
   static final String CONFIG_PASSWORD = "storePassword";
   static final String CONFIG_WAIT_TIME = "retryTimeout";
   static final String CONFIG_CONN_TIME = "connectTimeout";
+  static final String CONFIG_EVICT_IDLE_TIME = "evictIdleTime";
 
   static final boolean DEFAULT_COPY_LOCAL = false;
   static final int DEFAULT_MAX_AGE = 30;
@@ -48,6 +49,7 @@ public class EventsLogConfig {
   static final int DEFAULT_CONN_TIME = 1000;
   static final String DEFAULT_DRIVER = "org.h2.Driver";
   static final String DEFAULT_URL = "jdbc:h2:~/db/";
+  static final int DEFAULT_EVICT_IDLE_TIME = 1000 * 60;
 
   private boolean copyLocal;
   private int maxAge;
@@ -61,6 +63,7 @@ public class EventsLogConfig {
   private String urlOptions;
   private String storeUsername;
   private String storePassword;
+  private int evictIdleTime;
 
   @Inject
   EventsLogConfig(PluginConfigFactory cfgFactory,
@@ -81,6 +84,7 @@ public class EventsLogConfig {
     urlOptions = cfg.getString(CONFIG_URL_OPTIONS, "");
     storeUsername = cfg.getString(CONFIG_USERNAME);
     storePassword = cfg.getString(CONFIG_PASSWORD);
+    evictIdleTime = cfg.getInt(CONFIG_EVICT_IDLE_TIME, DEFAULT_EVICT_IDLE_TIME);
   }
 
   public int getMaxAge() {
@@ -134,5 +138,9 @@ public class EventsLogConfig {
 
   public boolean getCopyLocal() {
     return copyLocal;
+  }
+
+  public int getEvictIdleTime() {
+    return evictIdleTime;
   }
 }

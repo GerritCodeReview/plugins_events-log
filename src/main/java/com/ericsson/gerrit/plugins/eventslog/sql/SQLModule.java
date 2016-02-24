@@ -42,11 +42,11 @@ class SQLModule extends AbstractModule {
   @Singleton
   @EventsDb
   SQLClient provideSqlClient(EventsLogConfig cfg) {
-    SQLClient sqlClient =
-        new SQLClient(cfg.getStoreDriver(), cfg.getStoreUrl(),
-            cfg.getUrlOptions());
+    SQLClient sqlClient = new SQLClient(cfg.getStoreDriver(), cfg.getStoreUrl(),
+        cfg.getUrlOptions());
     sqlClient.setUsername(cfg.getStoreUsername());
     sqlClient.setPassword(cfg.getStorePassword());
+    sqlClient.setEvictIdleTime(cfg.getEvictIdleTime());
     return sqlClient;
   }
 
@@ -54,7 +54,9 @@ class SQLModule extends AbstractModule {
   @Singleton
   @LocalEventsDb
   SQLClient provideLocalSqlClient(EventsLogConfig cfg) {
-    return new SQLClient(cfg.getLocalStoreDriver(),
+    SQLClient sqlClient = new SQLClient(cfg.getLocalStoreDriver(),
         H2_DB_PREFIX + cfg.getLocalStorePath() + "/", cfg.getUrlOptions());
+    sqlClient.setEvictIdleTime(cfg.getEvictIdleTime());
+    return sqlClient;
   }
 }

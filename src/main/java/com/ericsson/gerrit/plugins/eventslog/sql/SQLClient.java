@@ -81,6 +81,17 @@ class SQLClient {
   }
 
   /**
+   * Set the time before an idle connection is evicted as well as the
+   * time between eviction runs.
+   *
+   * @param evictIdleTime the time in milliseconds before eviction
+   */
+  void setEvictIdleTime(int evictIdleTime) {
+    ds.setMinEvictableIdleTimeMillis(evictIdleTime);
+    ds.setTimeBetweenEvictionRunsMillis(evictIdleTime / 2);
+  }
+
+  /**
    * Create the database if it has not yet been created.
    *
    * @throws SQLException If there was a problem with the database
