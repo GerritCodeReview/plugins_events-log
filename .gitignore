@@ -11,3 +11,4 @@ bin
 .buckversion
 .watchmanconfig
 /bucklets
+/eclipse-out
