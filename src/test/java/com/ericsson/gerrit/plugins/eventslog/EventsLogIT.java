@@ -38,11 +38,11 @@ public class EventsLogIT extends PluginDaemonTest {
     String change1 = "refs/changes/01/1/1";
 
     createChange();
-    String response = adminSession.get(events).getEntityContent();
+    String response = adminRestSession.get(events).getEntityContent();
     assertThat(response).contains(change1);
 
     createChange();
-    response = adminSession.get(events).getEntityContent();
+    response = adminRestSession.get(events).getEntityContent();
     assertThat(response).contains(change1);
     assertThat(response).contains("refs/changes/02/2/1");
   }
