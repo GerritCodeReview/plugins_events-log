@@ -7,7 +7,7 @@ DEPS = [
   '//lib:gson',
   '//lib/commons:dbcp',
 ]
-TEST_DEPS = GERRIT_PLUGIN_API + GERRIT_TESTS + [
+TEST_DEPS = GERRIT_PLUGIN_API + DEPS + GERRIT_TESTS + [
   ':events-log__plugin',
 ]
 
@@ -27,7 +27,7 @@ gerrit_plugin(
 
 java_library(
   name = 'classpath',
-  deps = list(set(DEPS) | set(TEST_DEPS))
+  deps = TEST_DEPS,
 )
 
 java_test(
