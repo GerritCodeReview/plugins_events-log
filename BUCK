@@ -35,7 +35,7 @@ java_test(
   srcs = glob(['src/test/java/**/*.java']),
   labels = ['events-log'],
   source_under_test = [':events-log__plugin'],
-  deps = TEST_DEPS,
+  deps = list(set(DEPS) | set(TEST_DEPS)),
 )
 
 java_sources(
