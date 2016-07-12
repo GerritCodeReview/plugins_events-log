@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "1ad9cc3e_bfb357a9",
+        "filename": "BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2016-07-12T19:40:49Z",
+      "side": 1,
+      "message": "the \u0027classpath\u0027 rule is only use for IDE integration in stadalone mode. This should have all dependencies, including the test ones otherwise the tests won\u0027t compile in eclipse.",
+      "parentUuid": "dad49439_ad589d74",
+      "range": {
+        "startLine": 30,
+        "startChar": 24,
+        "endLine": 30,
+        "endChar": 41
+      },
+      "revId": "49b1c931aa9f2c73ac450b55b0b41e2f0de88cc4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ae984f9_d1adc49b",
         "filename": "BUCK",
         "patchSetId": 1
