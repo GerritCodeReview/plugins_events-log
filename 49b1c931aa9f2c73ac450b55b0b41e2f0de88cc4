@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "dad49439_ad589d74",
+        "filename": "BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1011624
+      },
+      "writtenOn": "2016-07-12T11:10:38Z",
+      "side": 1,
+      "message": "This was introduced by  I33ffd71e3222e6bdee1410b98784b7c07351e2f7.\n\nSeems like this is there for IDE integration.",
+      "parentUuid": "fad95870_8ee03bd3",
+      "range": {
+        "startLine": 30,
+        "startChar": 24,
+        "endLine": 30,
+        "endChar": 41
+      },
+      "revId": "49b1c931aa9f2c73ac450b55b0b41e2f0de88cc4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ae984f9_d1adc49b",
         "filename": "BUCK",
         "patchSetId": 1
