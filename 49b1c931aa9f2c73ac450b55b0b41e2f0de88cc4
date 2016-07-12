@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fad95870_8ee03bd3",
+        "filename": "BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1011624
+      },
+      "writtenOn": "2016-07-12T07:23:05Z",
+      "side": 1,
+      "message": "I don\u0027t know. I\u0027ll try if it can be removed.\nActually this may be the reason for a strange backtrace in the log:\n[HTTP-142] WARN  com.ericsson.gerrit.plugins.eventslog.sql.SQLStore : Database contains a non-existing project, com.ericsson.gerrit.plugins.eventslog.EventsLogIT_getEventsShallBeConsistent_project, removing project from database\ncom.google.gerrit.server.project.NoSuchProjectException: Project not found: com.ericsson.gerrit.plugins.eventslog.EventsLogIT_getEventsShallBeConsistent_project\n        at com.google.gerrit.server.project.ProjectControl$GenericFactory.controlFor(ProjectControl.java:87)\n        at com.ericsson.gerrit.plugins.eventslog.sql.SQLStore.queryChangeEvents(SQLStore.java:122)\n        at com.ericsson.gerrit.plugins.eventslog.EventsRestApiServlet.doGet(EventsRestApiServlet.java:70)\n        at javax.servlet.http.HttpServlet.service(HttpServlet.java:622)\n        at javax.servlet.http.HttpServlet.service(HttpServlet.java:729)\n        at com.google.inject.servlet.ServletDefinition.doServiceImpl(ServletDefinition.java:287)\n        at com.google.inject.servlet.ServletDefinition.doService(ServletDefinition.java:277)",
+      "parentUuid": "5ae984f9_b1a240aa",
+      "range": {
+        "startLine": 30,
+        "startChar": 24,
+        "endLine": 30,
+        "endChar": 41
+      },
+      "revId": "49b1c931aa9f2c73ac450b55b0b41e2f0de88cc4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5ae984f9_d1adc49b",
         "filename": "BUCK",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2016-07-12T05:09:38Z",
       "side": 1,
       "message": "Why not just append DEPS to TEST_DEPS at its declaration on line 10?\n\nThen this is not needed.",
+      "revId": "49b1c931aa9f2c73ac450b55b0b41e2f0de88cc4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fad95870_8ef95b85",
+        "filename": "BUCK",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1011624
+      },
+      "writtenOn": "2016-07-12T07:23:05Z",
+      "side": 1,
+      "message": "Fixed the dependencies completly.",
+      "parentUuid": "5ae984f9_d1adc49b",
       "revId": "49b1c931aa9f2c73ac450b55b0b41e2f0de88cc4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
