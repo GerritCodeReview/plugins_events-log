@@ -114,21 +114,21 @@ class SQLStore implements EventStore, LifecycleListener {
       throw new ServiceUnavailableException();
     }
     List<SQLEntry> entries = new ArrayList<>();
-    Project.NameKey project = null;
+
     for (Entry<String, Collection<SQLEntry>> entry
         : eventsDb.getEvents(query).asMap().entrySet()) {
+      String projectName = entry.getKey();
       try {
-        project = new Project.NameKey(entry.getKey());
-        if (projectControlFactory.controlFor(project,
+        if (projectControlFactory.controlFor(new Project.NameKey(projectName),
             userProvider.get()).isVisible()) {
           entries.addAll(entry.getValue());
         }
       } catch (NoSuchProjectException e) {
-        log.warn("Database contains a non-existing project, " + project.get()
+        log.warn("Database contains a non-existing project, " + projectName
             + ", removing project from database", e);
-        eventsDb.removeProjectEvents(project.get());
+        eventsDb.removeProjectEvents(projectName);
       } catch (IOException e) {
-        log.warn("Cannot get project visibility info for " + project.get()
+        log.warn("Cannot get project visibility info for " + projectName
             + " from cache", e);
       }
     }
