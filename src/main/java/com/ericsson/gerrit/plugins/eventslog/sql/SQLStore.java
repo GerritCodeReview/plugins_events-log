@@ -167,21 +167,25 @@ class SQLStore implements EventStore, LifecycleListener {
         if (e.getCause() instanceof ConnectException
             || e.getMessage().contains("terminating connection")) {
           done = false;
-          retryIfAllowed(failedConnections);
+          try {
+            retryIfAllowed(failedConnections);
+          } catch (InterruptedException e1) {
+            log.warn("Cannot store ChangeEvent for: " + projectName.get()
+                + ": Interrupted");
+            Thread.currentThread().interrupt();
+            return;
+          }
           failedConnections++;
         }
       }
     }
   }
 
-  private void retryIfAllowed(int failedConnections) {
+  private void retryIfAllowed(int failedConnections)
+      throws InterruptedException {
     if (failedConnections < maxTries - 1) {
       log.info("Retrying store event");
-      try {
-        Thread.sleep(waitTime);
-      } catch (InterruptedException e1) {
-        return;
-      }
+      Thread.sleep(waitTime);
     } else {
       log.error("Failed to store event " + maxTries + " times");
       setOnline(false);
