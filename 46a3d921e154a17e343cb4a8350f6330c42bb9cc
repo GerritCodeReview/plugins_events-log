@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fadf9821_7e6ab19a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2016-07-13T20:36:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fadf9821_be3279dc",
+      "range": {
+        "startLine": 11,
+        "startChar": 72,
+        "endLine": 11,
+        "endChar": 78
+      },
+      "revId": "46a3d921e154a17e343cb4a8350f6330c42bb9cc",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fadf9821_fe3c01b1",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2016-07-13T20:31:47Z",
       "side": 1,
       "message": "Should we log before interrupting currentThread?",
+      "revId": "46a3d921e154a17e343cb4a8350f6330c42bb9cc",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fadf9821_be5b590c",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2016-07-13T20:36:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fadf9821_fe3c01b1",
       "revId": "46a3d921e154a17e343cb4a8350f6330c42bb9cc",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
