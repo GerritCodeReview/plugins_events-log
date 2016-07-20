@@ -24,6 +24,7 @@ import com.google.inject.internal.UniqueAnnotations;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+/** Configures handling for an event queue while providing its pool. */
 public class EventModule extends AbstractModule {
 
   @Override

@@ -14,6 +14,7 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
+/** Custom exception for malformed queries. */
 public class MalformedQueryException extends EventsLogException {
   private static final long serialVersionUID = 1L;
   private static final String MESSAGE =

@@ -20,6 +20,9 @@ import com.google.inject.BindingAnnotation;
 
 import java.lang.annotation.Retention;
 
+/**
+ * Annotation applied to a ScheduledThreadPoolExecutor.
+ */
 @Retention(RUNTIME)
 @BindingAnnotation
 public @interface EventPool {

@@ -16,6 +16,7 @@ package com.ericsson.gerrit.plugins.eventslog;
 
 import java.util.Map;
 
+/** Helps build well-formed database query strings. */
 public interface QueryMaker {
 
   /**

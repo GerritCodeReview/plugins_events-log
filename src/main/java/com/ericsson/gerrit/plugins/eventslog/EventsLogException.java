@@ -14,6 +14,7 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
+/** Custom exception for events log. */
 public class EventsLogException extends Exception {
   private static final long serialVersionUID = 1L;
 
