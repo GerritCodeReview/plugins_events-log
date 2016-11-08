@@ -4,12 +4,14 @@
 File 'gerrit.config'
 --------------------
 
+```
   [plugin "@PLUGIN@"]
     maxAge = 20
     returnLimit = 10000
     storeUrl = jdbc:h2:~/gerrit/db/
     urlOptions = DB_CLOSE_DELAY=10
     copyLocal = true
+```
 
 plugin.@PLUGIN@.maxAge
 :    Specify the maximum allowed age in days of the entries in the database.
