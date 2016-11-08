@@ -57,7 +57,7 @@ class SQLModule extends AbstractModule {
     String path = cfg.getLocalStorePath().toString();
     path = path.endsWith("/") ? path : path + "/";
     SQLClient sqlClient = new SQLClient(cfg.getLocalStoreDriver(),
-        H2_DB_PREFIX + path, cfg.getUrlOptions());
+        H2_DB_PREFIX + path + SQLTable.TABLE_NAME, cfg.getUrlOptions());
     sqlClient.setEvictIdleTime(cfg.getEvictIdleTime());
     return sqlClient;
   }

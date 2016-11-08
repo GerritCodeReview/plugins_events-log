@@ -9,7 +9,8 @@ File 'gerrit.config'
     maxAge = 20
     returnLimit = 10000
     storeUrl = jdbc:h2:~/gerrit/db/
-    urlOptions = DB_CLOSE_DELAY=10
+    urlOptions = loglevel=INFO
+    urlOptions = logUnclosedConnections=true
     copyLocal = true
 ```
 
@@ -43,7 +44,10 @@ plugin.@PLUGIN@.storePassword
      also be defined in secure.config.
 
 plugin.@PLUGIN@.urlOptions
-:    Options to append to the database url.
+:    Options to append to the database url. Each option should be specified in a
+     separate line using the option=value format. For example:
+       urlOptions = loglevel=INFO
+       urlOptions = logUnclosedConnections=true
 
 plugin.@PLUGIN@.maxTries
 :    Maximum number of times the plugin should attempt to store the event if a
