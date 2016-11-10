@@ -57,7 +57,8 @@ class SQLClient {
   SQLClient(String storeDriver, String storeUrl, String urlOptions) {
     ds = new BasicDataSource();
     ds.setDriverClassName(storeDriver);
-    ds.setUrl(storeUrl + TABLE_NAME + ";" + urlOptions);
+    ds.setUrl(storeUrl);
+    ds.setConnectionProperties(urlOptions);
     gson = new GsonBuilder()
         .registerTypeAdapter(Supplier.class, new SupplierSerializer()).create();
   }
@@ -110,8 +111,7 @@ class SQLClient {
   boolean dbExists() throws SQLException {
     try (Connection conn = ds.getConnection();
         ResultSet tables =
-            conn.getMetaData().getTables(null, null, TABLE_NAME.toUpperCase(),
-                null)) {
+            conn.getMetaData().getTables(null, null, TABLE_NAME, null)) {
       return tables.next();
     }
   }

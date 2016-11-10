@@ -38,6 +38,7 @@ import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_WAIT
 import static com.google.common.truth.Truth.assertThat;
 import static org.easymock.EasyMock.expect;
 
+import com.google.common.base.Joiner;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.config.SitePaths;
@@ -60,6 +61,7 @@ public class EventsLogConfigTest {
   private EasyMockSupport easyMock;
   private String defaultLocalStorePath;
   private String localStorePath;
+  private String [] urlOptions = new String[]{"a=b", "c=d"};
 
   private static final int CUSTOM_EVICT_IDLE_TIME = 10000;
 
@@ -88,7 +90,7 @@ public class EventsLogConfigTest {
     expect(configMock.getString(CONFIG_DRIVER, DEFAULT_DRIVER)).andReturn(DEFAULT_DRIVER);
     expect(configMock.getString(CONFIG_URL, DEFAULT_URL)).andReturn(DEFAULT_URL);
     expect(configMock.getString(CONFIG_LOCAL_PATH, defaultLocalStorePath)).andReturn(defaultLocalStorePath);
-    expect(configMock.getString(CONFIG_URL_OPTIONS, "")).andReturn("");
+    expect(configMock.getStringList(CONFIG_URL_OPTIONS)).andReturn(new String[0]);
     expect(configMock.getString(CONFIG_USERNAME)).andReturn(null);
     expect(configMock.getString(CONFIG_PASSWORD)).andReturn(null);
     expect(configMock.getInt(CONFIG_EVICT_IDLE_TIME, DEFAULT_EVICT_IDLE_TIME)).andReturn(DEFAULT_EVICT_IDLE_TIME);
@@ -107,7 +109,7 @@ public class EventsLogConfigTest {
     expect(configMock.getString(CONFIG_DRIVER, DEFAULT_DRIVER)).andReturn("org.h2.Driver2");
     expect(configMock.getString(CONFIG_URL, DEFAULT_URL)).andReturn("jdbc:h2:~/gerrit/db");
     expect(configMock.getString(CONFIG_LOCAL_PATH, defaultLocalStorePath)).andReturn(localStorePath);
-    expect(configMock.getString(CONFIG_URL_OPTIONS, "")).andReturn("DB_CLOSE_DELAY=10");
+    expect(configMock.getStringList(CONFIG_URL_OPTIONS)).andReturn(urlOptions);
     expect(configMock.getString(CONFIG_USERNAME)).andReturn("testUsername");
     expect(configMock.getString(CONFIG_PASSWORD)).andReturn("testPassword");
     expect(configMock.getInt(CONFIG_EVICT_IDLE_TIME, DEFAULT_EVICT_IDLE_TIME)).andReturn(CUSTOM_EVICT_IDLE_TIME);
@@ -149,7 +151,7 @@ public class EventsLogConfigTest {
     assertThat(config.getLocalStorePath().toString() + "/").isEqualTo(localStorePath);
     assertThat(config.getStoreDriver()).isEqualTo("org.h2.Driver2");
     assertThat(config.getStoreUrl()).isEqualTo("jdbc:h2:~/gerrit/db");
-    assertThat(config.getUrlOptions()).isEqualTo("DB_CLOSE_DELAY=10");
+    assertThat(config.getUrlOptions()).isEqualTo(Joiner.on(";").join(urlOptions));
     assertThat(config.getStoreUsername()).isEqualTo("testUsername");
     assertThat(config.getStorePassword()).isEqualTo("testPassword");
     assertThat(config.getEvictIdleTime()).isEqualTo(CUSTOM_EVICT_IDLE_TIME);

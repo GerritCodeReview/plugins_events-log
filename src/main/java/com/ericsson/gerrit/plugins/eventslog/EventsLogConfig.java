@@ -14,6 +14,7 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
+import com.google.common.base.Joiner;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
@@ -81,10 +82,14 @@ public class EventsLogConfig {
     storeUrl = cfg.getString(CONFIG_URL, DEFAULT_URL);
     localStorePath = Paths.get(cfg.getString(CONFIG_LOCAL_PATH,
         defaultLocalPath));
-    urlOptions = cfg.getString(CONFIG_URL_OPTIONS, "");
+    urlOptions = concatenate(cfg.getStringList(CONFIG_URL_OPTIONS));
     storeUsername = cfg.getString(CONFIG_USERNAME);
     storePassword = cfg.getString(CONFIG_PASSWORD);
     evictIdleTime = cfg.getInt(CONFIG_EVICT_IDLE_TIME, DEFAULT_EVICT_IDLE_TIME);
+  }
+
+  private String concatenate(String[] stringList) {
+    return Joiner.on(";").join(stringList);
   }
 
   public int getMaxAge() {

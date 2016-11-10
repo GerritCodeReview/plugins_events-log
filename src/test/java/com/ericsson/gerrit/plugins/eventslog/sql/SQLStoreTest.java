@@ -58,10 +58,10 @@ import java.util.concurrent.TimeUnit;
 
 public class SQLStoreTest {
   private static final Logger log = LoggerFactory.getLogger(SQLStoreTest.class);
-  private static final String TEST_URL = "jdbc:h2:mem:";
+  private static final String TEST_URL = "jdbc:h2:mem:" + TABLE_NAME;
   private static final String TEST_LOCAL_URL = "jdbc:h2:mem:test:";
   private static final String TEST_DRIVER = "org.h2.Driver";
-  private static final String TEST_OPTIONS = "DB_CLOSE_DELAY=-1";
+  private static final String TEST_OPTIONS = "DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false";
   private static final String TERM_CONN_MSG = "terminating connection";
   private static final String MSG = "message";
   private static final String GENERIC_QUERY = "SELECT * FROM " + TABLE_NAME;
@@ -75,7 +75,7 @@ public class SQLStoreTest {
   private SQLStore store;
   private ScheduledThreadPoolExecutor poolMock;
 
-  private String path = TEST_URL + TABLE_NAME + ";" + TEST_OPTIONS;
+  private String path = TEST_URL + ";" + TEST_OPTIONS;
   private Connection conn;
   private Statement stat;
   private List<SQLEntry> results;
