@@ -124,8 +124,9 @@ class SQLStore implements EventStore, LifecycleListener {
           entries.addAll(entry.getValue());
         }
       } catch (NoSuchProjectException e) {
+
         log.warn("Database contains a non-existing project, " + projectName
-            + ", removing project from database", e);
+            + ", removing project from database");
         eventsDb.removeProjectEvents(projectName);
       } catch (IOException e) {
         log.warn("Cannot get project visibility info for " + projectName
