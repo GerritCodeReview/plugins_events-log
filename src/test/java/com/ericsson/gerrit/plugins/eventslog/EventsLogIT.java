@@ -17,11 +17,17 @@ package com.ericsson.gerrit.plugins.eventslog;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.gerrit.acceptance.GerritConfig;
-import com.google.gerrit.acceptance.PluginDaemonTest;
+import com.google.gerrit.acceptance.LightweightPluginDaemonTest;
+import com.google.gerrit.acceptance.TestPlugin;
 
 import org.junit.Test;
 
-public class EventsLogIT extends PluginDaemonTest {
+@TestPlugin(
+    name = "events-log",
+    sysModule = "com.ericsson.gerrit.plugins.eventslog.sql.SQLModule",
+    httpModule = "com.ericsson.gerrit.plugins.eventslog.HttpModule"
+)
+public class EventsLogIT extends LightweightPluginDaemonTest {
 
   @Test
   @GerritConfig(name = "plugin.events-log.storeUrl", value = "jdbc:h2:mem:db")
