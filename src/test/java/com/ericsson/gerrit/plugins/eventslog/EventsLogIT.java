@@ -16,23 +16,15 @@ package com.ericsson.gerrit.plugins.eventslog;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import com.google.gerrit.acceptance.GerritConfig;
 import com.google.gerrit.acceptance.PluginDaemonTest;
 
-import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.junit.Test;
-
-import java.io.IOException;
 
 public class EventsLogIT extends PluginDaemonTest {
 
-  @Override
-  protected void beforeTestServerStarts() throws IOException,
-      ConfigInvalidException {
-    // otherwise default ~/db not deleted after => corrupted next test/run
-    setPluginConfigString("storeUrl", "jdbc:h2:" + testSite + "/db/");
-  }
-
   @Test
+  @GerritConfig(name = "plugin.events-log.storeUrl", value = "jdbc:h2:mem:db")
   public void getEventsShallBeConsistent() throws Exception {
     String events = "/plugins/events-log/events/?t1=1970-01-01;t2=2999-01-01";
     String change1 = "refs/changes/01/1/1";
