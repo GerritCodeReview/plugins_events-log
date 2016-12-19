@@ -12,3 +12,4 @@ bin
 .watchmanconfig
 /bucklets
 /eclipse-out
+/.apt_generated/
