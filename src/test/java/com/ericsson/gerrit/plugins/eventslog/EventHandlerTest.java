@@ -15,55 +15,50 @@
 package com.ericsson.gerrit.plugins.eventslog;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.easymock.EasyMock.expectLastCall;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
-import com.google.gerrit.common.EventListener;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.Event;
 
-import org.easymock.EasyMockSupport;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
+@RunWith(MockitoJUnitRunner.class)
 public class EventHandlerTest {
-  private EasyMockSupport easyMock = new EasyMockSupport();
+  @Mock
   private EventStore storeMock;
-  private EventListener listener;
-  private ScheduledThreadPoolExecutor poolMock;
+  private EventHandler eventHandler;
 
   @Before
   public void setUp() {
-    storeMock = easyMock.createMock(EventStore.class);
+    ScheduledThreadPoolExecutor poolMock = new PoolMock();
+    eventHandler = new EventHandler(storeMock, poolMock);
   }
 
   @Test
   public void passEventToStore() {
-    ChangeEvent eventMock = easyMock.createNiceMock(ChangeEvent.class);
-    easyMock.resetAll();
-    storeMock.storeEvent(eventMock);
-    expectLastCall().once();
-    easyMock.replayAll();
-    poolMock = new PoolMock(1);
-    listener = new EventHandler(storeMock, poolMock);
-    listener.onEvent(eventMock);
-    easyMock.verifyAll();
+    ChangeEvent eventMock = mock(ChangeEvent.class);
+    eventHandler.onEvent(eventMock);
+    verify(storeMock).storeEvent(eventMock);
   }
 
   @Test
   public void nonProjectEvent() {
-    poolMock = easyMock.createMock(ScheduledThreadPoolExecutor.class);
-    Event eventMock = easyMock.createMock(Event.class);
-    easyMock.replayAll();
-    listener = new EventHandler(storeMock, poolMock);
-    listener.onEvent(eventMock);
-    easyMock.verifyAll();
+    Event eventMock = mock(Event.class);
+    eventHandler.onEvent(eventMock);
+    verifyZeroInteractions(storeMock);
   }
 
   class PoolMock extends ScheduledThreadPoolExecutor {
-    PoolMock(int corePoolSize) {
-      super(corePoolSize);
+    PoolMock() {
+      super(1);
     }
     @Override
     public void execute(Runnable command) {

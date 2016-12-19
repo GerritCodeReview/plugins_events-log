@@ -13,6 +13,7 @@
 // limitations under the License.
 
 package com.ericsson.gerrit.plugins.eventslog;
+
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_CONN_TIME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_COPY_LOCAL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_DRIVER;
@@ -36,91 +37,108 @@ import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_RETU
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_URL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_WAIT_TIME;
 import static com.google.common.truth.Truth.assertThat;
-import static org.easymock.EasyMock.expect;
+import static org.mockito.Mockito.when;
 
 import com.google.common.base.Joiner;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.config.SitePaths;
 
-import org.easymock.EasyMock;
-import org.easymock.EasyMockSupport;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.nio.file.Files;
 
+@RunWith(MockitoJUnitRunner.class)
 public class EventsLogConfigTest {
+  private static final String PLUGIN_NAME = "eventsLog";
+  private static final int CUSTOM_EVICT_IDLE_TIME = 10000;
+
   private SitePaths site;
   private EventsLogConfig config;
-  private PluginConfigFactory cfgFactoryMock;
-  private PluginConfig configMock;
-  private EasyMockSupport easyMock;
   private String defaultLocalStorePath;
   private String localStorePath;
-  private String [] urlOptions = new String[]{"a=b", "c=d"};
+  private String[] urlOptions = new String[] {"DB_CLOSE_DELAY=10"};
 
-  private static final int CUSTOM_EVICT_IDLE_TIME = 10000;
+  @Mock
+  private PluginConfigFactory cfgFactoryMock;
+  @Mock
+  private PluginConfig configMock;
 
   @Rule
   public TemporaryFolder gerrit_site = new TemporaryFolder();
 
   @Before
   public void setUp() throws IOException {
-    easyMock = new EasyMockSupport();
     site = new SitePaths(gerrit_site.getRoot().toPath());
     Files.createDirectories(site.etc_dir);
     defaultLocalStorePath = site.site_path.toString() + "/events-db/";
-    configMock = easyMock.createMock(PluginConfig.class);
-    cfgFactoryMock = easyMock.createMock(PluginConfigFactory.class);
-    expect(cfgFactoryMock.getFromGerritConfig(EasyMock.anyString(),
-        EasyMock.anyBoolean())).andStubReturn(configMock);
+    when(cfgFactoryMock.getFromGerritConfig(PLUGIN_NAME, true))
+        .thenReturn(configMock);
   }
 
   private void setUpDefaults() {
-    expect(configMock.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL)).andReturn(DEFAULT_COPY_LOCAL);
-    expect(configMock.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE)).andReturn(DEFAULT_MAX_AGE);
-    expect(configMock.getInt(CONFIG_MAX_TRIES, DEFAULT_MAX_TRIES)).andReturn(DEFAULT_MAX_TRIES);
-    expect(configMock.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT)).andReturn(DEFAULT_RETURN_LIMIT);
-    expect(configMock.getInt(CONFIG_CONN_TIME, DEFAULT_CONN_TIME)).andReturn(DEFAULT_CONN_TIME);
-    expect(configMock.getInt(CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME)).andReturn(DEFAULT_WAIT_TIME);
-    expect(configMock.getString(CONFIG_DRIVER, DEFAULT_DRIVER)).andReturn(DEFAULT_DRIVER);
-    expect(configMock.getString(CONFIG_URL, DEFAULT_URL)).andReturn(DEFAULT_URL);
-    expect(configMock.getString(CONFIG_LOCAL_PATH, defaultLocalStorePath)).andReturn(defaultLocalStorePath);
-    expect(configMock.getStringList(CONFIG_URL_OPTIONS)).andReturn(new String[0]);
-    expect(configMock.getString(CONFIG_USERNAME)).andReturn(null);
-    expect(configMock.getString(CONFIG_PASSWORD)).andReturn(null);
-    expect(configMock.getInt(CONFIG_EVICT_IDLE_TIME, DEFAULT_EVICT_IDLE_TIME)).andReturn(DEFAULT_EVICT_IDLE_TIME);
-
-    easyMock.replayAll();
+    when(configMock.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL))
+        .thenReturn(DEFAULT_COPY_LOCAL);
+    when(configMock.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE))
+        .thenReturn(DEFAULT_MAX_AGE);
+    when(configMock.getInt(CONFIG_MAX_TRIES, DEFAULT_MAX_TRIES))
+        .thenReturn(DEFAULT_MAX_TRIES);
+    when(configMock.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT))
+        .thenReturn(DEFAULT_RETURN_LIMIT);
+    when(configMock.getInt(CONFIG_CONN_TIME, DEFAULT_CONN_TIME))
+        .thenReturn(DEFAULT_CONN_TIME);
+    when(configMock.getInt(CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME))
+        .thenReturn(DEFAULT_WAIT_TIME);
+    when(configMock.getString(CONFIG_DRIVER, DEFAULT_DRIVER))
+        .thenReturn(DEFAULT_DRIVER);
+    when(configMock.getString(CONFIG_URL, DEFAULT_URL)).thenReturn(DEFAULT_URL);
+    when(configMock.getString(CONFIG_LOCAL_PATH, defaultLocalStorePath))
+        .thenReturn(defaultLocalStorePath);
+    when(configMock.getStringList(CONFIG_URL_OPTIONS))
+        .thenReturn(new String[] {});
+    when(configMock.getString(CONFIG_USERNAME)).thenReturn(null);
+    when(configMock.getString(CONFIG_PASSWORD)).thenReturn(null);
+    when(configMock.getInt(CONFIG_EVICT_IDLE_TIME, DEFAULT_EVICT_IDLE_TIME))
+        .thenReturn(DEFAULT_EVICT_IDLE_TIME);
   }
 
   private void setUpCustom() {
     localStorePath = "~/gerrit/events-db/";
-    expect(configMock.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL)).andReturn(true);
-    expect(configMock.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE)).andReturn(20);
-    expect(configMock.getInt(CONFIG_MAX_TRIES, DEFAULT_MAX_TRIES)).andReturn(5);
-    expect(configMock.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT)).andReturn(10000);
-    expect(configMock.getInt(CONFIG_CONN_TIME, DEFAULT_CONN_TIME)).andReturn(5000);
-    expect(configMock.getInt(CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME)).andReturn(5000);
-    expect(configMock.getString(CONFIG_DRIVER, DEFAULT_DRIVER)).andReturn("org.h2.Driver2");
-    expect(configMock.getString(CONFIG_URL, DEFAULT_URL)).andReturn("jdbc:h2:~/gerrit/db");
-    expect(configMock.getString(CONFIG_LOCAL_PATH, defaultLocalStorePath)).andReturn(localStorePath);
-    expect(configMock.getStringList(CONFIG_URL_OPTIONS)).andReturn(urlOptions);
-    expect(configMock.getString(CONFIG_USERNAME)).andReturn("testUsername");
-    expect(configMock.getString(CONFIG_PASSWORD)).andReturn("testPassword");
-    expect(configMock.getInt(CONFIG_EVICT_IDLE_TIME, DEFAULT_EVICT_IDLE_TIME)).andReturn(CUSTOM_EVICT_IDLE_TIME);
+    when(configMock.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL))
+        .thenReturn(true);
+    when(configMock.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE)).thenReturn(20);
+    when(configMock.getInt(CONFIG_MAX_TRIES, DEFAULT_MAX_TRIES)).thenReturn(5);
+    when(configMock.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT))
+        .thenReturn(10000);
+    when(configMock.getInt(CONFIG_CONN_TIME, DEFAULT_CONN_TIME))
+        .thenReturn(5000);
+    when(configMock.getInt(CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME))
+        .thenReturn(5000);
+    when(configMock.getString(CONFIG_DRIVER, DEFAULT_DRIVER))
+        .thenReturn("org.h2.Driver2");
+    when(configMock.getString(CONFIG_URL, DEFAULT_URL))
+        .thenReturn("jdbc:h2:~/gerrit/db");
+    when(configMock.getString(CONFIG_LOCAL_PATH, defaultLocalStorePath))
+        .thenReturn(localStorePath);
+    when(configMock.getStringList(CONFIG_URL_OPTIONS)).thenReturn(urlOptions);
+    when(configMock.getString(CONFIG_USERNAME)).thenReturn("testUsername");
+    when(configMock.getString(CONFIG_PASSWORD)).thenReturn("testPassword");
+    when(configMock.getInt(CONFIG_EVICT_IDLE_TIME, DEFAULT_EVICT_IDLE_TIME))
+        .thenReturn(CUSTOM_EVICT_IDLE_TIME);
 
-    easyMock.replayAll();
   }
 
   @Test
   public void shouldReturnDefaultsWhenMissingConfig() {
     setUpDefaults();
-    config = new EventsLogConfig(cfgFactoryMock, site, null);
+    config = new EventsLogConfig(cfgFactoryMock, site, PLUGIN_NAME);
     assertThat(config.getCopyLocal()).isFalse();
     assertThat(config.getMaxAge()).isEqualTo(30);
     assertThat(config.getMaxTries()).isEqualTo(3);
@@ -128,7 +146,8 @@ public class EventsLogConfigTest {
     assertThat(config.getConnectTime()).isEqualTo(1000);
     assertThat(config.getWaitTime()).isEqualTo(1000);
     assertThat(config.getLocalStoreDriver()).isEqualTo(DEFAULT_DRIVER);
-    assertThat(config.getLocalStorePath().toString() + "/").isEqualTo(defaultLocalStorePath);
+    assertThat(config.getLocalStorePath().toString() + "/")
+        .isEqualTo(defaultLocalStorePath);
     assertThat(config.getStoreDriver()).isEqualTo(DEFAULT_DRIVER);
     assertThat(config.getStoreUrl()).isEqualTo(DEFAULT_URL);
     assertThat(config.getUrlOptions()).isEmpty();
@@ -140,7 +159,7 @@ public class EventsLogConfigTest {
   @Test
   public void shouldReturnConfigValues() {
     setUpCustom();
-    config = new EventsLogConfig(cfgFactoryMock, site, null);
+    config = new EventsLogConfig(cfgFactoryMock, site, PLUGIN_NAME);
     assertThat(config.getCopyLocal()).isTrue();
     assertThat(config.getMaxAge()).isEqualTo(20);
     assertThat(config.getMaxTries()).isEqualTo(5);
@@ -148,10 +167,12 @@ public class EventsLogConfigTest {
     assertThat(config.getConnectTime()).isEqualTo(5000);
     assertThat(config.getWaitTime()).isEqualTo(5000);
     assertThat(config.getLocalStoreDriver()).isEqualTo(DEFAULT_DRIVER);
-    assertThat(config.getLocalStorePath().toString() + "/").isEqualTo(localStorePath);
+    assertThat(config.getLocalStorePath().toString() + "/")
+        .isEqualTo(localStorePath);
     assertThat(config.getStoreDriver()).isEqualTo("org.h2.Driver2");
     assertThat(config.getStoreUrl()).isEqualTo("jdbc:h2:~/gerrit/db");
-    assertThat(config.getUrlOptions()).isEqualTo(Joiner.on(";").join(urlOptions));
+    assertThat(config.getUrlOptions())
+        .isEqualTo(Joiner.on(";").join(urlOptions));
     assertThat(config.getStoreUsername()).isEqualTo("testUsername");
     assertThat(config.getStorePassword()).isEqualTo("testPassword");
     assertThat(config.getEvictIdleTime()).isEqualTo(CUSTOM_EVICT_IDLE_TIME);
