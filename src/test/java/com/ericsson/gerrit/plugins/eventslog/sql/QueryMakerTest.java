@@ -15,106 +15,98 @@
 package com.ericsson.gerrit.plugins.eventslog.sql;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.easymock.EasyMock.expect;
+import static org.mockito.Mockito.when;
+
+import com.google.common.collect.ImmutableMap;
 
 import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
 import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
-import com.ericsson.gerrit.plugins.eventslog.sql.SQLQueryMaker;
 
-import org.easymock.EasyMockSupport;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.HashMap;
-import java.util.Map;
-
+@RunWith(MockitoJUnitRunner.class)
 public class QueryMakerTest {
-  private static QueryMaker queryMaker;
-  private static String defaultQuery;
+  private static final String T2 = "t2";
+  private static final String T1 = "t1";
+  private static final String OLD_DATE = "2013-10-10 10:00:00";
+  private static final String NEW_DATE = "2014-10-10 10:00:00";
 
-  @BeforeClass
-  public static void setUp() throws Exception {
-    EasyMockSupport easyMock = new EasyMockSupport();
-    EventsLogConfig cfgMock = easyMock.createMock(EventsLogConfig.class);
-    expect(cfgMock.getReturnLimit()).andReturn(10);
-    easyMock.replayAll();
+  private QueryMaker queryMaker;
+  private String defaultQuery;
+
+  @Mock
+  private EventsLogConfig cfgMock;
+
+  private String query;
+
+  @Before
+  public void setUp() throws Exception {
+    when(cfgMock.getReturnLimit()).thenReturn(10);
     queryMaker = new SQLQueryMaker(cfgMock);
     defaultQuery = queryMaker.getDefaultQuery();
   }
 
   @Test
-  public void returnDefaultforNullMap() throws Exception {
-    assertThat(queryMaker.formQueryFromRequestParameters(null)).isEqualTo(defaultQuery);
+  public void returnDefaultQueryforNullMap() throws Exception {
+    assertThat(queryMaker.formQueryFromRequestParameters(null))
+        .isEqualTo(defaultQuery);
   }
 
   @Test(expected = MalformedQueryException.class)
   public void badParameters() throws Exception {
-    Map<String, String> params = new HashMap<>();
-    params.put("t1", "bad format");
-    params.put("t2", "bad format");
-    queryMaker.formQueryFromRequestParameters(params);
+    queryMaker.formQueryFromRequestParameters(
+        ImmutableMap.of(T1, "13/13/32", T2, "14/10/10"));
   }
 
   @Test
   public void dateOneOnly() throws Exception {
-    Map<String, String> params = new HashMap<>();
-    String oldDate = "1990-10-10 10:00:00";
-    params.put("t1", oldDate);
-    String query = queryMaker.formQueryFromRequestParameters(params);
-    assertThat(query).contains(String.format("'%s' and ", oldDate));
+    query = queryMaker
+        .formQueryFromRequestParameters(ImmutableMap.of(T1, OLD_DATE));
+    assertThat(query).contains(String.format("'%s' and ", OLD_DATE));
   }
 
   @Test
   public void dateTwoOnly() throws Exception {
-    Map<String, String> params = new HashMap<>();
-    String oldDate = "1990-10-10 10:00:00";
-    params.put("t2", oldDate);
-    String query = queryMaker.formQueryFromRequestParameters(params);
-    assertThat(query).contains(String.format("'%s' and ", oldDate));
+    query = queryMaker
+        .formQueryFromRequestParameters(ImmutableMap.of(T2, OLD_DATE));
+    assertThat(query).contains(String.format("'%s' and ", OLD_DATE));
   }
 
   @Test(expected = MalformedQueryException.class)
   public void noDate() throws Exception {
-    Map<String, String> params = new HashMap<>();
-    queryMaker.formQueryFromRequestParameters(params);
+    queryMaker
+        .formQueryFromRequestParameters(ImmutableMap.<String, String> of());
   }
 
   @Test
   public void dateOrdering() throws Exception {
-    String query;
-    Map<String, String> params = new HashMap<>();
-    String olderDate = "2013-10-10 10:00:00";
-    String newerDate = "2014-10-10 10:00:00";
+    query = queryMaker.formQueryFromRequestParameters(
+        ImmutableMap.of(T1, OLD_DATE, T2, NEW_DATE));
+    assertThat(query)
+        .contains(String.format("'%s' and '%s'", OLD_DATE, NEW_DATE));
 
-    params.put("t1", olderDate);
-    params.put("t2", newerDate);
-    query = queryMaker.formQueryFromRequestParameters(params);
-    assertThat(query).contains(String.format("'%s' and '%s'",
-        olderDate, newerDate));
-
-    params.put("t1", newerDate);
-    params.put("t2", olderDate);
-    query = queryMaker.formQueryFromRequestParameters(params);
-    assertThat(query).contains(String.format("'%s' and '%s'",
-        olderDate, newerDate));
+    query = queryMaker.formQueryFromRequestParameters(
+        ImmutableMap.of(T1, NEW_DATE, T2, OLD_DATE));
+    assertThat(query)
+        .contains(String.format("'%s' and '%s'", OLD_DATE, NEW_DATE));
   }
 
   @Test
   public void bothDateTime() throws Exception {
-    Map<String, String> params = new HashMap<>();
-    params.put("t1", "2013-10-10 10:00:00");
-    params.put("t2", "2014-10-10 10:00:00");
-    String query = queryMaker.formQueryFromRequestParameters(params);
+    query = queryMaker.formQueryFromRequestParameters(
+        ImmutableMap.of(T1, OLD_DATE, T2, NEW_DATE));
     assertThat(query).isNotEqualTo(defaultQuery);
   }
 
   @Test
   public void onlyDateNoTime() throws Exception {
-    Map<String, String> params = new HashMap<>();
-    params.put("t1", "2013-10-10");
-    params.put("t2", "2014-10-10");
-    String query = queryMaker.formQueryFromRequestParameters(params);
+    String query = queryMaker.formQueryFromRequestParameters(
+        ImmutableMap.of(T1, "2013-10-10", T2, "2014-10-10"));
     assertThat(query).isNotEqualTo(defaultQuery);
   }
 }

@@ -5,12 +5,12 @@ include_defs('//bucklets/maven_jar.bucklet')
 SOURCES = glob(['src/main/java/**/*.java'])
 RESOURCES = glob(['src/main/resources/**/*'])
 DEPS = [
-  ':easymock',
   '//lib:gson',
   '//lib/commons:dbcp',
 ]
 TEST_DEPS = GERRIT_PLUGIN_API + DEPS + GERRIT_TESTS + [
   ':events-log__plugin',
+  ':mockito',
 ]
 
 gerrit_plugin(
@@ -45,29 +45,28 @@ java_sources(
 )
 
 maven_jar(
-  name = 'easymock',
-  id = 'org.easymock:easymock:3.4',
-  sha1 = '9fdeea183a399f25c2469497612cad131e920fa3',
-  license = 'DO_NOT_DISTRIBUTE',
+  name = 'mockito',
+  id = 'org.mockito:mockito-core:2.5.0',
+  sha1 = 'be28d46a52c7f2563580adeca350145e9ce916f8',
+  license = 'MIT',
   deps = [
-    ':cglib-2_2',
+    ':byte-buddy',
     ':objenesis',
   ],
 )
 
 maven_jar(
-  name = 'cglib-2_2',
-  id = 'cglib:cglib-nodep:2.2.2',
-  sha1 = '00d456bb230c70c0b95c76fb28e429d42f275941',
+  name = 'byte-buddy',
+  id = 'net.bytebuddy:byte-buddy:1.5.12',
+  sha1 = 'b1ba1d15f102b36ed43b826488114678d6d413da',
   license = 'DO_NOT_DISTRIBUTE',
   attach_source = False,
 )
 
 maven_jar(
   name = 'objenesis',
-  id = 'org.objenesis:objenesis:2.2',
-  sha1 = '3fb533efdaa50a768c394aa4624144cf8df17845',
+  id = 'org.objenesis:objenesis:2.4',
+  sha1 = '2916b6c96b50c5b3ec4452ed99401db745aabb27',
   license = 'DO_NOT_DISTRIBUTE',
-  visibility = ['//lib/powermock:powermock-reflect'],
   attach_source = False,
 )
