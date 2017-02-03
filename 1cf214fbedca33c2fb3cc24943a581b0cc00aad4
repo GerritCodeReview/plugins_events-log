@@ -46,6 +46,30 @@
       "revId": "1cf214fbedca33c2fb3cc24943a581b0cc00aad4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f70c0ed7_d7210efd",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "Feb 3, 2017 6:36:10 AM",
+      "side": 1,
+      "message": "this should be an error",
+      "parentUuid": "6ddd3f86_09f3268e",
+      "range": {
+        "startLine": 282,
+        "startChar": 12,
+        "endLine": 282,
+        "endChar": 17
+      },
+      "revId": "1cf214fbedca33c2fb3cc24943a581b0cc00aad4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
