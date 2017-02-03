@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "54773663_c59d7ae4",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1025452
+      },
+      "writtenOn": "Feb 3, 2017 6:27:52 AM",
+      "side": 1,
+      "message": "how about turning it into info?",
+      "range": {
+        "startLine": 282,
+        "startChar": 12,
+        "endLine": 282,
+        "endChar": 17
+      },
+      "revId": "1cf214fbedca33c2fb3cc24943a581b0cc00aad4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
