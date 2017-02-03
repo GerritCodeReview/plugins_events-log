@@ -274,7 +274,7 @@ class SQLStore implements EventStore, LifecycleListener {
     }
 
     private boolean checkConnection() {
-      log.info("Checking database connection...");
+      log.debug("Checking database connection...");
       try {
         eventsDb.queryOne();
         return true;
