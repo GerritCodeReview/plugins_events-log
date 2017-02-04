@@ -94,6 +94,30 @@
       "revId": "1cf214fbedca33c2fb3cc24943a581b0cc00aad4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "156f714e_c9e1d6e0",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "Feb 3, 2017 4:09:06 PM",
+      "side": 1,
+      "message": "Ah, sorry, I didn\u0027t see this before pushing a new patch set here.",
+      "parentUuid": "929f2fbb_31e3c4e4",
+      "range": {
+        "startLine": 282,
+        "startChar": 12,
+        "endLine": 282,
+        "endChar": 17
+      },
+      "revId": "1cf214fbedca33c2fb3cc24943a581b0cc00aad4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
