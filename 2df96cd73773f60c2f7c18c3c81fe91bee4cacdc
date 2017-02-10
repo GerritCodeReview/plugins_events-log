@@ -22,6 +22,30 @@
       "revId": "2df96cd73773f60c2f7c18c3c81fe91bee4cacdc",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "493467a9_69a8250b",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntryTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-02-10T20:27:52Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "deab1e92_e07ade67",
+      "range": {
+        "startLine": 74,
+        "startChar": 4,
+        "endLine": 74,
+        "endChar": 47
+      },
+      "revId": "2df96cd73773f60c2f7c18c3c81fe91bee4cacdc",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
