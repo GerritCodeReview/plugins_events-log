@@ -68,7 +68,7 @@ public class SQLEntryTest {
   }
 
   @Test
-  public void testEquals() throws Exception {
+  public void BROKEN_testEquals() throws Exception {
     assertThat(entry1.equals(null)).isFalse();
     assertThat(entry1.equals("String object")).isFalse();
     assertThat(entry1.equals(entry1)).isTrue();
