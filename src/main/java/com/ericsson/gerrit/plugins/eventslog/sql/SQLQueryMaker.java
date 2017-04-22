@@ -37,10 +37,10 @@ class SQLQueryMaker implements QueryMaker {
   private static final int TWO = 2;
   private static final String TIME_ONE = "t1";
   private static final String TIME_TWO = "t2";
-  private static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat(
-      "yyyy-MM-dd HH:mm:ss");
-  private static final DateFormat DATE_ONLY_FORMAT = new SimpleDateFormat(
-      "yyyy-MM-dd");
+  private static final ThreadLocal<DateFormat> DATE_TIME_FORMAT = ThreadLocal
+      .withInitial(() -> new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+  private static final ThreadLocal<DateFormat> DATE_ONLY_FORMAT = ThreadLocal
+      .withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
 
   private final int returnLimit;
 
@@ -63,8 +63,8 @@ class SQLQueryMaker implements QueryMaker {
     }
     return String.format(
         "SELECT * FROM %s WHERE %s BETWEEN '%s' and '%s' LIMIT %d", TABLE_NAME,
-        DATE_ENTRY, DATE_TIME_FORMAT.format(dates[0]),
-        DATE_TIME_FORMAT.format(dates[1]), returnLimit);
+        DATE_ENTRY, DATE_TIME_FORMAT.get().format(dates[0]),
+        DATE_TIME_FORMAT.get().format(dates[1]), returnLimit);
   }
 
   @Override
@@ -92,9 +92,9 @@ class SQLQueryMaker implements QueryMaker {
   private Date parseDate(String date) throws ParseException {
     Date parsedDate;
     try {
-      parsedDate = DATE_TIME_FORMAT.parse(date);
+      parsedDate = DATE_TIME_FORMAT.get().parse(date);
     } catch (ParseException e) {
-      parsedDate = DATE_ONLY_FORMAT.parse(date);
+      parsedDate = DATE_ONLY_FORMAT.get().parse(date);
     }
     return parsedDate;
   }
