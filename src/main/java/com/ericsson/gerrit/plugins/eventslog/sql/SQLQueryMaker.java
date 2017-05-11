@@ -31,7 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
-import java.util.function.Supplier;
 
 @Singleton
 class SQLQueryMaker implements QueryMaker {
@@ -39,19 +38,19 @@ class SQLQueryMaker implements QueryMaker {
   private static final String TIME_ONE = "t1";
   private static final String TIME_TWO = "t2";
   private static final ThreadLocal<DateFormat> DATE_TIME_FORMAT =
-      ThreadLocal.withInitial(new Supplier<DateFormat>() {
+      new ThreadLocal<DateFormat>() {
         @Override
-        public DateFormat get() {
+        protected DateFormat initialValue() {
           return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         }
-      });
+      };
   private static final ThreadLocal<DateFormat> DATE_ONLY_FORMAT =
-      ThreadLocal.withInitial(new Supplier<DateFormat>() {
+      new ThreadLocal<DateFormat>() {
         @Override
-        public DateFormat get() {
+        protected DateFormat initialValue() {
           return new SimpleDateFormat("yyyy-MM-dd");
         }
-      });
+      };
 
   private final int returnLimit;
 
