@@ -28,8 +28,8 @@ import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.reviewdb.client.Project.NameKey;
 import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.events.ProjectEvent;
-import com.google.gerrit.server.project.NoSuchProjectException;
-import com.google.gerrit.server.project.ProjectControl;
+import com.google.gerrit.server.permissions.PermissionBackend;
+import com.google.gerrit.server.permissions.ProjectPermission;
 import com.google.gson.Gson;
 import com.google.inject.Provider;
 
@@ -47,7 +47,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -75,15 +74,17 @@ public class SQLStoreTest {
   private static final boolean PROJECT_NOT_VISIBLE_TO_USER = false;
 
   @Mock
-  private ProjectControl.GenericFactory pcFactoryMock;
-  @Mock
   private Provider<CurrentUser> userProviderMock;
   @Mock
   private EventsLogConfig cfgMock;
+  @Mock
+  private PermissionBackend permissionBackendMock;
   private SQLClient eventsDb;
   private SQLClient localEventsDb;
   private SQLStore store;
   private ScheduledThreadPoolExecutor poolMock;
+  private PermissionBackend.ForProject permissionMock;
+  private PermissionBackend.WithUser withUserMock;
 
   private Statement stat;
 
@@ -108,8 +109,8 @@ public class SQLStoreTest {
   private void setUpClient() {
     eventsDb = new SQLClient(TEST_DRIVER, TEST_URL, TEST_OPTIONS);
     localEventsDb = new SQLClient(TEST_DRIVER, TEST_LOCAL_URL, TEST_OPTIONS);
-    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb,
-        localEventsDb, poolMock);
+    store = new SQLStore(userProviderMock, cfgMock, eventsDb,
+        localEventsDb, poolMock, permissionBackendMock);
     store.start();
   }
 
@@ -138,15 +139,14 @@ public class SQLStoreTest {
     tearDown();
   }
 
-  private MockEvent setUpMocks(boolean isVisible)
-      throws NoSuchProjectException, IOException {
+  private MockEvent setUpMocks(boolean isVisible) {
     MockEvent mockEvent = new MockEvent();
-    ProjectControl pcMock = mock(ProjectControl.class);
     CurrentUser userMock = mock(CurrentUser.class);
+    withUserMock = mock(PermissionBackend.WithUser.class);
     when(userProviderMock.get()).thenReturn(userMock);
-    when(pcFactoryMock.controlFor(mockEvent.getProjectNameKey(), userMock))
-        .thenReturn(pcMock);
-    when(pcMock.isVisible()).thenReturn(isVisible);
+    when(permissionBackendMock.user(userMock)).thenReturn(withUserMock);
+    permissionMock = mock(PermissionBackend.ForProject.class);
+    when(permissionMock.testOrFalse(ProjectPermission.ACCESS)).thenReturn(isVisible);
     setUpClient();
     return mockEvent;
   }
@@ -161,12 +161,10 @@ public class SQLStoreTest {
   @Test
   public void notReturnEventOfNonExistingProject() throws Exception {
     MockEvent mockEvent = new MockEvent();
-    Project.NameKey projectMock = mock(Project.NameKey.class);
     CurrentUser userMock = mock(CurrentUser.class);
     when(userProviderMock.get()).thenReturn(userMock);
-    NameKey projectNameKey = mockEvent.getProjectNameKey();
-    doThrow(new NoSuchProjectException(projectMock)).when(pcFactoryMock)
-        .controlFor(projectNameKey, userMock);
+    NameKey project = mockEvent.getProjectNameKey();
+    when(withUserMock.project(project)).thenReturn(permissionMock);
     setUpClient();
     store.storeEvent(mockEvent);
     List<String> events = store.queryChangeEvents(GENERIC_QUERY);
@@ -179,9 +177,10 @@ public class SQLStoreTest {
     MockEvent mockEvent = new MockEvent();
     CurrentUser userMock = mock(CurrentUser.class);
     when(userProviderMock.get()).thenReturn(userMock);
-    NameKey projectNameKey = mockEvent.getProjectNameKey();
-    doThrow(new IOException()).when(pcFactoryMock).controlFor(projectNameKey,
-        userMock);
+    withUserMock = mock(PermissionBackend.WithUser.class);
+    when(permissionBackendMock.user(userProviderMock)).thenReturn(withUserMock);
+    permissionMock = mock(PermissionBackend.ForProject.class);
+    when(withUserMock.project(any(Project.NameKey.class))).thenReturn(permissionMock);
     setUpClient();
     store.storeEvent(mockEvent);
     List<String> events = store.queryChangeEvents(GENERIC_QUERY);
@@ -198,8 +197,8 @@ public class SQLStoreTest {
     setUpClientMock();
     doThrow(exceptions).doNothing().when(eventsDb).storeEvent(mockEvent);
     doThrow(exceptions).doNothing().when(eventsDb).queryOne();
-    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb,
-        localEventsDb, poolMock);
+    store = new SQLStore(userProviderMock, cfgMock, eventsDb,
+        localEventsDb, poolMock, permissionBackendMock);
     store.start();
     store.storeEvent(mockEvent);
     verify(eventsDb, times(3)).storeEvent(mockEvent);
@@ -215,8 +214,8 @@ public class SQLStoreTest {
     setUpClientMock();
     doThrow(exceptions).doNothing().when(eventsDb).storeEvent(mockEvent);
     doThrow(exceptions).doNothing().when(eventsDb).queryOne();
-    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb,
-        localEventsDb, poolMock);
+    store = new SQLStore(userProviderMock, cfgMock, eventsDb,
+        localEventsDb, poolMock, permissionBackendMock);
     store.start();
     store.storeEvent(mockEvent);
     verify(eventsDb, times(3)).storeEvent(mockEvent);
@@ -229,8 +228,8 @@ public class SQLStoreTest {
     when(cfgMock.getMaxTries()).thenReturn(3);
     setUpClientMock();
     doThrow(new SQLException(MSG)).when(eventsDb).storeEvent(mockEvent);
-    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb,
-        localEventsDb, poolMock);
+    store = new SQLStore(userProviderMock, cfgMock, eventsDb,
+        localEventsDb, poolMock, permissionBackendMock);
     store.start();
     store.storeEvent(mockEvent);
     verify(eventsDb, times(1)).storeEvent(mockEvent);
@@ -245,8 +244,8 @@ public class SQLStoreTest {
     setUpClientMock();
     doThrow(exceptions).doNothing().when(eventsDb).storeEvent(mockEvent);
     doThrow(exceptions).doNothing().when(eventsDb).queryOne();
-    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb,
-        localEventsDb, poolMock);
+    store = new SQLStore(userProviderMock, cfgMock, eventsDb,
+        localEventsDb, poolMock, permissionBackendMock);
     store.start();
     store.storeEvent(mockEvent);
     verify(eventsDb, times(1)).storeEvent(mockEvent);
@@ -259,8 +258,8 @@ public class SQLStoreTest {
     doThrow(new SQLException(new ConnectException())).when(eventsDb)
         .createDBIfNotCreated();
     doThrow(new SQLException()).when(eventsDb).queryOne();
-    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb,
-        localEventsDb, poolMock);
+    store = new SQLStore(userProviderMock, cfgMock, eventsDb,
+        localEventsDb, poolMock, permissionBackendMock);
     store.start();
     store.storeEvent(mockEvent);
     store.queryChangeEvents(GENERIC_QUERY);
@@ -272,22 +271,15 @@ public class SQLStoreTest {
     MockEvent mockEvent2 = new MockEvent("proj");
     MockEvent mockEvent3 = new MockEvent("unfound");
 
-    ProjectControl pc = mock(ProjectControl.class);
-    NoSuchProjectException e = mock(NoSuchProjectException.class);
     CurrentUser userMock = mock(CurrentUser.class);
+    PermissionBackend.ForProject permissionMock = mock(PermissionBackend.ForProject.class);
     when(userProviderMock.get()).thenReturn(userMock);
-    when(pcFactoryMock.controlFor((mockEvent.getProjectNameKey()), userMock))
-        .thenReturn(pc);
-    when(pcFactoryMock.controlFor((mockEvent2.getProjectNameKey()), userMock))
-        .thenReturn(pc);
-    when(pc.isVisible()).thenReturn(true);
-    doThrow(e).when(pcFactoryMock).controlFor((mockEvent3.getProjectNameKey()),
-        userMock);
+    when(permissionMock.testOrFalse(ProjectPermission.ACCESS)).thenReturn(true);
 
     eventsDb = new SQLClient(TEST_DRIVER, TEST_URL, TEST_OPTIONS);
     localEventsDb = new SQLClient(TEST_DRIVER, TEST_LOCAL_URL, TEST_OPTIONS);
-    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb,
-        localEventsDb, poolMock);
+    store = new SQLStore(userProviderMock, cfgMock, eventsDb,
+        localEventsDb, poolMock, permissionBackendMock);
 
     localEventsDb.createDBIfNotCreated();
     localEventsDb.storeEvent(mockEvent);
@@ -308,8 +300,8 @@ public class SQLStoreTest {
     doThrow(new SQLException(new ConnectException())).when(eventsDb)
         .createDBIfNotCreated();
     doThrow(new SQLException()).when(eventsDb).queryOne();
-    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb,
-        localEventsDb, poolMock);
+    store = new SQLStore(userProviderMock, cfgMock, eventsDb,
+        localEventsDb, poolMock, permissionBackendMock);
     store.start();
     verify(localEventsDb).createDBIfNotCreated();
   }
@@ -321,8 +313,8 @@ public class SQLStoreTest {
     doThrow(new SQLException(new ConnectException())).when(eventsDb)
         .createDBIfNotCreated();
     doThrow(new SQLException()).when(eventsDb).queryOne();
-    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb,
-        localEventsDb, poolMock);
+    store = new SQLStore(userProviderMock, cfgMock, eventsDb,
+        localEventsDb, poolMock, permissionBackendMock);
     store.start();
     store.storeEvent(mockEvent);
     verify(localEventsDb).storeEvent(mockEvent);
@@ -336,8 +328,8 @@ public class SQLStoreTest {
     doThrow(new SQLException(new ConnectException())).when(eventsDb)
         .createDBIfNotCreated();
     doThrow(new SQLException()).when(eventsDb).queryOne();
-    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb,
-        localEventsDb, poolMock);
+    store = new SQLStore(userProviderMock, cfgMock, eventsDb,
+        localEventsDb, poolMock, permissionBackendMock);
     store.start();
     store.storeEvent(mockEvent);
     verify(localEventsDb).storeEvent(mockEvent);
@@ -356,8 +348,8 @@ public class SQLStoreTest {
     when(localEventsDb.dbExists()).thenReturn(true);
     when(localEventsDb.getAll())
         .thenReturn(ImmutableList.of(mock(SQLEntry.class)));
-    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb,
-        localEventsDb, poolMock);
+    store = new SQLStore(userProviderMock, cfgMock, eventsDb,
+        localEventsDb, poolMock, permissionBackendMock);
     store.start();
     poolMock.scheduleWithFixedDelay(store.new CheckConnectionTask(), 0, 0,
         TimeUnit.MILLISECONDS);
@@ -387,8 +379,8 @@ public class SQLStoreTest {
       when(cfgMock.getCopyLocal()).thenReturn(true);
     }
 
-    store = new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb,
-        localEventsDb, poolMock);
+    store = new SQLStore(userProviderMock, cfgMock, eventsDb,
+        localEventsDb, poolMock, permissionBackendMock);
     store.start();
     verify(eventsDb).queryOne();
     verify(eventsDb).storeEvent(any(String.class), any(Timestamp.class),

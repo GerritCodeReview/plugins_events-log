@@ -19,11 +19,13 @@ import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.TABLE_NAME;
 import com.google.common.io.Files;
 import com.google.gerrit.common.TimeUtil;
 import com.google.gerrit.extensions.events.LifecycleListener;
+import com.google.gerrit.extensions.restapi.AuthException;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.events.ProjectEvent;
-import com.google.gerrit.server.project.NoSuchProjectException;
-import com.google.gerrit.server.project.ProjectControl;
+import com.google.gerrit.server.permissions.PermissionBackend;
+import com.google.gerrit.server.permissions.PermissionBackendException;
+import com.google.gerrit.server.permissions.ProjectPermission;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
@@ -56,7 +58,6 @@ class SQLStore implements EventStore, LifecycleListener {
   private static final Logger log = LoggerFactory.getLogger(SQLStore.class);
   private static final String H2_DB_SUFFIX = ".h2.db";
 
-  private final ProjectControl.GenericFactory projectControlFactory;
   private final Provider<CurrentUser> userProvider;
   private SQLClient eventsDb;
   private SQLClient localEventsDb;
@@ -67,26 +68,27 @@ class SQLStore implements EventStore, LifecycleListener {
   private boolean online = true;
   private boolean copyLocal;
   private final ScheduledThreadPoolExecutor pool;
+  private final PermissionBackend permissionBackend;
   private ScheduledFuture<?> checkConnTask;
   private Path localPath;
 
   @Inject
-  SQLStore(ProjectControl.GenericFactory projectControlFactory,
-      Provider<CurrentUser> userProvider,
+  SQLStore(Provider<CurrentUser> userProvider,
       EventsLogConfig cfg,
       @EventsDb SQLClient eventsDb,
       @LocalEventsDb SQLClient localEventsDb,
-      @EventPool ScheduledThreadPoolExecutor pool) {
+      @EventPool ScheduledThreadPoolExecutor pool,
+      PermissionBackend permissionBackend) {
     this.maxAge = cfg.getMaxAge();
     this.maxTries = cfg.getMaxTries();
     this.waitTime = cfg.getWaitTime();
     this.connectTime = cfg.getConnectTime();
     this.copyLocal = cfg.getCopyLocal();
-    this.projectControlFactory = projectControlFactory;
     this.userProvider = userProvider;
     this.eventsDb = eventsDb;
     this.localEventsDb = localEventsDb;
     this.pool = pool;
+    this.permissionBackend = permissionBackend;
     this.localPath = cfg.getLocalStorePath();
   }
 
@@ -119,17 +121,15 @@ class SQLStore implements EventStore, LifecycleListener {
         : eventsDb.getEvents(query).asMap().entrySet()) {
       String projectName = entry.getKey();
       try {
-        if (projectControlFactory.controlFor(new Project.NameKey(projectName),
-            userProvider.get()).isVisible()) {
-          entries.addAll(entry.getValue());
-        }
-      } catch (NoSuchProjectException e) {
-        log.warn("Database contains a non-existing project, " + projectName
-            + ", removing project from database");
-        eventsDb.removeProjectEvents(projectName);
-      } catch (IOException e) {
-        log.warn("Cannot get project visibility info for " + projectName
-            + " from cache", e);
+        permissionBackend
+            .user(userProvider)
+            .project(new Project.NameKey(projectName))
+            .check(ProjectPermission.ACCESS);
+        entries.addAll(entry.getValue());
+      } catch (AuthException e) {
+        // Ignore
+      } catch (PermissionBackendException e) {
+        log.warn("Cannot check project access permission", e);
       }
     }
     return sortedEventsFromEntries(entries);
