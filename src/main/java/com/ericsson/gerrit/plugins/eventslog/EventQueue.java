@@ -42,7 +42,6 @@ public class EventQueue implements LifecycleListener {
   @Override
   public void stop() {
     if (pool != null) {
-      pool.unregisterWorkQueue();
       pool = null;
     }
   }
