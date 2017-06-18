@@ -42,6 +42,48 @@
     },
     {
       "key": {
+        "uuid": "fcced9b1_ba32066f",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-06-18T19:10:35Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "2bf47da1_871094b9",
+      "range": {
+        "startLine": 129,
+        "startChar": 25,
+        "endLine": 129,
+        "endChar": 50
+      },
+      "revId": "dc188a3554a6d69f576b218391a0aa8a4ef697dd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88f2e8b5_8e7e603c",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-06-18T19:10:35Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "45f0366a_847635af",
+      "revId": "dc188a3554a6d69f576b218391a0aa8a4ef697dd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f68b9d95_d8b8d409",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
         "patchSetId": 3
@@ -53,6 +95,30 @@
       "writtenOn": "2017-06-18T18:55:42Z",
       "side": 1,
       "message": "The old code didn\u0027t log for isVisible() returning false. It just silently skipped those. Should we do the same here when AuthException is thrown?\n\nPermissionBackendException indicates a failure more like IOException in the old code; an unexpected internal failure that should be logged, but it isn\u0027t about access so maybe say:\n\n  } catch (AuthException e) {\n    // Not permitted to record.\n  } catch (PermissionBackendException e) {\n    log.warn(\"cannot check access to \" + projectName, e);\n  }",
+      "range": {
+        "startLine": 132,
+        "startChar": 0,
+        "endLine": 134,
+        "endChar": 0
+      },
+      "revId": "dc188a3554a6d69f576b218391a0aa8a4ef697dd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7dcf9d2_504ab1bb",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2017-06-18T19:10:35Z",
+      "side": 1,
+      "message": "Thanks, done.",
+      "parentUuid": "f68b9d95_d8b8d409",
       "range": {
         "startLine": 132,
         "startChar": 0,
