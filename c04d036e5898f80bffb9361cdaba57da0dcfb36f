@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e7e8fc6_eb535b53",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1001240
+      },
+      "writtenOn": "2017-06-18T19:12:49Z",
+      "side": 1,
+      "message": "This doesn\u0027t look like it conforms to the standard style. When breaking something this large across several lines its more probable it would be formatted as:\n\n  permissionBackend\n      .user(userProvider)\n      .project(new Project.NameKey(projectName))\n      .check(ProjectPermission.ACCESS);\n\nDue to the \"box model\" used by google-java-format.",
+      "range": {
+        "startLine": 129,
+        "startChar": 0,
+        "endLine": 131,
+        "endChar": 0
+      },
+      "revId": "c04d036e5898f80bffb9361cdaba57da0dcfb36f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
