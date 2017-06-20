@@ -23,7 +23,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 /** A queue for events to store. */
 public class EventQueue implements LifecycleListener {
   private final WorkQueue workQueue;
-  private WorkQueue.Executor pool;
+  private ScheduledThreadPoolExecutor pool;
 
   @Inject
   EventQueue(WorkQueue workQueue) {
