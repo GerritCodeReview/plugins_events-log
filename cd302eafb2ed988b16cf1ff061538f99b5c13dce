@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8cdaa8f_bec44fd2",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventQueue.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-06-20T00:44:20Z",
+      "side": 1,
+      "message": "unrelated change",
+      "revId": "cd302eafb2ed988b16cf1ff061538f99b5c13dce",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
