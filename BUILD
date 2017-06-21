@@ -19,6 +19,14 @@ gerrit_plugin(
     resources = glob(["src/main/resources/**/*"]),
 )
 
+java_library(
+    name = "events-log__plugin_test_deps",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@mockito//jar",
+    ],
+)
+
 junit_tests(
     name = "events_log_tests",
     testonly = 1,
@@ -35,6 +43,6 @@ java_library(
     visibility = ["//visibility:public"],
     exports = PLUGIN_DEPS + PLUGIN_TEST_DEPS + [
         ":events-log__plugin",
-        "@mockito//jar",
+        ":events-log__plugin_test_deps",
     ],
 )
