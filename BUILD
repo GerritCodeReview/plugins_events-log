@@ -22,13 +22,21 @@ gerrit_plugin(
     ],
 )
 
+java_library(
+    name = "events-log__plugin_test_deps",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@mockito//jar",
+    ],
+)
+
 junit_tests(
     name = "events_log_tests",
     srcs = glob(["src/test/java/**/*.java"]),
     tags = ["events-log"],
     deps = PLUGIN_DEPS + PLUGIN_TEST_DEPS + [
         ":events-log__plugin",
-        "@mockito//jar",
+        ":events-log__plugin_test_deps",
     ],
     testonly = 1,
 )
