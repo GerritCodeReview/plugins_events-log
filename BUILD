@@ -12,6 +12,7 @@ gerrit_plugin(
     manifest_entries = [
         "Gerrit-PluginName: events-log",
         "Implementation-URL: https://gerrit-review.googlesource.com/#/admin/projects/plugins/events-log",
+        "Implementation-Title: events-log plugin",
         "Gerrit-Module: com.ericsson.gerrit.plugins.eventslog.sql.SQLModule",
         "Gerrit-HttpModule: com.ericsson.gerrit.plugins.eventslog.HttpModule",
     ],
