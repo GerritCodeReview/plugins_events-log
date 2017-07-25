@@ -12,3 +12,5 @@ bin
 .watchmanconfig
 /bucklets
 /eclipse-out
+/.primary_build_tool
+/bazel-*
