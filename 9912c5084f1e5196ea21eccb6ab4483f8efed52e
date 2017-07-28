@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "91ec5b2b_c1d3c39a",
+        "filename": "external_plugin_deps.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1043775
+      },
+      "writtenOn": "2017-07-28T16:59:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b823974a_385a8c69",
+      "range": {
+        "startLine": 6,
+        "startChar": 45,
+        "endLine": 6,
+        "endChar": 46
+      },
+      "revId": "9912c5084f1e5196ea21eccb6ab4483f8efed52e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6c8e82f7_803558e5",
         "filename": "external_plugin_deps.bzl",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2017-07-28T16:32:46Z",
       "side": 1,
       "message": "9cda1bf1674c8de3a1116bae4d7ce0046a857d30",
+      "range": {
+        "startLine": 7,
+        "startChar": 12,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "9912c5084f1e5196ea21eccb6ab4483f8efed52e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8aae0873_fd968f05",
+        "filename": "external_plugin_deps.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1043775
+      },
+      "writtenOn": "2017-07-28T16:59:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c8e82f7_803558e5",
       "range": {
         "startLine": 7,
         "startChar": 12,
