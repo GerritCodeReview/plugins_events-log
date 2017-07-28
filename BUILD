@@ -17,8 +17,9 @@ gerrit_plugin(
     ],
     resources = glob(["src/main/resources/**/*"]),
     deps = [
+        # TODO (oswcab): remove when https://gerrit-review.googlesource.com/c/116810/
+        # is merged
         "@commons_dbcp//jar:neverlink",
-        "@gson//jar:neverlink",
     ],
 )
 
