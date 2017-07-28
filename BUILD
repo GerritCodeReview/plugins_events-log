@@ -16,10 +16,6 @@ gerrit_plugin(
         "Gerrit-HttpModule: com.ericsson.gerrit.plugins.eventslog.HttpModule",
     ],
     resources = glob(["src/main/resources/**/*"]),
-    deps = [
-        "@commons_dbcp//jar:neverlink",
-        "@gson//jar:neverlink",
-    ],
 )
 
 junit_tests(
