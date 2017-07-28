@@ -16,6 +16,24 @@
       "revId": "34dd5b26046230f837b4fa7466ead2a537724f5e",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e3db565f_ac66972f",
+        "filename": "src/main/resources/Documentation/build.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2017-07-28T18:47:54Z",
+      "side": 1,
+      "message": "Forget my comment, it\u0027s there",
+      "parentUuid": "27685396_25d276ad",
+      "revId": "34dd5b26046230f837b4fa7466ead2a537724f5e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
