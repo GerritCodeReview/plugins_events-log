@@ -29,8 +29,9 @@ The output is created in
 ```
 
 This project can be imported into the Eclipse IDE.
-Add the plugin name to the `CUSTOM_PLUGINS` set in
-Gerrit core in `tools/bzl/plugins.bzl`, and execute:
+Add the plugin name to the `CUSTOM_PLUGINS` and to the
+`CUSTOM_PLUGINS_TEST_DEPS` set in Gerrit core in
+`tools/bzl/plugins.bzl`, and execute:
 
 ```
   ./tools/eclipse/project.py

@@ -23,7 +23,16 @@ junit_tests(
     testonly = 1,
     srcs = glob(["src/test/java/**/*.java"]),
     tags = ["events-log"],
-    deps = PLUGIN_DEPS + PLUGIN_TEST_DEPS + [
+    deps = [
+        ":events-log__plugin_test_deps",
+    ],
+)
+
+java_library(
+    name = "events-log__plugin_test_deps",
+    testonly = 1,
+    visibility = ["//visibility:public"],
+    exports = PLUGIN_DEPS + PLUGIN_TEST_DEPS + [
         ":events-log__plugin",
         "@mockito//jar",
     ],
