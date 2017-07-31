@@ -2,15 +2,8 @@
 .project
 .settings
 bin
-/.buckconfig.local
-/.buckd
-/buck-cache
-/buck-out
 /local.properties
 *.pyc
-.buckversion
-.watchmanconfig
-/bucklets
 /eclipse-out
 /.primary_build_tool
 /bazel-*
