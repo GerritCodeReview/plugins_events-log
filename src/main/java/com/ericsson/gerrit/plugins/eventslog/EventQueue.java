@@ -36,7 +36,7 @@ public class EventQueue implements LifecycleListener {
    */
   @Override
   public void start() {
-    pool = workQueue.createQueue(1, "Store events");
+    pool = (ScheduledThreadPoolExecutor) workQueue.createQueue(1, "Store events");
   }
 
   @Override

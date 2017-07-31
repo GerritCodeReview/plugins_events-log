@@ -141,11 +141,13 @@ public class SQLStoreTest {
 
   private MockEvent setUpMocks(boolean isVisible) {
     MockEvent mockEvent = new MockEvent();
+
     CurrentUser userMock = mock(CurrentUser.class);
     withUserMock = mock(PermissionBackend.WithUser.class);
     when(userProviderMock.get()).thenReturn(userMock);
-    when(permissionBackendMock.user(userMock)).thenReturn(withUserMock);
+    when(permissionBackendMock.user(userProviderMock)).thenReturn(withUserMock);
     permissionMock = mock(PermissionBackend.ForProject.class);
+    when(withUserMock.project(mockEvent.getProjectNameKey())).thenReturn(permissionMock);
     when(permissionMock.testOrFalse(ProjectPermission.ACCESS)).thenReturn(isVisible);
     setUpClient();
     return mockEvent;
