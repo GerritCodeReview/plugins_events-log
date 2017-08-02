@@ -34,7 +34,6 @@ import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_EVIC
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_MAX_AGE;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_MAX_TRIES;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_RETURN_LIMIT;
-import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_URL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_WAIT_TIME;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
@@ -63,6 +62,7 @@ public class EventsLogConfigTest {
   private SitePaths site;
   private EventsLogConfig config;
   private String defaultLocalStorePath;
+  private String defaultUrl;
   private String localStorePath;
   private String[] urlOptions = new String[] {"DB_CLOSE_DELAY=10"};
 
@@ -79,6 +79,7 @@ public class EventsLogConfigTest {
     site = new SitePaths(gerrit_site.getRoot().toPath());
     Files.createDirectories(site.etc_dir);
     defaultLocalStorePath = site.site_path.toString() + "/events-db/";
+    defaultUrl = "jdbc:h2:" + site.data_dir.toString() + "/db";
     when(cfgFactoryMock.getFromGerritConfig(PLUGIN_NAME, true))
         .thenReturn(configMock);
   }
@@ -98,7 +99,7 @@ public class EventsLogConfigTest {
         .thenReturn(DEFAULT_WAIT_TIME);
     when(configMock.getString(CONFIG_DRIVER, DEFAULT_DRIVER))
         .thenReturn(DEFAULT_DRIVER);
-    when(configMock.getString(CONFIG_URL, DEFAULT_URL)).thenReturn(DEFAULT_URL);
+    when(configMock.getString(CONFIG_URL, defaultUrl)).thenReturn(defaultUrl);
     when(configMock.getString(CONFIG_LOCAL_PATH, defaultLocalStorePath))
         .thenReturn(defaultLocalStorePath);
     when(configMock.getStringList(CONFIG_URL_OPTIONS))
@@ -123,7 +124,7 @@ public class EventsLogConfigTest {
         .thenReturn(5000);
     when(configMock.getString(CONFIG_DRIVER, DEFAULT_DRIVER))
         .thenReturn("org.h2.Driver2");
-    when(configMock.getString(CONFIG_URL, DEFAULT_URL))
+    when(configMock.getString(CONFIG_URL, defaultUrl))
         .thenReturn("jdbc:h2:~/gerrit/db");
     when(configMock.getString(CONFIG_LOCAL_PATH, defaultLocalStorePath))
         .thenReturn(localStorePath);
@@ -149,7 +150,7 @@ public class EventsLogConfigTest {
     assertThat(config.getLocalStorePath().toString() + "/")
         .isEqualTo(defaultLocalStorePath);
     assertThat(config.getStoreDriver()).isEqualTo(DEFAULT_DRIVER);
-    assertThat(config.getStoreUrl()).isEqualTo(DEFAULT_URL);
+    assertThat(config.getStoreUrl()).isEqualTo(defaultUrl);
     assertThat(config.getUrlOptions()).isEmpty();
     assertThat(config.getStoreUsername()).isNull();
     assertThat(config.getStorePassword()).isNull();
