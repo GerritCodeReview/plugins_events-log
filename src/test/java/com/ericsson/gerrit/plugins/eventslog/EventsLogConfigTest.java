@@ -34,7 +34,6 @@ import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_EVIC
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_MAX_AGE;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_MAX_TRIES;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_RETURN_LIMIT;
-import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_URL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_WAIT_TIME;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
@@ -98,7 +97,7 @@ public class EventsLogConfigTest {
         .thenReturn(DEFAULT_WAIT_TIME);
     when(configMock.getString(CONFIG_DRIVER, DEFAULT_DRIVER))
         .thenReturn(DEFAULT_DRIVER);
-    when(configMock.getString(CONFIG_URL, DEFAULT_URL)).thenReturn(DEFAULT_URL);
+    when(configMock.getString(CONFIG_URL, config.getDefaultUrl())).thenReturn(config.getDefaultUrl());
     when(configMock.getString(CONFIG_LOCAL_PATH, defaultLocalStorePath))
         .thenReturn(defaultLocalStorePath);
     when(configMock.getStringList(CONFIG_URL_OPTIONS))
@@ -123,7 +122,7 @@ public class EventsLogConfigTest {
         .thenReturn(5000);
     when(configMock.getString(CONFIG_DRIVER, DEFAULT_DRIVER))
         .thenReturn("org.h2.Driver2");
-    when(configMock.getString(CONFIG_URL, DEFAULT_URL))
+    when(configMock.getString(CONFIG_URL, config.getDefaultUrl()))
         .thenReturn("jdbc:h2:~/gerrit/db");
     when(configMock.getString(CONFIG_LOCAL_PATH, defaultLocalStorePath))
         .thenReturn(localStorePath);
@@ -149,7 +148,7 @@ public class EventsLogConfigTest {
     assertThat(config.getLocalStorePath().toString() + "/")
         .isEqualTo(defaultLocalStorePath);
     assertThat(config.getStoreDriver()).isEqualTo(DEFAULT_DRIVER);
-    assertThat(config.getStoreUrl()).isEqualTo(DEFAULT_URL);
+    assertThat(config.getStoreUrl()).isEqualTo(config.getDefaultUrl());
     assertThat(config.getUrlOptions()).isEmpty();
     assertThat(config.getStoreUsername()).isNull();
     assertThat(config.getStorePassword()).isNull();

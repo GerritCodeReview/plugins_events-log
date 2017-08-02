@@ -49,7 +49,6 @@ public class EventsLogConfig {
   static final int DEFAULT_WAIT_TIME = 1000;
   static final int DEFAULT_CONN_TIME = 1000;
   static final String DEFAULT_DRIVER = "org.h2.Driver";
-  static final String DEFAULT_URL = "jdbc:h2:~/db/";
   static final int DEFAULT_EVICT_IDLE_TIME = 1000 * 60;
 
   private boolean copyLocal;
@@ -65,6 +64,7 @@ public class EventsLogConfig {
   private String storeUsername;
   private String storePassword;
   private int evictIdleTime;
+  private String defaultUrl;
 
   @Inject
   EventsLogConfig(PluginConfigFactory cfgFactory,
@@ -79,7 +79,8 @@ public class EventsLogConfig {
     waitTime = cfg.getInt(CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME);
     connectTime = cfg.getInt(CONFIG_CONN_TIME, DEFAULT_CONN_TIME);
     storeDriver = cfg.getString(CONFIG_DRIVER, DEFAULT_DRIVER);
-    storeUrl = cfg.getString(CONFIG_URL, DEFAULT_URL);
+    defaultUrl = "jdbc:h2:" + site.data_dir.toString();
+    storeUrl = cfg.getString(CONFIG_URL, defaultUrl);
     localStorePath = Paths.get(cfg.getString(CONFIG_LOCAL_PATH,
         defaultLocalPath));
     urlOptions = concatenate(cfg.getStringList(CONFIG_URL_OPTIONS));
@@ -147,5 +148,9 @@ public class EventsLogConfig {
 
   public int getEvictIdleTime() {
     return evictIdleTime;
+  }
+
+  public String getDefaultUrl() {
+    return defaultUrl;
   }
 }
