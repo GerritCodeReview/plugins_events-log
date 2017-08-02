@@ -49,7 +49,7 @@ public class EventsLogConfig {
   static final int DEFAULT_WAIT_TIME = 1000;
   static final int DEFAULT_CONN_TIME = 1000;
   static final String DEFAULT_DRIVER = "org.h2.Driver";
-  static final String DEFAULT_URL = "jdbc:h2:~/db/";
+  static final String DEFAULT_URL = "jdbc:h2:" + System.getProperty("user.home") + "/db";
   static final int DEFAULT_EVICT_IDLE_TIME = 1000 * 60;
 
   private boolean copyLocal;
