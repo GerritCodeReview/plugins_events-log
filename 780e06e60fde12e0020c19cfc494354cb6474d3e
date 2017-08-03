@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b916af7e_9b52e4dc",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2017-08-03T09:42:07Z",
+      "side": 1,
+      "message": "What if user.home is not defined?",
+      "range": {
+        "startLine": 52,
+        "startChar": 49,
+        "endLine": 52,
+        "endChar": 80
+      },
+      "revId": "780e06e60fde12e0020c19cfc494354cb6474d3e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
