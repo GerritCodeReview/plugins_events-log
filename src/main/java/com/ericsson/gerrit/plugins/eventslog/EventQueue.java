@@ -18,12 +18,12 @@ import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.server.git.WorkQueue;
 import com.google.inject.Inject;
 
-import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ScheduledExecutorService;
 
 /** A queue for events to store. */
 public class EventQueue implements LifecycleListener {
   private final WorkQueue workQueue;
-  private ScheduledThreadPoolExecutor pool;
+  private ScheduledExecutorService pool;
 
   @Inject
   EventQueue(WorkQueue workQueue) {
@@ -46,7 +46,7 @@ public class EventQueue implements LifecycleListener {
     }
   }
 
-  ScheduledThreadPoolExecutor getPool() {
+  ScheduledExecutorService getPool() {
     return this.pool;
   }
 }
