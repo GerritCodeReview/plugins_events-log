@@ -22,7 +22,7 @@ import com.google.inject.Provides;
 import com.google.inject.Scopes;
 import com.google.inject.internal.UniqueAnnotations;
 
-import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ScheduledExecutorService;
 
 /** Configures handling for an event queue while providing its pool. */
 public class EventModule extends AbstractModule {
@@ -39,7 +39,7 @@ public class EventModule extends AbstractModule {
 
   @Provides
   @EventPool
-  ScheduledThreadPoolExecutor provideEventPool(EventQueue queue) {
+  ScheduledExecutorService provideEventPool(EventQueue queue) {
     return queue.getPool();
   }
 }
