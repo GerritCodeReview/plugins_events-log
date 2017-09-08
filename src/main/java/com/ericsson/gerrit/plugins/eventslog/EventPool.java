@@ -21,7 +21,7 @@ import com.google.inject.BindingAnnotation;
 import java.lang.annotation.Retention;
 
 /**
- * Annotation applied to a ScheduledThreadPoolExecutor.
+ * Annotation applied to a ScheduledExecutorService.
  */
 @Retention(RUNTIME)
 @BindingAnnotation
