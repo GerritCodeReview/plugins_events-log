@@ -50,7 +50,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @Singleton
@@ -67,7 +67,7 @@ class SQLStore implements EventStore, LifecycleListener {
   private final int connectTime;
   private boolean online = true;
   private boolean copyLocal;
-  private final ScheduledThreadPoolExecutor pool;
+  private final ScheduledExecutorService pool;
   private final PermissionBackend permissionBackend;
   private ScheduledFuture<?> checkConnTask;
   private Path localPath;
@@ -77,7 +77,7 @@ class SQLStore implements EventStore, LifecycleListener {
       EventsLogConfig cfg,
       @EventsDb SQLClient eventsDb,
       @LocalEventsDb SQLClient localEventsDb,
-      @EventPool ScheduledThreadPoolExecutor pool,
+      @EventPool ScheduledExecutorService pool,
       PermissionBackend permissionBackend) {
     this.maxAge = cfg.getMaxAge();
     this.maxTries = cfg.getMaxTries();

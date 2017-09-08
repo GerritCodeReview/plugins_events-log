@@ -57,7 +57,7 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -83,7 +83,7 @@ public class SQLStoreTest {
   private SQLClient eventsDb;
   private SQLClient localEventsDb;
   private SQLStore store;
-  private ScheduledThreadPoolExecutor poolMock;
+  private ScheduledExecutorService poolMock;
 
   private Statement stat;
 
@@ -415,7 +415,7 @@ public class SQLStoreTest {
     }
   }
 
-  class PoolMock extends ScheduledThreadPoolExecutor {
+  class PoolMock extends ScheduledExecutorService {
     PoolMock() {
       super(1);
     }
