@@ -80,7 +80,7 @@ public class QueryMakerTest {
   @Test(expected = MalformedQueryException.class)
   public void noDate() throws Exception {
     queryMaker
-        .formQueryFromRequestParameters(ImmutableMap.<String, String> of());
+        .formQueryFromRequestParameters(ImmutableMap.of());
   }
 
   @Test

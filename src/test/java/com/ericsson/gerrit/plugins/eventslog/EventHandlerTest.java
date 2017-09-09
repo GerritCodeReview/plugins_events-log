@@ -22,13 +22,14 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import com.google.gerrit.server.events.ChangeEvent;
 import com.google.gerrit.server.events.Event;
 
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.util.concurrent.ScheduledExecutorService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EventHandlerTest {
@@ -56,10 +57,11 @@ public class EventHandlerTest {
     verifyZeroInteractions(storeMock);
   }
 
-  class PoolMock extends ScheduledExecutorService {
+  class PoolMock extends ScheduledThreadPoolExecutor {
     PoolMock() {
       super(1);
     }
+
     @Override
     public void execute(Runnable command) {
       assertThat(command.toString()).isEqualTo("(Events-log) Insert Event");

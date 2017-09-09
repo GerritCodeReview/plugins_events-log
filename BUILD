@@ -9,34 +9,32 @@ load(
 gerrit_plugin(
     name = "events-log",
     srcs = glob(["src/main/java/**/*.java"]),
-    resources = glob(["src/main/resources/**/*"]),
     manifest_entries = [
         "Gerrit-PluginName: events-log",
         "Implementation-URL: https://gerrit-review.googlesource.com/#/admin/projects/plugins/events-log",
+        "Implementation-Title: events-log plugin",
         "Gerrit-Module: com.ericsson.gerrit.plugins.eventslog.sql.SQLModule",
         "Gerrit-HttpModule: com.ericsson.gerrit.plugins.eventslog.HttpModule",
     ],
+    resources = glob(["src/main/resources/**/*"]),
+)
+
+junit_tests(
+    name = "events_log_tests",
+    testonly = 1,
+    srcs = glob(["src/test/java/**/*.java"]),
+    tags = ["events-log"],
     deps = [
-        "@gson//jar:neverlink",
-        "@commons_dbcp//jar:neverlink",
+        ":events-log__plugin_test_deps",
     ],
 )
 
 java_library(
     name = "events-log__plugin_test_deps",
+    testonly = 1,
     visibility = ["//visibility:public"],
-    exports = [
+    exports = PLUGIN_DEPS + PLUGIN_TEST_DEPS + [
+        ":events-log__plugin",
         "@mockito//jar",
     ],
-)
-
-junit_tests(
-    name = "events_log_tests",
-    srcs = glob(["src/test/java/**/*.java"]),
-    tags = ["events-log"],
-    deps = PLUGIN_DEPS + PLUGIN_TEST_DEPS + [
-        ":events-log__plugin",
-        ":events-log__plugin_test_deps",
-    ],
-    testonly = 1,
 )
