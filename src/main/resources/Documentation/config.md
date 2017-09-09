@@ -8,7 +8,7 @@ File 'gerrit.config'
   [plugin "@PLUGIN@"]
     maxAge = 20
     returnLimit = 10000
-    storeUrl = jdbc:h2:~/gerrit/db/
+    storeUrl = jdbc:h2:<gerrit_site>/data/db
     urlOptions = loglevel=INFO
     urlOptions = logUnclosedConnections=true
     copyLocal = true
@@ -29,11 +29,11 @@ plugin.@PLUGIN@.storeDriver
 
 plugin.@PLUGIN@.storeUrl
 :    Specify the path to the directory in which to keep the database. When not
-     specified, the default path is jdbc:h2:~/db/.
+     specified, the default path is jdbc:h2:\<gerrit_site>/data/db.
 
 plugin.@PLUGIN@.localStorePath
 :    Specify the path to the directory in which to keep the back up database.
-     When not specified, the default path is <gerrit_site>/events-db/.
+     When not specified, the default path is \<gerrit_site>/events-db/.
 
 plugin.@PLUGIN@.storeUsername
 :    Username to connect to the database, not defined by default. This value can

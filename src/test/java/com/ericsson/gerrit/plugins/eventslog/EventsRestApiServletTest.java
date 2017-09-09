@@ -76,7 +76,7 @@ public class EventsRestApiServletTest {
     when(queryMakerMock.formQueryFromRequestParameters(captor.capture()))
         .thenReturn(RANDOM_QUERY);
     when(storeMock.queryChangeEvents(RANDOM_QUERY))
-        .thenReturn(new ArrayList<String>());
+        .thenReturn(new ArrayList<>());
     eventServlet.doGet(reqMock, rspMock);
     assertThat(ImmutableMap.of("a", "1", "b", "2"))
         .isEqualTo(captor.getValue());
@@ -88,7 +88,7 @@ public class EventsRestApiServletTest {
     when(queryMakerMock.formQueryFromRequestParameters(captor.capture()))
         .thenReturn(RANDOM_QUERY);
     when(storeMock.queryChangeEvents(RANDOM_QUERY))
-        .thenReturn(new ArrayList<String>());
+        .thenReturn(new ArrayList<>());
     eventServlet.doGet(reqMock, rspMock);
     assertThat(captor.getValue()).isEmpty();
   }
