@@ -29,6 +29,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EventHandlerTest {
@@ -56,7 +57,7 @@ public class EventHandlerTest {
     verifyZeroInteractions(storeMock);
   }
 
-  class PoolMock extends ScheduledExecutorService {
+  class PoolMock extends ScheduledThreadPoolExecutor {
     PoolMock() {
       super(1);
     }
