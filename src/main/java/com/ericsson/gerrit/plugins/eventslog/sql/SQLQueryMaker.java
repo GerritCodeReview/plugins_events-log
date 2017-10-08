@@ -25,11 +25,10 @@ import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
 import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Map;
 
 @Singleton
@@ -37,10 +36,10 @@ class SQLQueryMaker implements QueryMaker {
   private static final int TWO = 2;
   private static final String TIME_ONE = "t1";
   private static final String TIME_TWO = "t2";
-  private static final ThreadLocal<DateFormat> DATE_TIME_FORMAT = ThreadLocal
-      .withInitial(() -> new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-  private static final ThreadLocal<DateFormat> DATE_ONLY_FORMAT = ThreadLocal
-      .withInitial(() -> new SimpleDateFormat("yyyy-MM-dd"));
+  private static final DateTimeFormatter DATE_TIME_FORMAT =
+      DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+  private static final DateTimeFormatter DATE_ONLY_FORMAT =
+      DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
   private final int returnLimit;
 
@@ -55,16 +54,15 @@ class SQLQueryMaker implements QueryMaker {
     if (params == null) {
       return getDefaultQuery();
     }
-    Date[] dates;
+    String[] dates;
     try {
       dates = parseDates(params.get(TIME_ONE), params.get(TIME_TWO));
-    } catch (ParseException e) {
+    } catch (DateTimeParseException e) {
       throw new MalformedQueryException(e);
     }
     return String.format(
         "SELECT * FROM %s WHERE %s BETWEEN '%s' and '%s' LIMIT %d", TABLE_NAME,
-        DATE_ENTRY, DATE_TIME_FORMAT.get().format(dates[0]),
-        DATE_TIME_FORMAT.get().format(dates[1]), returnLimit);
+        DATE_ENTRY, dates[0], dates[1], returnLimit);
   }
 
   @Override
@@ -74,27 +72,30 @@ class SQLQueryMaker implements QueryMaker {
         + " a ORDER BY " + PRIMARY_ENTRY + " ASC";
   }
 
-  private Date[] parseDates(String dateOne, String dateTwo)
-      throws MalformedQueryException, ParseException {
+  private String[] parseDates(String dateOne, String dateTwo)
+      throws MalformedQueryException, DateTimeParseException {
     if (dateOne == null && dateTwo == null) {
       throw new MalformedQueryException();
     }
-    Calendar cal = Calendar.getInstance();
-    Date dOne = dateOne == null ? cal.getTime() : parseDate(dateOne);
-    Date dTwo = dateTwo == null ? cal.getTime() : parseDate(dateTwo);
-    Date[] dates = new Date[TWO];
+    LocalDateTime dOne =
+        dateOne == null ? LocalDateTime.now() : parseDate(dateOne);
+    LocalDateTime dTwo =
+        dateTwo == null ? LocalDateTime.now() : parseDate(dateTwo);
+    LocalDateTime[] dates = new LocalDateTime[TWO];
 
-    dates[0] = dOne.compareTo(dTwo) < 0 ? dOne : dTwo;
-    dates[1] = dOne.compareTo(dTwo) < 0 ? dTwo : dOne;
-    return dates;
+    dates[0] = dOne.isBefore(dTwo) ? dOne : dTwo;
+    dates[1] = dOne.isBefore(dTwo) ? dTwo : dOne;
+    return new String[] {DATE_TIME_FORMAT.format(dates[0]),
+        DATE_TIME_FORMAT.format(dates[1])};
   }
 
-  private Date parseDate(String date) throws ParseException {
-    Date parsedDate;
+  private LocalDateTime parseDate(String date) throws DateTimeParseException {
+    LocalDateTime parsedDate;
     try {
-      parsedDate = DATE_TIME_FORMAT.get().parse(date);
-    } catch (ParseException e) {
-      parsedDate = DATE_ONLY_FORMAT.get().parse(date);
+      parsedDate = LocalDateTime.parse(date, DATE_TIME_FORMAT);
+    } catch (DateTimeParseException e) {
+      LocalDate localDate = LocalDate.parse(date, DATE_ONLY_FORMAT);
+      parsedDate = localDate.atStartOfDay();
     }
     return parsedDate;
   }
