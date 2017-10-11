@@ -62,11 +62,9 @@ class EventsRestApiServlet extends HttpServlet {
     rsp.setContentType("text/html");
     Map<String, String> params =
         req.getQueryString() != null ? getParameters(req) : null;
-    Writer out = rsp.getWriter();
 
-    String query = null;
-    try {
-      query = queryMaker.formQueryFromRequestParameters(params);
+    try (Writer out = rsp.getWriter()) {
+      String query = queryMaker.formQueryFromRequestParameters(params);
       for (String event : store.queryChangeEvents(query)) {
         out.write(event + "\n");
       }

@@ -105,7 +105,7 @@ public class QueryMakerTest {
 
   @Test
   public void onlyDateNoTime() throws Exception {
-    String query = queryMaker.formQueryFromRequestParameters(
+    query = queryMaker.formQueryFromRequestParameters(
         ImmutableMap.of(T1, "2013-10-10", T2, "2014-10-10"));
     assertThat(query).isNotEqualTo(defaultQuery);
   }
