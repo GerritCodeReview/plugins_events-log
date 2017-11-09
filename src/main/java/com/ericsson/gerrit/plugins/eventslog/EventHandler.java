@@ -14,8 +14,8 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
-import com.google.gerrit.common.EventListener;
 import com.google.gerrit.server.events.Event;
+import com.google.gerrit.server.events.EventListener;
 import com.google.gerrit.server.events.ProjectEvent;
 import com.google.inject.Inject;
 
