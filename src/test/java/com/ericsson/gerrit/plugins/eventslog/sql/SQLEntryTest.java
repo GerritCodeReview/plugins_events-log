@@ -16,11 +16,10 @@ package com.ericsson.gerrit.plugins.eventslog.sql;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import java.sql.Timestamp;
 import java.util.Calendar;
+import org.junit.Before;
+import org.junit.Test;
 
 public class SQLEntryTest {
 

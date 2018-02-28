@@ -18,26 +18,22 @@ import com.google.gerrit.common.EventListener;
 import com.google.gerrit.server.events.Event;
 import com.google.gerrit.server.events.ProjectEvent;
 import com.google.inject.Inject;
-
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
-/**
- * Listen to Events and store them into the EventStore
- */
+/** Listen to Events and store them into the EventStore */
 class EventHandler implements EventListener {
   private final EventStore store;
   private final ScheduledThreadPoolExecutor pool;
 
   @Inject
-  EventHandler(EventStore store,
-      @EventPool ScheduledThreadPoolExecutor pool) {
+  EventHandler(EventStore store, @EventPool ScheduledThreadPoolExecutor pool) {
     this.store = store;
     this.pool = pool;
   }
 
   @Override
   public void onEvent(Event event) {
-    if(event instanceof ProjectEvent) {
+    if (event instanceof ProjectEvent) {
       pool.execute(new StoreEventTask((ProjectEvent) event));
     }
   }

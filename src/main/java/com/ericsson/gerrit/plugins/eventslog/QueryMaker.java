@@ -23,13 +23,11 @@ public interface QueryMaker {
    * Forms a String query based on the given parameters.
    *
    * @param params parameters which are used to form the query
-   * @return a query based on the given parameters. The query should conform to
-   *         the format required by the database.
-   * @throws MalformedQueryException if the given parameters do conform to
-   *         requirements
+   * @return a query based on the given parameters. The query should conform to the format required
+   *     by the database.
+   * @throws MalformedQueryException if the given parameters do conform to requirements
    */
-  String formQueryFromRequestParameters(Map<String, String> params)
-      throws MalformedQueryException;
+  String formQueryFromRequestParameters(Map<String, String> params) throws MalformedQueryException;
 
   /**
    * Get the query designated as the default when no parameters are given.

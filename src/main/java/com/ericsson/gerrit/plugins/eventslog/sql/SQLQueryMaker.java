@@ -18,13 +18,11 @@ import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.DATE_ENTRY;
 import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.PRIMARY_ENTRY;
 import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.TABLE_NAME;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
 import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
 import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
-
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -61,15 +59,22 @@ class SQLQueryMaker implements QueryMaker {
       throw new MalformedQueryException(e);
     }
     return String.format(
-        "SELECT * FROM %s WHERE %s BETWEEN '%s' and '%s' LIMIT %d", TABLE_NAME,
-        DATE_ENTRY, dates[0], dates[1], returnLimit);
+        "SELECT * FROM %s WHERE %s BETWEEN '%s' and '%s' LIMIT %d",
+        TABLE_NAME, DATE_ENTRY, dates[0], dates[1], returnLimit);
   }
 
   @Override
   public String getDefaultQuery() {
-    return "SELECT * FROM(SELECT * FROM " + TABLE_NAME
-        + " ORDER BY " + PRIMARY_ENTRY + " DESC LIMIT " + returnLimit + ")"
-        + " a ORDER BY " + PRIMARY_ENTRY + " ASC";
+    return "SELECT * FROM(SELECT * FROM "
+        + TABLE_NAME
+        + " ORDER BY "
+        + PRIMARY_ENTRY
+        + " DESC LIMIT "
+        + returnLimit
+        + ")"
+        + " a ORDER BY "
+        + PRIMARY_ENTRY
+        + " ASC";
   }
 
   private String[] parseDates(String dateOne, String dateTwo)
@@ -77,16 +82,13 @@ class SQLQueryMaker implements QueryMaker {
     if (dateOne == null && dateTwo == null) {
       throw new MalformedQueryException();
     }
-    LocalDateTime dOne =
-        dateOne == null ? LocalDateTime.now() : parseDate(dateOne);
-    LocalDateTime dTwo =
-        dateTwo == null ? LocalDateTime.now() : parseDate(dateTwo);
+    LocalDateTime dOne = dateOne == null ? LocalDateTime.now() : parseDate(dateOne);
+    LocalDateTime dTwo = dateTwo == null ? LocalDateTime.now() : parseDate(dateTwo);
     LocalDateTime[] dates = new LocalDateTime[TWO];
 
     dates[0] = dOne.isBefore(dTwo) ? dOne : dTwo;
     dates[1] = dOne.isBefore(dTwo) ? dTwo : dOne;
-    return new String[] {DATE_TIME_FORMAT.format(dates[0]),
-        DATE_TIME_FORMAT.format(dates[1])};
+    return new String[] {DATE_TIME_FORMAT.format(dates[0]), DATE_TIME_FORMAT.format(dates[1])};
   }
 
   private LocalDateTime parseDate(String date) throws DateTimeParseException {

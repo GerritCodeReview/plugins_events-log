@@ -17,13 +17,9 @@ package com.ericsson.gerrit.plugins.eventslog;
 /** An exception type for when the events database cannot be queried. */
 public class ServiceUnavailableException extends EventsLogException {
   private static final long serialVersionUID = 1L;
-  private static final String MESSAGE =
-      "Database server disconnected, cannot query events";
+  private static final String MESSAGE = "Database server disconnected, cannot query events";
 
-  /**
-   * Constructs a <code>ServiceUnavailableException</code> object with the
-   * default message.
-   */
+  /** Constructs a <code>ServiceUnavailableException</code> object with the default message. */
   public ServiceUnavailableException() {
     super(MESSAGE);
   }
