@@ -100,7 +100,7 @@ public class SQLStoreTest {
     when(cfgMock.getLocalStorePath()).thenReturn(testFolder.getRoot().toPath());
   }
 
-  public void tearDown() throws Exception {
+  private void tearDown() throws Exception {
     stat.execute("DROP TABLE " + TABLE_NAME);
     store.stop();
   }
