@@ -37,6 +37,7 @@ import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
 import com.ericsson.gerrit.plugins.eventslog.ServiceUnavailableException;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -100,6 +101,7 @@ public class SQLStoreTest {
     when(cfgMock.getLocalStorePath()).thenReturn(testFolder.getRoot().toPath());
   }
 
+  @After
   public void tearDown() throws Exception {
     stat.execute("DROP TABLE " + TABLE_NAME);
     store.stop();
