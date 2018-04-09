@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f0f0015a_fa477cfd",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2018-04-09T16:53:48Z",
+      "side": 1,
+      "message": "nit:indentation should only be 4 spaces",
+      "range": {
+        "startLine": 74,
+        "startChar": 11,
+        "endLine": 77,
+        "endChar": 49
+      },
+      "revId": "79c0840c56a087cf144b39396feac25376a7566d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
