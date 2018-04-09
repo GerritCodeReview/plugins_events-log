@@ -21,13 +21,11 @@ import com.google.gerrit.common.TimeUtil;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.extensions.restapi.AuthException;
 import com.google.gerrit.reviewdb.client.Project;
-import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.events.ProjectEvent;
 import com.google.gerrit.server.permissions.PermissionBackend;
 import com.google.gerrit.server.permissions.PermissionBackendException;
 import com.google.gerrit.server.permissions.ProjectPermission;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 import com.ericsson.gerrit.plugins.eventslog.EventPool;
@@ -58,7 +56,6 @@ class SQLStore implements EventStore, LifecycleListener {
   private static final Logger log = LoggerFactory.getLogger(SQLStore.class);
   private static final String H2_DB_SUFFIX = ".h2.db";
 
-  private final Provider<CurrentUser> userProvider;
   private SQLClient eventsDb;
   private SQLClient localEventsDb;
   private final int maxAge;
@@ -73,18 +70,16 @@ class SQLStore implements EventStore, LifecycleListener {
   private Path localPath;
 
   @Inject
-  SQLStore(Provider<CurrentUser> userProvider,
-      EventsLogConfig cfg,
-      @EventsDb SQLClient eventsDb,
-      @LocalEventsDb SQLClient localEventsDb,
-      @EventPool ScheduledExecutorService pool,
-      PermissionBackend permissionBackend) {
+  SQLStore(EventsLogConfig cfg,
+           @EventsDb SQLClient eventsDb,
+           @LocalEventsDb SQLClient localEventsDb,
+           @EventPool ScheduledExecutorService pool,
+           PermissionBackend permissionBackend) {
     this.maxAge = cfg.getMaxAge();
     this.maxTries = cfg.getMaxTries();
     this.waitTime = cfg.getWaitTime();
     this.connectTime = cfg.getConnectTime();
     this.copyLocal = cfg.getCopyLocal();
-    this.userProvider = userProvider;
     this.eventsDb = eventsDb;
     this.localEventsDb = localEventsDb;
     this.pool = pool;
@@ -122,7 +117,7 @@ class SQLStore implements EventStore, LifecycleListener {
       String projectName = entry.getKey();
       try {
         permissionBackend
-            .user(userProvider)
+            .currentUser()
             .project(new Project.NameKey(projectName))
             .check(ProjectPermission.ACCESS);
         entries.addAll(entry.getValue());
