@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9cf02f5c_0d951ba5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1064576
+      },
+      "writtenOn": "2018-04-09T16:12:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "526d9fa0_f302ccf3",
+      "range": {
+        "startLine": 7,
+        "startChar": 33,
+        "endLine": 7,
+        "endChar": 34
+      },
+      "revId": "ac5bffa9297543d82ac99d336541db87a2da33d9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0ebf61aa_2ac5f800",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-04-09T15:51:51Z",
       "side": 1,
       "message": "this can be removed after applying Patrick\u0027 comment",
+      "range": {
+        "startLine": 61,
+        "startChar": 2,
+        "endLine": 61,
+        "endChar": 51
+      },
+      "revId": "ac5bffa9297543d82ac99d336541db87a2da33d9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3723cced_7733ef39",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1064576
+      },
+      "writtenOn": "2018-04-09T16:12:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ebf61aa_2ac5f800",
       "range": {
         "startLine": 61,
         "startChar": 2,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "53ef2d7f_2990e3c8",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1064576
+      },
+      "writtenOn": "2018-04-09T16:12:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abf1154a_14f408d4",
+      "range": {
+        "startLine": 76,
+        "startChar": 11,
+        "endLine": 76,
+        "endChar": 45
+      },
+      "revId": "ac5bffa9297543d82ac99d336541db87a2da33d9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2c6ffc21_281fc0c9",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
         "patchSetId": 1
@@ -82,6 +154,30 @@
       "writtenOn": "2018-04-09T15:51:51Z",
       "side": 1,
       "message": "this can be removed after applying Patrick\u0027 comment",
+      "range": {
+        "startLine": 87,
+        "startChar": 4,
+        "endLine": 87,
+        "endChar": 37
+      },
+      "revId": "ac5bffa9297543d82ac99d336541db87a2da33d9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "be5c1e59_c5fcfe76",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1064576
+      },
+      "writtenOn": "2018-04-09T16:12:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c6ffc21_281fc0c9",
       "range": {
         "startLine": 87,
         "startChar": 4,
@@ -114,6 +210,30 @@
       "revId": "ac5bffa9297543d82ac99d336541db87a2da33d9",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a35fd61_22ac80c2",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1064576
+      },
+      "writtenOn": "2018-04-09T16:12:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3a96a23_62406a4e",
+      "range": {
+        "startLine": 125,
+        "startChar": 13,
+        "endLine": 125,
+        "endChar": 17
+      },
+      "revId": "ac5bffa9297543d82ac99d336541db87a2da33d9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
