@@ -38,6 +38,7 @@ import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
 import com.ericsson.gerrit.plugins.eventslog.ServiceUnavailableException;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -105,6 +106,7 @@ public class SQLStoreTest {
     when(cfgMock.getLocalStorePath()).thenReturn(testFolder.getRoot().toPath());
   }
 
+  @After
   public void tearDown() throws Exception {
     stat.execute("DROP TABLE " + TABLE_NAME);
     store.stop();
@@ -112,7 +114,7 @@ public class SQLStoreTest {
 
   @Test
   public void storeThenQueryVisible() throws Exception {
-    when(permissionBackendMock.user(userProviderMock)).thenReturn(withUserMock);
+    when(permissionBackendMock.user(userProviderMock.get())).thenReturn(withUserMock);
     when(withUserMock.project(any(Project.NameKey.class)))
         .thenReturn(forProjectMock);
     doNothing().when(forProjectMock).check(ProjectPermission.ACCESS);
@@ -126,7 +128,7 @@ public class SQLStoreTest {
 
   @Test
   public void storeThenQueryNotVisible() throws Exception {
-    when(permissionBackendMock.user(userProviderMock)).thenReturn(withUserMock);
+    when(permissionBackendMock.user(userProviderMock.get())).thenReturn(withUserMock);
     when(withUserMock.project(any(Project.NameKey.class)))
         .thenReturn(forProjectMock);
     doThrow(new PermissionBackendException("")).when(forProjectMock)
@@ -147,7 +149,7 @@ public class SQLStoreTest {
 
   @Test
   public void notReturnEventWithNoVisibilityInfo() throws Exception {
-    when(permissionBackendMock.user(userProviderMock)).thenReturn(withUserMock);
+    when(permissionBackendMock.user(userProviderMock.get())).thenReturn(withUserMock);
     when(withUserMock.project(any(Project.NameKey.class)))
         .thenReturn(forProjectMock);
     doThrow(new PermissionBackendException("")).when(forProjectMock)
@@ -235,7 +237,7 @@ public class SQLStoreTest {
   public void restoreEventsFromLocalDb() throws Exception {
     MockEvent mockEvent = new MockEvent();
     MockEvent mockEvent2 = new MockEvent("proj");
-    when(permissionBackendMock.user(userProviderMock)).thenReturn(withUserMock);
+    when(permissionBackendMock.user(userProviderMock.get())).thenReturn(withUserMock);
     when(withUserMock.project(any(Project.NameKey.class)))
         .thenReturn(forProjectMock);
     doNothing().when(forProjectMock).check(ProjectPermission.ACCESS);

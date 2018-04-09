@@ -122,7 +122,7 @@ class SQLStore implements EventStore, LifecycleListener {
       String projectName = entry.getKey();
       try {
         permissionBackend
-            .user(userProvider)
+            .user(userProvider.get())
             .project(new Project.NameKey(projectName))
             .check(ProjectPermission.ACCESS);
         entries.addAll(entry.getValue());
