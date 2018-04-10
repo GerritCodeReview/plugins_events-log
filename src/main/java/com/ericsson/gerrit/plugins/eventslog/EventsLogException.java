@@ -19,8 +19,7 @@ public class EventsLogException extends Exception {
   private static final long serialVersionUID = 1L;
 
   /**
-   * Constructs an <code>EventsLogException</code> object with a given
-   * <code>message</code>.
+   * Constructs an <code>EventsLogException</code> object with a given <code>message</code>.
    *
    * @param message a description of the exception
    */
@@ -29,12 +28,11 @@ public class EventsLogException extends Exception {
   }
 
   /**
-   * Constructs an <code>EventsLogException</code> object with a given
-   * <code>message</code> and a given <code>cause</code>.
+   * Constructs an <code>EventsLogException</code> object with a given <code>message</code> and a
+   * given <code>cause</code>.
    *
    * @param message a description of the exception
-   * @param cause the underlying reason for this
-   *        <code>EventsLogException</code>
+   * @param cause the underlying reason for this <code>EventsLogException</code>
    */
   public EventsLogException(String message, Throwable cause) {
     super(message, cause);

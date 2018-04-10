@@ -15,7 +15,6 @@
 package com.ericsson.gerrit.plugins.eventslog;
 
 import com.google.gerrit.server.events.ProjectEvent;
-
 import java.util.List;
 
 /** A store for change events to query. */

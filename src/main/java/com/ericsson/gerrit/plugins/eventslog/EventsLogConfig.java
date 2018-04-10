@@ -21,7 +21,6 @@ import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.config.SitePaths;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -67,9 +66,7 @@ public class EventsLogConfig {
   private String defaultUrl;
 
   @Inject
-  EventsLogConfig(PluginConfigFactory cfgFactory,
-      SitePaths site,
-      @PluginName String pluginName) {
+  EventsLogConfig(PluginConfigFactory cfgFactory, SitePaths site, @PluginName String pluginName) {
     String defaultLocalPath = site.site_path.toString() + "/events-db/";
     PluginConfig cfg = cfgFactory.getFromGerritConfig(pluginName, true);
     copyLocal = cfg.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL);
@@ -81,8 +78,7 @@ public class EventsLogConfig {
     storeDriver = cfg.getString(CONFIG_DRIVER, DEFAULT_DRIVER);
     defaultUrl = "jdbc:h2:" + site.data_dir.toString() + "/db";
     storeUrl = cfg.getString(CONFIG_URL, defaultUrl);
-    localStorePath = Paths.get(cfg.getString(CONFIG_LOCAL_PATH,
-        defaultLocalPath));
+    localStorePath = Paths.get(cfg.getString(CONFIG_LOCAL_PATH, defaultLocalPath));
     urlOptions = concatenate(cfg.getStringList(CONFIG_URL_OPTIONS));
     storeUsername = cfg.getString(CONFIG_USERNAME);
     storePassword = cfg.getString(CONFIG_PASSWORD);

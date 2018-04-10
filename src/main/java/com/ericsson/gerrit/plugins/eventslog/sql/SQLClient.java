@@ -24,22 +24,16 @@ import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
+import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.google.gerrit.server.events.ProjectEvent;
+import com.google.gerrit.server.events.SupplierSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.Inject;
-import com.google.gerrit.server.events.SupplierSerializer;
-
-import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
-import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
-
-import org.apache.commons.dbcp.BasicDataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -47,6 +41,9 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.dbcp.BasicDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class SQLClient {
   private static final Logger log = LoggerFactory.getLogger(SQLClient.class);
@@ -59,8 +56,7 @@ class SQLClient {
     ds.setDriverClassName(storeDriver);
     ds.setUrl(storeUrl);
     ds.setConnectionProperties(urlOptions);
-    gson = new GsonBuilder()
-        .registerTypeAdapter(Supplier.class, new SupplierSerializer()).create();
+    gson = new GsonBuilder().registerTypeAdapter(Supplier.class, new SupplierSerializer()).create();
   }
 
   /**
@@ -82,8 +78,7 @@ class SQLClient {
   }
 
   /**
-   * Set the time before an idle connection is evicted as well as the
-   * time between eviction runs.
+   * Set the time before an idle connection is evicted as well as the time between eviction runs.
    *
    * @param evictIdleTime the time in milliseconds before eviction
    */
@@ -110,8 +105,7 @@ class SQLClient {
    */
   boolean dbExists() throws SQLException {
     try (Connection conn = ds.getConnection();
-        ResultSet tables =
-            conn.getMetaData().getTables(null, null, TABLE_NAME, null)) {
+        ResultSet tables = conn.getMetaData().getTables(null, null, TABLE_NAME, null)) {
       return tables.next();
     }
   }
@@ -125,15 +119,14 @@ class SQLClient {
   }
 
   /**
-   * Get events as a multimap list of Strings and SQLEntries. The String
-   * represents the project name, and the SQLEntry is the event information.
+   * Get events as a multimap list of Strings and SQLEntries. The String represents the project
+   * name, and the SQLEntry is the event information.
    *
    * @param query the query as a string
    * @return Multimap list of Strings (project names) and SQLEntries (events)
    * @throws EventsLogException If there was a problem with the database
    */
-  ListMultimap<String, SQLEntry> getEvents(String query)
-      throws EventsLogException {
+  ListMultimap<String, SQLEntry> getEvents(String query) throws EventsLogException {
     try (Connection conn = ds.getConnection();
         Statement stat = conn.createStatement()) {
       return listEvents(stat, query);
@@ -149,7 +142,8 @@ class SQLClient {
    * @throws SQLException If there was a problem with the database
    */
   void storeEvent(ProjectEvent event) throws SQLException {
-    storeEvent(event.getProjectNameKey().get(),
+    storeEvent(
+        event.getProjectNameKey().get(),
         new Timestamp(SECONDS.toMillis(event.eventCreatedOn)),
         gson.toJson(event));
   }
@@ -162,11 +156,10 @@ class SQLClient {
    * @param event The event as a string
    * @throws SQLException If there was a problem with the database
    */
-  void storeEvent(String projectName, Timestamp timestamp, String event)
-      throws SQLException {
-    execute(format("INSERT INTO %s(%s, %s, %s) ", TABLE_NAME, PROJECT_ENTRY,
-        DATE_ENTRY, EVENT_ENTRY)
-        + format("VALUES('%s', '%s', '%s')", projectName, timestamp, event));
+  void storeEvent(String projectName, Timestamp timestamp, String event) throws SQLException {
+    execute(
+        format("INSERT INTO %s(%s, %s, %s) ", TABLE_NAME, PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
+            + format("VALUES('%s', '%s', '%s')", projectName, timestamp, event));
   }
 
   /**
@@ -176,12 +169,12 @@ class SQLClient {
    */
   void removeOldEvents(int maxAge) {
     try {
-      execute(format(
-          "DELETE FROM %s WHERE %s < '%s'",
-          TABLE_NAME,
-          DATE_ENTRY,
-          new Timestamp(System.currentTimeMillis()
-              - MILLISECONDS.convert(maxAge, DAYS))));
+      execute(
+          format(
+              "DELETE FROM %s WHERE %s < '%s'",
+              TABLE_NAME,
+              DATE_ENTRY,
+              new Timestamp(System.currentTimeMillis() - MILLISECONDS.convert(maxAge, DAYS))));
     } catch (SQLException e) {
       log.warn("Cannot remove old event entries from database", e);
     }
@@ -194,17 +187,15 @@ class SQLClient {
    */
   void removeProjectEvents(String project) {
     try {
-      execute(
-          format("DELETE FROM %s WHERE project = '%s'", TABLE_NAME, project));
+      execute(format("DELETE FROM %s WHERE project = '%s'", TABLE_NAME, project));
     } catch (SQLException e) {
-      log.warn(
-          "Cannot remove project " + project + " events from database", e);
+      log.warn("Cannot remove project " + project + " events from database", e);
     }
   }
 
   /**
-   * Do a simple query on the database. This is used to determine whether or
-   * not the main database is online.
+   * Do a simple query on the database. This is used to determine whether or not the main database
+   * is online.
    *
    * @throws SQLException If there was a problem with the database
    */
@@ -224,9 +215,12 @@ class SQLClient {
         Statement stat = conn.createStatement();
         ResultSet rs = stat.executeQuery("SELECT * FROM " + TABLE_NAME)) {
       while (rs.next()) {
-        entries.add(new SQLEntry(rs.getString(PROJECT_ENTRY), rs
-            .getTimestamp(DATE_ENTRY), rs.getString(EVENT_ENTRY), rs
-            .getInt(PRIMARY_ENTRY)));
+        entries.add(
+            new SQLEntry(
+                rs.getString(PROJECT_ENTRY),
+                rs.getTimestamp(DATE_ENTRY),
+                rs.getString(EVENT_ENTRY),
+                rs.getInt(PRIMARY_ENTRY)));
       }
       return entries;
     }
@@ -238,8 +232,10 @@ class SQLClient {
       ListMultimap<String, SQLEntry> result = ArrayListMultimap.create();
       while (rs.next()) {
         SQLEntry entry =
-            new SQLEntry(rs.getString(PROJECT_ENTRY),
-                rs.getTimestamp(DATE_ENTRY), rs.getString(EVENT_ENTRY),
+            new SQLEntry(
+                rs.getString(PROJECT_ENTRY),
+                rs.getTimestamp(DATE_ENTRY),
+                rs.getString(EVENT_ENTRY),
                 rs.getInt(PRIMARY_ENTRY));
         result.put(rs.getString(PROJECT_ENTRY), entry);
       }

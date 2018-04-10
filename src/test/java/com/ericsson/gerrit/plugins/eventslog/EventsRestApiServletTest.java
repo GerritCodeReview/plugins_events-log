@@ -23,7 +23,12 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gerrit.server.CurrentUser;
 import com.google.inject.Provider;
-
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,39 +37,23 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 @RunWith(MockitoJUnitRunner.class)
 public class EventsRestApiServletTest {
   private static final String RANDOM_QUERY = "random query";
 
-  @Mock
-  private EventStore storeMock;
-  @Mock
-  private QueryMaker queryMakerMock;
-  @Mock
-  private Provider<CurrentUser> userProviderMock;
-  @Mock
-  private CurrentUser userMock;
-  @Mock
-  private HttpServletRequest reqMock;
-  @Mock
-  private HttpServletResponse rspMock;
-  @Captor
-  private ArgumentCaptor<Map<String, String>> captor;
+  @Mock private EventStore storeMock;
+  @Mock private QueryMaker queryMakerMock;
+  @Mock private Provider<CurrentUser> userProviderMock;
+  @Mock private CurrentUser userMock;
+  @Mock private HttpServletRequest reqMock;
+  @Mock private HttpServletResponse rspMock;
+  @Captor private ArgumentCaptor<Map<String, String>> captor;
 
   private EventsRestApiServlet eventServlet;
 
   @Before
   public void setUp() {
-    eventServlet =
-        new EventsRestApiServlet(storeMock, queryMakerMock, userProviderMock);
+    eventServlet = new EventsRestApiServlet(storeMock, queryMakerMock, userProviderMock);
 
     when(userProviderMock.get()).thenReturn(userMock);
     when(userMock.isIdentifiedUser()).thenReturn(true);
@@ -73,22 +62,17 @@ public class EventsRestApiServletTest {
   @Test
   public void queryStringSplitting() throws Exception {
     when(reqMock.getQueryString()).thenReturn("a=1;b=2");
-    when(queryMakerMock.formQueryFromRequestParameters(captor.capture()))
-        .thenReturn(RANDOM_QUERY);
-    when(storeMock.queryChangeEvents(RANDOM_QUERY))
-        .thenReturn(new ArrayList<>());
+    when(queryMakerMock.formQueryFromRequestParameters(captor.capture())).thenReturn(RANDOM_QUERY);
+    when(storeMock.queryChangeEvents(RANDOM_QUERY)).thenReturn(new ArrayList<>());
     eventServlet.doGet(reqMock, rspMock);
-    assertThat(ImmutableMap.of("a", "1", "b", "2"))
-        .isEqualTo(captor.getValue());
+    assertThat(ImmutableMap.of("a", "1", "b", "2")).isEqualTo(captor.getValue());
   }
 
   @Test
   public void badQueryString() throws Exception {
     when(reqMock.getQueryString()).thenReturn("a;b");
-    when(queryMakerMock.formQueryFromRequestParameters(captor.capture()))
-        .thenReturn(RANDOM_QUERY);
-    when(storeMock.queryChangeEvents(RANDOM_QUERY))
-        .thenReturn(new ArrayList<>());
+    when(queryMakerMock.formQueryFromRequestParameters(captor.capture())).thenReturn(RANDOM_QUERY);
+    when(storeMock.queryChangeEvents(RANDOM_QUERY)).thenReturn(new ArrayList<>());
     eventServlet.doGet(reqMock, rspMock);
     assertThat(captor.getValue()).isEmpty();
   }
@@ -116,8 +100,7 @@ public class EventsRestApiServletTest {
     PrintWriter outMock = mock(PrintWriter.class);
     List<String> listMock = ImmutableList.of("event one", "event two");
     when(rspMock.getWriter()).thenReturn(outMock);
-    when(queryMakerMock.formQueryFromRequestParameters(captor.capture()))
-        .thenReturn(RANDOM_QUERY);
+    when(queryMakerMock.formQueryFromRequestParameters(captor.capture())).thenReturn(RANDOM_QUERY);
     when(storeMock.queryChangeEvents(RANDOM_QUERY)).thenReturn(listMock);
     eventServlet.doGet(reqMock, rspMock);
     verify(outMock).write(listMock.get(0) + "\n");

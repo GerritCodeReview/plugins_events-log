@@ -19,24 +19,20 @@ import com.google.gerrit.server.CurrentUser;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 class EventsRestApiServlet extends HttpServlet {
-  private static final Logger log =
-      LoggerFactory.getLogger(EventsRestApiServlet.class);
+  private static final Logger log = LoggerFactory.getLogger(EventsRestApiServlet.class);
   private static final long serialVersionUID = 1L;
 
   private final EventStore store;
@@ -44,9 +40,8 @@ class EventsRestApiServlet extends HttpServlet {
   private final Provider<CurrentUser> userProvider;
 
   @Inject
-  EventsRestApiServlet(EventStore store,
-      QueryMaker queryMaker,
-      Provider<CurrentUser> userProvider) {
+  EventsRestApiServlet(
+      EventStore store, QueryMaker queryMaker, Provider<CurrentUser> userProvider) {
     this.store = store;
     this.queryMaker = queryMaker;
     this.userProvider = userProvider;
@@ -60,8 +55,7 @@ class EventsRestApiServlet extends HttpServlet {
       return;
     }
     rsp.setContentType("text/html");
-    Map<String, String> params =
-        req.getQueryString() != null ? getParameters(req) : null;
+    Map<String, String> params = req.getQueryString() != null ? getParameters(req) : null;
 
     try (Writer out = rsp.getWriter()) {
       String query = queryMaker.formQueryFromRequestParameters(params);
