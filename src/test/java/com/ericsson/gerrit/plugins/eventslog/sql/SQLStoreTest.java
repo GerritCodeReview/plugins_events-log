@@ -110,7 +110,7 @@ public class SQLStoreTest {
     store.storeEvent(mockEvent);
     List<String> events = store.queryChangeEvents(GENERIC_QUERY);
     String json = new Gson().toJson(mockEvent);
-    assertThat(events).containsExactly(json);
+    assertThat(events).containsExactly(json).inOrder();
   }
 
   @Test
@@ -245,7 +245,7 @@ public class SQLStoreTest {
     Gson gson = new Gson();
     String json = gson.toJson(mockEvent);
     String json2 = gson.toJson(mockEvent2);
-    assertThat(events).containsExactly(json, json2);
+    assertThat(events).containsExactly(json, json2).inOrder();
   }
 
   @Test

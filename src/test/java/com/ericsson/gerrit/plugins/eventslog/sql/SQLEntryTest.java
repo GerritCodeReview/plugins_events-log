@@ -66,6 +66,7 @@ public class SQLEntryTest {
     assertThat(entry2.compareTo(entry1)).isEqualTo(-1);
   }
 
+  @SuppressWarnings("unlikely-arg-type")
   @Test
   public void testEquals() throws Exception {
     assertThat(entry1.equals(null)).isFalse();
