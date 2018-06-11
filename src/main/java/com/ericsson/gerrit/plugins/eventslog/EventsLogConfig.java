@@ -1,4 +1,4 @@
-// Copyright (C) 2015 Ericsson
+// Copyright (C) 2015 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -79,14 +79,10 @@ public class EventsLogConfig {
     defaultUrl = "jdbc:h2:" + site.data_dir.toString() + "/db";
     storeUrl = cfg.getString(CONFIG_URL, defaultUrl);
     localStorePath = Paths.get(cfg.getString(CONFIG_LOCAL_PATH, defaultLocalPath));
-    urlOptions = concatenate(cfg.getStringList(CONFIG_URL_OPTIONS));
+    urlOptions = Joiner.on(";").join(cfg.getStringList(CONFIG_URL_OPTIONS));
     storeUsername = cfg.getString(CONFIG_USERNAME);
     storePassword = cfg.getString(CONFIG_PASSWORD);
     evictIdleTime = cfg.getInt(CONFIG_EVICT_IDLE_TIME, DEFAULT_EVICT_IDLE_TIME);
-  }
-
-  private String concatenate(String[] stringList) {
-    return Joiner.on(";").join(stringList);
   }
 
   public int getMaxAge() {
