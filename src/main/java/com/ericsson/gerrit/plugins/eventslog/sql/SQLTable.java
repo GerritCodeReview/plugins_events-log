@@ -23,10 +23,27 @@ final class SQLTable {
   static final String DATE_ENTRY = "date_created";
   static final String EVENT_ENTRY = "event_info";
 
+  private static final String CREATED_INDEX = "created_idx";
+  private static final String PROJECT_INDEX = "project_idx";
+  private static final String H2_INDEX_CREATION_FORMAT = "CREATE INDEX IF NOT EXISTS %s ON %s (%s)";
+  private static final String POSTGRESQL_INDEX_CREATION_FORMAT =
+      "DO $$\n"
+          + "BEGIN\n"
+          + "IF NOT EXISTS (\n"
+          + "    SELECT 1\n"
+          + "    FROM   pg_class c\n"
+          + "    JOIN   pg_namespace n ON n.oid = c.relnamespace\n"
+          + "    WHERE  c.relname = '%s'\n"
+          + "    AND    n.nspname = 'public'\n"
+          + "    ) THEN\n"
+          + "    CREATE INDEX %s ON %s (%s);\n"
+          + "END IF;\n"
+          + "END$$;";
+
   private SQLTable() {}
 
   static String createTableQuery(boolean postgresql) {
-    StringBuilder query = new StringBuilder();
+    StringBuilder query = new StringBuilder(140);
     query.append(format("CREATE TABLE IF NOT EXISTS %s(", TABLE_NAME));
     if (postgresql) {
       query.append(format("%s SERIAL PRIMARY KEY,", PRIMARY_ENTRY));
@@ -36,6 +53,34 @@ final class SQLTable {
     query.append(format("%s VARCHAR(255),", PROJECT_ENTRY));
     query.append(format("%s TIMESTAMP DEFAULT NOW(),", DATE_ENTRY));
     query.append(format("%s TEXT)", EVENT_ENTRY));
+    return query.toString();
+  }
+
+  static String createIndexes(boolean postgresql) {
+    return postgresql ? getPostgresqlQuery() : getH2Query();
+  }
+
+  private static String getPostgresqlQuery() {
+    StringBuilder query = new StringBuilder(540);
+    query.append(
+        format(
+            POSTGRESQL_INDEX_CREATION_FORMAT, TABLE_NAME, CREATED_INDEX, TABLE_NAME, DATE_ENTRY));
+    query.append("\n;\n");
+    query.append(
+        format(
+            POSTGRESQL_INDEX_CREATION_FORMAT,
+            TABLE_NAME,
+            PROJECT_INDEX,
+            TABLE_NAME,
+            PROJECT_ENTRY));
+    return query.toString();
+  }
+
+  private static String getH2Query() {
+    StringBuilder query = new StringBuilder();
+    query.append(format(H2_INDEX_CREATION_FORMAT, CREATED_INDEX, TABLE_NAME, DATE_ENTRY));
+    query.append(";");
+    query.append(format(H2_INDEX_CREATION_FORMAT, PROJECT_INDEX, TABLE_NAME, PROJECT_ENTRY));
     return query.toString();
   }
 }
