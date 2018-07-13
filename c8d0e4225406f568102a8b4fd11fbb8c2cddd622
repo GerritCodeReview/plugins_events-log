@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4dc52f10_5d084936",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfig.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2018-07-13T11:58:00Z",
+      "side": 1,
+      "message": "to preserved same behaviour as before, this should be 8.",
+      "range": {
+        "startLine": 53,
+        "startChar": 45,
+        "endLine": 53,
+        "endChar": 47
+      },
+      "revId": "c8d0e4225406f568102a8b4fd11fbb8c2cddd622",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98898246_a63b1c3e",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLClient.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2018-07-13T11:58:00Z",
+      "side": 1,
+      "message": "what will happen if max connection is 1?",
+      "range": {
+        "startLine": 95,
+        "startChar": 29,
+        "endLine": 95,
+        "endChar": 43
+      },
+      "revId": "c8d0e4225406f568102a8b4fd11fbb8c2cddd622",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43a7f28e_9d11e31a",
+        "filename": "src/main/resources/Documentation/config.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2018-07-13T11:58:00Z",
+      "side": 1,
+      "message": "document the default value",
+      "revId": "c8d0e4225406f568102a8b4fd11fbb8c2cddd622",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
