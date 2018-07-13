@@ -122,12 +122,11 @@ class SQLStore implements EventStore, LifecycleListener {
         }
       } catch (NoSuchProjectException e) {
         log.warn(
-            "Database contains a non-existing project, "
-                + projectName
-                + ", removing project from database");
+            "Database contains a non-existing project, {}; removing project from database",
+            projectName);
         eventsDb.removeProjectEvents(projectName);
       } catch (IOException e) {
-        log.warn("Cannot get project visibility info for " + projectName + " from cache", e);
+        log.warn("Cannot get project visibility info for {} from cache", projectName, e);
       }
     }
     return sortedEventsFromEntries(entries);
@@ -160,14 +159,14 @@ class SQLStore implements EventStore, LifecycleListener {
       try {
         getEventsDb().storeEvent(event);
       } catch (SQLException e) {
-        log.warn("Cannot store ChangeEvent for: " + projectName.get(), e);
+        log.warn("Cannot store ChangeEvent for: {}", projectName.get(), e);
         if (e.getCause() instanceof ConnectException
             || e.getMessage().contains("terminating connection")) {
           done = false;
           try {
             retryIfAllowed(failedConnections);
           } catch (InterruptedException e1) {
-            log.warn("Cannot store ChangeEvent for: " + projectName.get() + ": Interrupted");
+            log.warn("Cannot store ChangeEvent for {}: Interrupted", projectName.get());
             Thread.currentThread().interrupt();
             return;
           }
@@ -182,7 +181,7 @@ class SQLStore implements EventStore, LifecycleListener {
       log.info("Retrying store event");
       Thread.sleep(waitTime);
     } else {
-      log.error("Failed to store event " + maxTries + " times");
+      log.error("Failed to store event {} times", maxTries);
       setOnline(false);
     }
   }
