@@ -28,7 +28,6 @@ import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_URL_O
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_USERNAME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_WAIT_TIME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_CONN_TIME;
-import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_COPY_LOCAL;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_DRIVER;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_EVICT_IDLE_TIME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_MAX_AGE;
@@ -39,11 +38,14 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableList;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.config.SitePaths;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
+import org.eclipse.jgit.lib.Config;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -54,18 +56,15 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EventsLogConfigTest {
+  private static final String LOCAL_STORE_PATH = "~/gerrit/events-db/";
+  private static final String PLUGIN = "plugin";
   private static final String PLUGIN_NAME = "eventsLog";
   private static final int CUSTOM_EVICT_IDLE_TIME = 10000;
+  private static final List<String> urlOptions = ImmutableList.of("DB_CLOSE_DELAY=10");
 
   private SitePaths site;
-  private EventsLogConfig config;
-  private String defaultLocalStorePath;
-  private String defaultUrl;
-  private String localStorePath;
-  private String[] urlOptions = new String[] {"DB_CLOSE_DELAY=10"};
 
   @Mock private PluginConfigFactory cfgFactoryMock;
-  @Mock private PluginConfig configMock;
 
   @Rule public TemporaryFolder gerrit_site = new TemporaryFolder();
 
@@ -73,86 +72,67 @@ public class EventsLogConfigTest {
   public void setUp() throws IOException {
     site = new SitePaths(gerrit_site.getRoot().toPath());
     Files.createDirectories(site.etc_dir);
-    defaultLocalStorePath = site.site_path.toString() + "/events-db/";
-    defaultUrl = "jdbc:h2:" + site.data_dir.toString() + "/db";
-    when(cfgFactoryMock.getFromGerritConfig(PLUGIN_NAME, true)).thenReturn(configMock);
-  }
-
-  private void setUpDefaults() {
-    when(configMock.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL))
-        .thenReturn(DEFAULT_COPY_LOCAL);
-    when(configMock.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE)).thenReturn(DEFAULT_MAX_AGE);
-    when(configMock.getInt(CONFIG_MAX_TRIES, DEFAULT_MAX_TRIES)).thenReturn(DEFAULT_MAX_TRIES);
-    when(configMock.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT))
-        .thenReturn(DEFAULT_RETURN_LIMIT);
-    when(configMock.getInt(CONFIG_CONN_TIME, DEFAULT_CONN_TIME)).thenReturn(DEFAULT_CONN_TIME);
-    when(configMock.getInt(CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME)).thenReturn(DEFAULT_WAIT_TIME);
-    when(configMock.getString(CONFIG_DRIVER, DEFAULT_DRIVER)).thenReturn(DEFAULT_DRIVER);
-    when(configMock.getString(CONFIG_URL, defaultUrl)).thenReturn(defaultUrl);
-    when(configMock.getString(CONFIG_LOCAL_PATH, defaultLocalStorePath))
-        .thenReturn(defaultLocalStorePath);
-    when(configMock.getStringList(CONFIG_URL_OPTIONS)).thenReturn(new String[] {});
-    when(configMock.getString(CONFIG_USERNAME)).thenReturn(null);
-    when(configMock.getString(CONFIG_PASSWORD)).thenReturn(null);
-    when(configMock.getInt(CONFIG_EVICT_IDLE_TIME, DEFAULT_EVICT_IDLE_TIME))
-        .thenReturn(DEFAULT_EVICT_IDLE_TIME);
-  }
-
-  private void setUpCustom() {
-    localStorePath = "~/gerrit/events-db/";
-    when(configMock.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL)).thenReturn(true);
-    when(configMock.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE)).thenReturn(20);
-    when(configMock.getInt(CONFIG_MAX_TRIES, DEFAULT_MAX_TRIES)).thenReturn(5);
-    when(configMock.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT)).thenReturn(10000);
-    when(configMock.getInt(CONFIG_CONN_TIME, DEFAULT_CONN_TIME)).thenReturn(5000);
-    when(configMock.getInt(CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME)).thenReturn(5000);
-    when(configMock.getString(CONFIG_DRIVER, DEFAULT_DRIVER)).thenReturn("org.h2.Driver2");
-    when(configMock.getString(CONFIG_URL, defaultUrl)).thenReturn("jdbc:h2:~/gerrit/db");
-    when(configMock.getString(CONFIG_LOCAL_PATH, defaultLocalStorePath)).thenReturn(localStorePath);
-    when(configMock.getStringList(CONFIG_URL_OPTIONS)).thenReturn(urlOptions);
-    when(configMock.getString(CONFIG_USERNAME)).thenReturn("testUsername");
-    when(configMock.getString(CONFIG_PASSWORD)).thenReturn("testPassword");
-    when(configMock.getInt(CONFIG_EVICT_IDLE_TIME, DEFAULT_EVICT_IDLE_TIME))
-        .thenReturn(CUSTOM_EVICT_IDLE_TIME);
   }
 
   @Test
   public void shouldReturnDefaultsWhenMissingConfig() {
-    setUpDefaults();
-    config = new EventsLogConfig(cfgFactoryMock, site, PLUGIN_NAME);
-    assertThat(config.getCopyLocal()).isFalse();
-    assertThat(config.getMaxAge()).isEqualTo(30);
-    assertThat(config.getMaxTries()).isEqualTo(3);
-    assertThat(config.getReturnLimit()).isEqualTo(5000);
-    assertThat(config.getConnectTime()).isEqualTo(1000);
-    assertThat(config.getWaitTime()).isEqualTo(1000);
-    assertThat(config.getLocalStoreDriver()).isEqualTo(DEFAULT_DRIVER);
-    assertThat(config.getLocalStorePath().toString() + "/").isEqualTo(defaultLocalStorePath);
-    assertThat(config.getStoreDriver()).isEqualTo(DEFAULT_DRIVER);
-    assertThat(config.getStoreUrl()).isEqualTo(defaultUrl);
-    assertThat(config.getUrlOptions()).isEmpty();
-    assertThat(config.getStoreUsername()).isNull();
-    assertThat(config.getStorePassword()).isNull();
-    assertThat(config.getEvictIdleTime()).isEqualTo(DEFAULT_EVICT_IDLE_TIME);
+    PluginConfig pluginConfig = new PluginConfig(PLUGIN_NAME, new Config());
+    when(cfgFactoryMock.getFromGerritConfig(PLUGIN_NAME, true)).thenReturn(pluginConfig);
+    EventsLogConfig eventsLogConfig = new EventsLogConfig(cfgFactoryMock, site, PLUGIN_NAME);
+    assertThat(eventsLogConfig.getCopyLocal()).isFalse();
+    assertThat(eventsLogConfig.getMaxAge()).isEqualTo(DEFAULT_MAX_AGE);
+    assertThat(eventsLogConfig.getMaxTries()).isEqualTo(DEFAULT_MAX_TRIES);
+    assertThat(eventsLogConfig.getReturnLimit()).isEqualTo(DEFAULT_RETURN_LIMIT);
+    assertThat(eventsLogConfig.getConnectTime()).isEqualTo(DEFAULT_CONN_TIME);
+    assertThat(eventsLogConfig.getWaitTime()).isEqualTo(DEFAULT_WAIT_TIME);
+    assertThat(eventsLogConfig.getLocalStoreDriver()).isEqualTo(DEFAULT_DRIVER);
+    assertThat(eventsLogConfig.getLocalStorePath().toString() + "/")
+        .isEqualTo(site.site_path.toString() + "/events-db/");
+    assertThat(eventsLogConfig.getStoreDriver()).isEqualTo(DEFAULT_DRIVER);
+    assertThat(eventsLogConfig.getStoreUrl())
+        .isEqualTo("jdbc:h2:" + site.data_dir.toString() + "/db");
+    assertThat(eventsLogConfig.getUrlOptions()).isEmpty();
+    assertThat(eventsLogConfig.getStoreUsername()).isNull();
+    assertThat(eventsLogConfig.getStorePassword()).isNull();
+    assertThat(eventsLogConfig.getEvictIdleTime()).isEqualTo(DEFAULT_EVICT_IDLE_TIME);
   }
 
   @Test
   public void shouldReturnConfigValues() {
-    setUpCustom();
-    config = new EventsLogConfig(cfgFactoryMock, site, PLUGIN_NAME);
-    assertThat(config.getCopyLocal()).isTrue();
-    assertThat(config.getMaxAge()).isEqualTo(20);
-    assertThat(config.getMaxTries()).isEqualTo(5);
-    assertThat(config.getReturnLimit()).isEqualTo(10000);
-    assertThat(config.getConnectTime()).isEqualTo(5000);
-    assertThat(config.getWaitTime()).isEqualTo(5000);
-    assertThat(config.getLocalStoreDriver()).isEqualTo(DEFAULT_DRIVER);
-    assertThat(config.getLocalStorePath().toString() + "/").isEqualTo(localStorePath);
-    assertThat(config.getStoreDriver()).isEqualTo("org.h2.Driver2");
-    assertThat(config.getStoreUrl()).isEqualTo("jdbc:h2:~/gerrit/db");
-    assertThat(config.getUrlOptions()).isEqualTo(Joiner.on(";").join(urlOptions));
-    assertThat(config.getStoreUsername()).isEqualTo("testUsername");
-    assertThat(config.getStorePassword()).isEqualTo("testPassword");
-    assertThat(config.getEvictIdleTime()).isEqualTo(CUSTOM_EVICT_IDLE_TIME);
+    PluginConfig pluginConfig = new PluginConfig(PLUGIN_NAME, customConfig());
+    when(cfgFactoryMock.getFromGerritConfig(PLUGIN_NAME, true)).thenReturn(pluginConfig);
+    EventsLogConfig eventsLogConfig = new EventsLogConfig(cfgFactoryMock, site, PLUGIN_NAME);
+    assertThat(eventsLogConfig.getCopyLocal()).isTrue();
+    assertThat(eventsLogConfig.getMaxAge()).isEqualTo(20);
+    assertThat(eventsLogConfig.getMaxTries()).isEqualTo(5);
+    assertThat(eventsLogConfig.getReturnLimit()).isEqualTo(10000);
+    assertThat(eventsLogConfig.getConnectTime()).isEqualTo(5000);
+    assertThat(eventsLogConfig.getWaitTime()).isEqualTo(5000);
+    assertThat(eventsLogConfig.getLocalStoreDriver()).isEqualTo(DEFAULT_DRIVER);
+    assertThat(eventsLogConfig.getLocalStorePath().toString() + "/").isEqualTo(LOCAL_STORE_PATH);
+    assertThat(eventsLogConfig.getStoreDriver()).isEqualTo("org.h2.Driver2");
+    assertThat(eventsLogConfig.getStoreUrl()).isEqualTo("jdbc:h2:~/gerrit/db");
+    assertThat(eventsLogConfig.getUrlOptions()).isEqualTo(Joiner.on(";").join(urlOptions));
+    assertThat(eventsLogConfig.getStoreUsername()).isEqualTo("testUsername");
+    assertThat(eventsLogConfig.getStorePassword()).isEqualTo("testPassword");
+    assertThat(eventsLogConfig.getEvictIdleTime()).isEqualTo(CUSTOM_EVICT_IDLE_TIME);
+  }
+
+  private Config customConfig() {
+    Config config = new Config();
+    config.setBoolean(PLUGIN, PLUGIN_NAME, CONFIG_COPY_LOCAL, true);
+    config.setInt(PLUGIN, PLUGIN_NAME, CONFIG_MAX_AGE, 20);
+    config.setInt(PLUGIN, PLUGIN_NAME, CONFIG_MAX_TRIES, 5);
+    config.setInt(PLUGIN, PLUGIN_NAME, CONFIG_RETURN_LIMIT, 10000);
+    config.setInt(PLUGIN, PLUGIN_NAME, CONFIG_CONN_TIME, 5000);
+    config.setInt(PLUGIN, PLUGIN_NAME, CONFIG_WAIT_TIME, 5000);
+    config.setString(PLUGIN, PLUGIN_NAME, CONFIG_DRIVER, "org.h2.Driver2");
+    config.setString(PLUGIN, PLUGIN_NAME, CONFIG_URL, "jdbc:h2:~/gerrit/db");
+    config.setString(PLUGIN, PLUGIN_NAME, CONFIG_LOCAL_PATH, LOCAL_STORE_PATH);
+    config.setStringList(PLUGIN, PLUGIN_NAME, CONFIG_URL_OPTIONS, urlOptions);
+    config.setString(PLUGIN, PLUGIN_NAME, CONFIG_USERNAME, "testUsername");
+    config.setString(PLUGIN, PLUGIN_NAME, CONFIG_PASSWORD, "testPassword");
+    config.setInt(PLUGIN, PLUGIN_NAME, CONFIG_EVICT_IDLE_TIME, CUSTOM_EVICT_IDLE_TIME);
+    return config;
   }
 }
