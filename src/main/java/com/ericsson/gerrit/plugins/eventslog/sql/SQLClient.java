@@ -189,7 +189,7 @@ class SQLClient {
     try {
       execute(format("DELETE FROM %s WHERE project = '%s'", TABLE_NAME, project));
     } catch (SQLException e) {
-      log.warn("Cannot remove project " + project + " events from database", e);
+      log.warn("Cannot remove project {} events from database", project, e);
     }
   }
 
