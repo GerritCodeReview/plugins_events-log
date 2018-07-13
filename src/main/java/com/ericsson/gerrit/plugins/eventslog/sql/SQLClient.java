@@ -56,6 +56,11 @@ class SQLClient {
     ds.setDriverClassName(storeDriver);
     ds.setUrl(storeUrl);
     ds.setConnectionProperties(urlOptions);
+    ds.setMaxWait(MILLISECONDS.convert(30, SECONDS));
+    ds.setTestOnBorrow(true);
+    ds.setValidationQuery("SELECT 1");
+    ds.setValidationQueryTimeout(5);
+
     gson = new GsonBuilder().registerTypeAdapter(Supplier.class, new SupplierSerializer()).create();
   }
 
@@ -85,6 +90,17 @@ class SQLClient {
   void setEvictIdleTime(int evictIdleTime) {
     ds.setMinEvictableIdleTimeMillis(evictIdleTime);
     ds.setTimeBetweenEvictionRunsMillis(evictIdleTime / 2);
+  }
+
+  void setMaxConnections(int maxConnections) {
+    ds.setMaxActive(maxConnections);
+    ds.setMinIdle(maxConnections / 4);
+    int maxIdle = maxConnections / 2;
+    if (maxIdle == 0) {
+      maxIdle = maxConnections;
+    }
+    ds.setMaxIdle(maxIdle);
+    ds.setInitialSize(ds.getMinIdle());
   }
 
   /**

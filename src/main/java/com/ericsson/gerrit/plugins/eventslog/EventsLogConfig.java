@@ -40,6 +40,7 @@ public class EventsLogConfig {
   static final String CONFIG_WAIT_TIME = "retryTimeout";
   static final String CONFIG_CONN_TIME = "connectTimeout";
   static final String CONFIG_EVICT_IDLE_TIME = "evictIdleTime";
+  static final String CONFIG_MAX_CONNECTIONS = "maxConnections";
 
   static final boolean DEFAULT_COPY_LOCAL = false;
   static final int DEFAULT_MAX_AGE = 30;
@@ -49,6 +50,7 @@ public class EventsLogConfig {
   static final int DEFAULT_CONN_TIME = 1000;
   static final String DEFAULT_DRIVER = "org.h2.Driver";
   static final int DEFAULT_EVICT_IDLE_TIME = 1000 * 60;
+  static final int DEFAULT_MAX_CONNECTIONS = 8;
 
   private boolean copyLocal;
   private int maxAge;
@@ -63,6 +65,7 @@ public class EventsLogConfig {
   private String storeUsername;
   private String storePassword;
   private int evictIdleTime;
+  private int maxConnections;
   private String defaultUrl;
 
   @Inject
@@ -83,6 +86,7 @@ public class EventsLogConfig {
     storeUsername = cfg.getString(CONFIG_USERNAME);
     storePassword = cfg.getString(CONFIG_PASSWORD);
     evictIdleTime = cfg.getInt(CONFIG_EVICT_IDLE_TIME, DEFAULT_EVICT_IDLE_TIME);
+    maxConnections = Math.max(cfg.getInt(CONFIG_MAX_CONNECTIONS, DEFAULT_MAX_CONNECTIONS), 1);
   }
 
   public int getMaxAge() {
@@ -140,5 +144,9 @@ public class EventsLogConfig {
 
   public int getEvictIdleTime() {
     return evictIdleTime;
+  }
+
+  public int getMaxConnections() {
+    return maxConnections;
   }
 }
