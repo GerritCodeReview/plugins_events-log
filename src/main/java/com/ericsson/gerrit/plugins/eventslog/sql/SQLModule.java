@@ -45,6 +45,7 @@ class SQLModule extends AbstractModule {
     sqlClient.setUsername(cfg.getStoreUsername());
     sqlClient.setPassword(cfg.getStorePassword());
     sqlClient.setEvictIdleTime(cfg.getEvictIdleTime());
+    sqlClient.setMaxConnections(cfg.getMaxConnections());
     return sqlClient;
   }
 
