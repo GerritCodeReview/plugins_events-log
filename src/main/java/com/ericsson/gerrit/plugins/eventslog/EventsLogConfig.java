@@ -67,7 +67,7 @@ public class EventsLogConfig {
 
   @Inject
   EventsLogConfig(PluginConfigFactory cfgFactory, SitePaths site, @PluginName String pluginName) {
-    String defaultLocalPath = site.site_path.toString() + "/events-db/";
+    String defaultLocalPath = site.site_path.resolve("events-db").normalize().toString();
     PluginConfig cfg = cfgFactory.getFromGerritConfig(pluginName, true);
     copyLocal = cfg.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL);
     maxAge = cfg.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE);
@@ -76,7 +76,7 @@ public class EventsLogConfig {
     waitTime = cfg.getInt(CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME);
     connectTime = cfg.getInt(CONFIG_CONN_TIME, DEFAULT_CONN_TIME);
     storeDriver = cfg.getString(CONFIG_DRIVER, DEFAULT_DRIVER);
-    defaultUrl = "jdbc:h2:" + site.data_dir.toString() + "/db";
+    defaultUrl = "jdbc:h2:" + site.data_dir.resolve("db").normalize();
     storeUrl = cfg.getString(CONFIG_URL, defaultUrl);
     localStorePath = Paths.get(cfg.getString(CONFIG_LOCAL_PATH, defaultLocalPath));
     urlOptions = Joiner.on(";").join(cfg.getStringList(CONFIG_URL_OPTIONS));
