@@ -21,7 +21,6 @@ import com.ericsson.gerrit.plugins.eventslog.EventStore;
 import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
 import com.ericsson.gerrit.plugins.eventslog.ServiceUnavailableException;
-import com.google.common.io.Files;
 import com.google.gerrit.common.TimeUtil;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.reviewdb.client.Project;
@@ -32,9 +31,9 @@ import com.google.gerrit.server.project.ProjectControl;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -294,12 +293,10 @@ class SQLStore implements EventStore, LifecycleListener {
     if (!copyLocal) {
       return;
     }
-    File file = localPath.resolve(TABLE_NAME + H2_DB_SUFFIX).toFile();
-    File copyFile =
-        localPath
-            .resolve(
-                TABLE_NAME + (TimeUnit.MILLISECONDS.toSeconds(TimeUtil.nowMs())) + H2_DB_SUFFIX)
-            .toFile();
+    Path file = localPath.resolve(TABLE_NAME + H2_DB_SUFFIX);
+    Path copyFile =
+        localPath.resolve(
+            TABLE_NAME + (TimeUnit.MILLISECONDS.toSeconds(TimeUtil.nowMs())) + H2_DB_SUFFIX);
     try {
       Files.copy(file, copyFile);
     } catch (IOException e) {
