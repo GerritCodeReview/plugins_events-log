@@ -54,6 +54,7 @@ class SQLStore implements EventStore, LifecycleListener {
 
   private final ProjectControl.GenericFactory projectControlFactory;
   private final Provider<CurrentUser> userProvider;
+  private final EventsLogCleaner eventsLogCleaner;
   private SQLClient eventsDb;
   private SQLClient localEventsDb;
   private final int maxAge;
@@ -73,7 +74,8 @@ class SQLStore implements EventStore, LifecycleListener {
       EventsLogConfig cfg,
       @EventsDb SQLClient eventsDb,
       @LocalEventsDb SQLClient localEventsDb,
-      @EventPool ScheduledThreadPoolExecutor pool) {
+      @EventPool ScheduledThreadPoolExecutor pool,
+      EventsLogCleaner eventsLogCleaner) {
     this.maxAge = cfg.getMaxAge();
     this.maxTries = cfg.getMaxTries();
     this.waitTime = cfg.getWaitTime();
@@ -83,6 +85,7 @@ class SQLStore implements EventStore, LifecycleListener {
     this.userProvider = userProvider;
     this.eventsDb = eventsDb;
     this.localEventsDb = localEventsDb;
+    this.eventsLogCleaner = eventsLogCleaner;
     this.pool = pool;
     this.localPath = cfg.getLocalStorePath();
   }
@@ -123,7 +126,7 @@ class SQLStore implements EventStore, LifecycleListener {
         log.warn(
             "Database contains a non-existing project, {}; removing project from database",
             projectName);
-        eventsDb.removeProjectEvents(projectName);
+        eventsLogCleaner.removeProjectEventsAsync(projectName);
       } catch (IOException e) {
         log.warn("Cannot get project visibility info for {} from cache", projectName, e);
       }
