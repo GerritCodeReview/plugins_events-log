@@ -14,8 +14,10 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
+import com.ericsson.gerrit.plugins.eventslog.sql.EventsLogCleaner;
 import com.google.gerrit.common.EventListener;
 import com.google.gerrit.extensions.events.LifecycleListener;
+import com.google.gerrit.extensions.events.ProjectDeletedListener;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -31,12 +33,22 @@ public class EventModule extends AbstractModule {
     bind(EventQueue.class).in(Scopes.SINGLETON);
     bind(EventHandler.class).in(Scopes.SINGLETON);
     bind(LifecycleListener.class).annotatedWith(UniqueAnnotations.create()).to(EventQueue.class);
+    bind(LifecycleListener.class)
+        .annotatedWith(UniqueAnnotations.create())
+        .to(EventCleanerQueue.class);
     DynamicSet.bind(binder(), EventListener.class).to(EventHandler.class);
+    DynamicSet.bind(binder(), ProjectDeletedListener.class).to(EventsLogCleaner.class);
   }
 
   @Provides
   @EventPool
   ScheduledThreadPoolExecutor provideEventPool(EventQueue queue) {
+    return queue.getPool();
+  }
+
+  @Provides
+  @EventCleanerPool
+  ScheduledThreadPoolExecutor provideEventCleanerPool(EventCleanerQueue queue) {
     return queue.getPool();
   }
 }

@@ -73,6 +73,8 @@ public class SQLStoreTest {
   @Mock private ProjectControl.GenericFactory pcFactoryMock;
   @Mock private Provider<CurrentUser> userProviderMock;
   @Mock private EventsLogConfig cfgMock;
+  @Mock private EventsLogCleaner logCleanerMock;
+
   private SQLClient eventsDb;
   private SQLClient localEventsDb;
   private SQLStore store;
@@ -100,7 +102,14 @@ public class SQLStoreTest {
     eventsDb = new SQLClient(TEST_DRIVER, TEST_URL, TEST_OPTIONS);
     localEventsDb = new SQLClient(TEST_DRIVER, TEST_LOCAL_URL, TEST_OPTIONS);
     store =
-        new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb, localEventsDb, poolMock);
+        new SQLStore(
+            pcFactoryMock,
+            userProviderMock,
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            logCleanerMock);
     store.start();
   }
 
@@ -161,6 +170,7 @@ public class SQLStoreTest {
     store.storeEvent(mockEvent);
     List<String> events = store.queryChangeEvents(GENERIC_QUERY);
     assertThat(events).isEmpty();
+    verify(logCleanerMock).removeProjectEventsAsync(mockEvent.project);
     tearDown();
   }
 
@@ -188,7 +198,14 @@ public class SQLStoreTest {
     doThrow(exceptions).doNothing().when(eventsDb).storeEvent(mockEvent);
     doThrow(exceptions).doNothing().when(eventsDb).queryOne();
     store =
-        new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb, localEventsDb, poolMock);
+        new SQLStore(
+            pcFactoryMock,
+            userProviderMock,
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            logCleanerMock);
     store.start();
     store.storeEvent(mockEvent);
     verify(eventsDb, times(3)).storeEvent(mockEvent);
@@ -205,7 +222,14 @@ public class SQLStoreTest {
     doThrow(exceptions).doNothing().when(eventsDb).storeEvent(mockEvent);
     doThrow(exceptions).doNothing().when(eventsDb).queryOne();
     store =
-        new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb, localEventsDb, poolMock);
+        new SQLStore(
+            pcFactoryMock,
+            userProviderMock,
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            logCleanerMock);
     store.start();
     store.storeEvent(mockEvent);
     verify(eventsDb, times(3)).storeEvent(mockEvent);
@@ -219,7 +243,14 @@ public class SQLStoreTest {
     setUpClientMock();
     doThrow(new SQLException(MSG)).when(eventsDb).storeEvent(mockEvent);
     store =
-        new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb, localEventsDb, poolMock);
+        new SQLStore(
+            pcFactoryMock,
+            userProviderMock,
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            logCleanerMock);
     store.start();
     store.storeEvent(mockEvent);
     verify(eventsDb, times(1)).storeEvent(mockEvent);
@@ -235,7 +266,14 @@ public class SQLStoreTest {
     doThrow(exceptions).doNothing().when(eventsDb).storeEvent(mockEvent);
     doThrow(exceptions).doNothing().when(eventsDb).queryOne();
     store =
-        new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb, localEventsDb, poolMock);
+        new SQLStore(
+            pcFactoryMock,
+            userProviderMock,
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            logCleanerMock);
     store.start();
     store.storeEvent(mockEvent);
     verify(eventsDb, times(1)).storeEvent(mockEvent);
@@ -248,7 +286,14 @@ public class SQLStoreTest {
     doThrow(new SQLException(new ConnectException())).when(eventsDb).createDBIfNotCreated();
     doThrow(new SQLException()).when(eventsDb).queryOne();
     store =
-        new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb, localEventsDb, poolMock);
+        new SQLStore(
+            pcFactoryMock,
+            userProviderMock,
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            logCleanerMock);
     store.start();
     store.storeEvent(mockEvent);
     store.queryChangeEvents(GENERIC_QUERY);
@@ -272,7 +317,14 @@ public class SQLStoreTest {
     eventsDb = new SQLClient(TEST_DRIVER, TEST_URL, TEST_OPTIONS);
     localEventsDb = new SQLClient(TEST_DRIVER, TEST_LOCAL_URL, TEST_OPTIONS);
     store =
-        new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb, localEventsDb, poolMock);
+        new SQLStore(
+            pcFactoryMock,
+            userProviderMock,
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            logCleanerMock);
 
     localEventsDb.createDBIfNotCreated();
     localEventsDb.storeEvent(mockEvent);
@@ -293,7 +345,14 @@ public class SQLStoreTest {
     doThrow(new SQLException(new ConnectException())).when(eventsDb).createDBIfNotCreated();
     doThrow(new SQLException()).when(eventsDb).queryOne();
     store =
-        new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb, localEventsDb, poolMock);
+        new SQLStore(
+            pcFactoryMock,
+            userProviderMock,
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            logCleanerMock);
     store.start();
     verify(localEventsDb).createDBIfNotCreated();
   }
@@ -305,7 +364,14 @@ public class SQLStoreTest {
     doThrow(new SQLException(new ConnectException())).when(eventsDb).createDBIfNotCreated();
     doThrow(new SQLException()).when(eventsDb).queryOne();
     store =
-        new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb, localEventsDb, poolMock);
+        new SQLStore(
+            pcFactoryMock,
+            userProviderMock,
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            logCleanerMock);
     store.start();
     store.storeEvent(mockEvent);
     verify(localEventsDb).storeEvent(mockEvent);
@@ -319,7 +385,14 @@ public class SQLStoreTest {
     doThrow(new SQLException(new ConnectException())).when(eventsDb).createDBIfNotCreated();
     doThrow(new SQLException()).when(eventsDb).queryOne();
     store =
-        new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb, localEventsDb, poolMock);
+        new SQLStore(
+            pcFactoryMock,
+            userProviderMock,
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            logCleanerMock);
     store.start();
     store.storeEvent(mockEvent);
     verify(localEventsDb).storeEvent(mockEvent);
@@ -337,7 +410,14 @@ public class SQLStoreTest {
     when(localEventsDb.dbExists()).thenReturn(true);
     when(localEventsDb.getAll()).thenReturn(ImmutableList.of(mock(SQLEntry.class)));
     store =
-        new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb, localEventsDb, poolMock);
+        new SQLStore(
+            pcFactoryMock,
+            userProviderMock,
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            logCleanerMock);
     store.start();
     poolMock.scheduleWithFixedDelay(store.new CheckConnectionTask(), 0, 0, TimeUnit.MILLISECONDS);
     verify(localEventsDb, times(2)).removeOldEvents(0);
@@ -369,7 +449,14 @@ public class SQLStoreTest {
     }
 
     store =
-        new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb, localEventsDb, poolMock);
+        new SQLStore(
+            pcFactoryMock,
+            userProviderMock,
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            logCleanerMock);
     store.start();
     verify(eventsDb).queryOne();
     verify(eventsDb).storeEvent(any(String.class), any(Timestamp.class), any(String.class));
