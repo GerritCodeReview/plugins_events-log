@@ -15,6 +15,7 @@
 package com.ericsson.gerrit.plugins.eventslog.sql;
 
 import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.TABLE_NAME;
+import static java.util.stream.Collectors.toList;
 
 import com.ericsson.gerrit.plugins.eventslog.EventPool;
 import com.ericsson.gerrit.plugins.eventslog.EventStore;
@@ -38,7 +39,6 @@ import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledFuture;
@@ -128,16 +128,7 @@ class SQLStore implements EventStore, LifecycleListener {
         log.warn("Cannot get project visibility info for {} from cache", projectName, e);
       }
     }
-    return sortedEventsFromEntries(entries);
-  }
-
-  private List<String> sortedEventsFromEntries(List<SQLEntry> entries) {
-    Collections.sort(entries);
-    List<String> events = new ArrayList<>();
-    for (SQLEntry entry : entries) {
-      events.add(entry.getEvent());
-    }
-    return events;
+    return entries.stream().sorted().map(SQLEntry::getEvent).collect(toList());
   }
 
   /**
