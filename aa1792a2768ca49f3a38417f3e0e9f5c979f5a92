@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3b82eb76_1d5f0474",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2018-07-17T00:06:36Z",
+      "side": 1,
+      "message": "optional: import toList as static",
+      "range": {
+        "startLine": 131,
+        "startChar": 69,
+        "endLine": 131,
+        "endChar": 88
+      },
+      "revId": "aa1792a2768ca49f3a38417f3e0e9f5c979f5a92",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
