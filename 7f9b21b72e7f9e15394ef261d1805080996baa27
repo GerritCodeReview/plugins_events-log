@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4f57f669_5d18a4ee",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventCleanerQueue.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2018-07-20T19:05:02Z",
+      "side": 1,
+      "message": "pool",
+      "range": {
+        "startLine": 47,
+        "startChar": 11,
+        "endLine": 47,
+        "endChar": 20
+      },
+      "revId": "7f9b21b72e7f9e15394ef261d1805080996baa27",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f18e1e7c_8b80cad9",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/sql/EventsLogCleanerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2018-07-20T19:05:02Z",
+      "side": 1,
+      "message": "private, too?",
+      "range": {
+        "startLine": 40,
+        "startChar": 37,
+        "endLine": 40,
+        "endChar": 42
+      },
+      "revId": "7f9b21b72e7f9e15394ef261d1805080996baa27",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
