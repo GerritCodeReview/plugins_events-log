@@ -111,6 +111,7 @@ class SQLClient {
   void createDBIfNotCreated() throws SQLException {
     boolean postgresql = ds.getDriverClassName().contains("postgresql");
     execute(SQLTable.createTableQuery(postgresql));
+    execute(SQLTable.createIndexes(postgresql));
   }
 
   /**
