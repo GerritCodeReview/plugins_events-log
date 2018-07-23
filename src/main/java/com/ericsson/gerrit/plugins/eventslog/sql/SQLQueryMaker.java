@@ -59,7 +59,7 @@ class SQLQueryMaker implements QueryMaker {
       throw new MalformedQueryException(e);
     }
     return String.format(
-        "SELECT * FROM %s WHERE %s BETWEEN '%s' and '%s' LIMIT %d",
+        "SELECT * FROM %s WHERE %s BETWEEN '%s' and '%s' ORDER BY date_created LIMIT %d",
         TABLE_NAME, DATE_ENTRY, dates[0], dates[1], returnLimit);
   }
 
