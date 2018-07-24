@@ -64,12 +64,16 @@ final class SQLTable {
     StringBuilder query = new StringBuilder(540);
     query.append(
         format(
-            POSTGRESQL_INDEX_CREATION_FORMAT, TABLE_NAME, CREATED_INDEX, TABLE_NAME, DATE_ENTRY));
+            POSTGRESQL_INDEX_CREATION_FORMAT,
+            CREATED_INDEX,
+            CREATED_INDEX,
+            TABLE_NAME,
+            DATE_ENTRY));
     query.append("\n;\n");
     query.append(
         format(
             POSTGRESQL_INDEX_CREATION_FORMAT,
-            TABLE_NAME,
+            PROJECT_INDEX,
             PROJECT_INDEX,
             TABLE_NAME,
             PROJECT_ENTRY));
