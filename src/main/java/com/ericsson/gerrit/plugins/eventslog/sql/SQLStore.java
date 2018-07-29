@@ -61,6 +61,8 @@ class SQLStore implements EventStore, LifecycleListener {
   private final int maxTries;
   private final int waitTime;
   private final int connectTime;
+  private final long initialDelay;
+  private final long interval;
   private boolean online = true;
   private boolean copyLocal;
   private final ScheduledThreadPoolExecutor pool;
@@ -80,6 +82,8 @@ class SQLStore implements EventStore, LifecycleListener {
     this.maxTries = cfg.getMaxTries();
     this.waitTime = cfg.getWaitTime();
     this.connectTime = cfg.getConnectTime();
+    this.initialDelay = cfg.getInitialDelay();
+    this.interval = cfg.getInterval();
     this.copyLocal = cfg.getCopyLocal();
     this.projectControlFactory = projectControlFactory;
     this.userProvider = userProvider;
@@ -93,6 +97,13 @@ class SQLStore implements EventStore, LifecycleListener {
   @Override
   public void start() {
     setUp();
+    if (isPeriodicCleaningEnabled()) {
+      eventsLogCleaner.scheduleCleaningWith(maxAge, initialDelay, interval);
+    }
+  }
+
+  private boolean isPeriodicCleaningEnabled() {
+    return initialDelay > 0 && interval > 0;
   }
 
   @Override
@@ -192,7 +203,9 @@ class SQLStore implements EventStore, LifecycleListener {
     if (online) {
       restoreEventsFromLocal();
     }
-    getEventsDb().removeOldEvents(maxAge);
+    if (!isPeriodicCleaningEnabled()) {
+      eventsLogCleaner.removeOldEventsAsync(maxAge);
+    }
   }
 
   private SQLClient getEventsDb() {
