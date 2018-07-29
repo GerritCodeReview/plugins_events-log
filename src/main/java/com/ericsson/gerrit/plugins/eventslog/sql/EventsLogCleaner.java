@@ -18,10 +18,18 @@ import com.ericsson.gerrit.plugins.eventslog.EventCleanerPool;
 import com.google.gerrit.extensions.events.ProjectDeletedListener;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import java.time.Duration;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @Singleton
 public class EventsLogCleaner implements ProjectDeletedListener {
+  private static final int HOUR = 23;
+  private static final long INTERVAL = TimeUnit.DAYS.toSeconds(1);
+
   private final SQLClient eventsDb;
   private final SQLClient localEventsDb;
   private ScheduledThreadPoolExecutor pool;
@@ -44,5 +52,22 @@ public class EventsLogCleaner implements ProjectDeletedListener {
   public void removeProjectEventsAsync(String projectName) {
     pool.submit(() -> eventsDb.removeProjectEvents(projectName));
     pool.submit(() -> localEventsDb.removeProjectEvents(projectName));
+  }
+
+  public void scheduleCleaningWith(int maxAge) {
+    long initialDelay = getInitialDelay();
+    pool.scheduleAtFixedRate(
+        () -> eventsDb.removeOldEvents(maxAge), initialDelay, INTERVAL, TimeUnit.SECONDS);
+    pool.scheduleAtFixedRate(
+        () -> localEventsDb.removeOldEvents(maxAge), initialDelay, INTERVAL, TimeUnit.SECONDS);
+  }
+
+  private long getInitialDelay() {
+    ZonedDateTime now = ZonedDateTime.now(ZoneId.systemDefault());
+    ZonedDateTime next = now.withHour(HOUR).truncatedTo(ChronoUnit.HOURS);
+    if (now.isAfter(next)) {
+      next = next.plusDays(1);
+    }
+    return Duration.between(now, next).getSeconds();
   }
 }
