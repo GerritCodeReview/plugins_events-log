@@ -7,6 +7,8 @@ File 'gerrit.config'
 ```
   [plugin "@PLUGIN@"]
     maxAge = 20
+    startTime = Sun 00:00
+    interval = 1 day
     returnLimit = 10000
     storeUrl = jdbc:h2:<gerrit_site>/data/db
     urlOptions = loglevel=INFO
@@ -16,8 +18,35 @@ File 'gerrit.config'
 
 plugin.@PLUGIN@.maxAge
 :    Specify the maximum allowed age in days of the entries in the database.
-     Any entries that are older than this value will be removed on server startup.
+     Any entries that are older than this value will be removed periodically
+     starting on 'startTime' and with a period defined by 'interval'. If any
+     of these values is not defined in the configuration, the removal will be
+     performed on server startup.
      When not specified, the default value is 30 days.
+
+plugin.@PLUGIN@.startTime
+:       start time to define the first execution of the old entries removal
+from the database. Expressed as &lt;day of week> &lt;hours>:&lt;minutes>.
+By default, disabled.
+
+This setting should be expressed using the following time units:
+
+  * &lt;day of week> : Mon, Tue, Wed, Thu, Fri, Sat, Sun
+  * &lt;hours> : 00-23
+  * &lt;minutes> : 00-59
+
+plugin.@PLUGIN@.interval
+:       interval for periodic repetition of the old entries removal
+from the database. By default, disabled.
+
+The following suffixes are supported to define the time unit for the interval:
+
+ * h, hour, hours
+ * d, day, days
+ * w, week, weeks (1 week is treated as 7 days)
+ * mon, month, months (1 month is treated as 30 days)
+
+If no time unit is specified, days are assumed.
 
 plugin.@PLUGIN@.returnLimit
 :    Specify the max amount of events that will be returned for each query.

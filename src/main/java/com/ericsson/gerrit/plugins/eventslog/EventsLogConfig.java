@@ -15,13 +15,16 @@
 package com.ericsson.gerrit.plugins.eventslog;
 
 import com.google.gerrit.extensions.annotations.PluginName;
+import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
+import com.google.gerrit.server.config.ScheduleConfig;
 import com.google.gerrit.server.config.SitePaths;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.eclipse.jgit.lib.Config;
 
 /** Holder of all things related to events-log plugin configuration. */
 @Singleton
@@ -55,6 +58,8 @@ public class EventsLogConfig {
   private int returnLimit;
   private int waitTime;
   private int connectTime;
+  private long initialDelay;
+  private long interval;
   private String storeUrl;
   private Path localStorePath;
   private String[] urlOptions;
@@ -63,7 +68,11 @@ public class EventsLogConfig {
   private int maxConnections;
 
   @Inject
-  EventsLogConfig(PluginConfigFactory cfgFactory, SitePaths site, @PluginName String pluginName) {
+  EventsLogConfig(
+      @GerritServerConfig Config gerritCfg,
+      PluginConfigFactory cfgFactory,
+      SitePaths site,
+      @PluginName String pluginName) {
     PluginConfig cfg = cfgFactory.getFromGerritConfig(pluginName, true);
     copyLocal = cfg.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL);
     maxAge = cfg.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE);
@@ -71,6 +80,9 @@ public class EventsLogConfig {
     returnLimit = cfg.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT);
     waitTime = cfg.getInt(CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME);
     connectTime = cfg.getInt(CONFIG_CONN_TIME, DEFAULT_CONN_TIME);
+    ScheduleConfig scheduleConfig = new ScheduleConfig(gerritCfg, "plugin", pluginName);
+    initialDelay = scheduleConfig.getInitialDelay();
+    interval = scheduleConfig.getInterval();
     storeUrl = cfg.getString(CONFIG_URL, H2_DB_PREFIX + site.data_dir.resolve("db").normalize());
     localStorePath =
         Paths.get(
@@ -128,5 +140,13 @@ public class EventsLogConfig {
 
   public int getMaxConnections() {
     return maxConnections;
+  }
+
+  public long getInitialDelay() {
+    return initialDelay;
+  }
+
+  public long getInterval() {
+    return interval;
   }
 }
