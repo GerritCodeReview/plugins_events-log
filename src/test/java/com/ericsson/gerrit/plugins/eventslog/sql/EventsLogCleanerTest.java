@@ -31,6 +31,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EventsLogCleanerTest {
+  private static final int MAX_AGE = 30;
   private static final String PROJECT = "testProject";
 
   @Mock private EventsLogConfig cfgMock;
@@ -54,6 +55,22 @@ public class EventsLogCleanerTest {
     executor.awaitTermination(1, TimeUnit.SECONDS);
     verify(eventsDb, times(1)).removeProjectEvents(PROJECT);
     verify(localEventsDb, times(1)).removeProjectEvents(PROJECT);
+  }
+
+  @Test
+  public void testScheduleCleaning() throws InterruptedException {
+    eventsLogCleaner.scheduleCleaningWith(MAX_AGE, 1, 60_000);
+    executor.awaitTermination(250, TimeUnit.MILLISECONDS);
+    verify(eventsDb, times(1)).removeOldEvents(MAX_AGE);
+    verify(localEventsDb, times(1)).removeOldEvents(MAX_AGE);
+  }
+
+  @Test
+  public void testRemoveOldEventsAsync() throws InterruptedException {
+    eventsLogCleaner.removeOldEventsAsync(MAX_AGE);
+    executor.awaitTermination(250, TimeUnit.MILLISECONDS);
+    verify(eventsDb, times(1)).removeOldEvents(MAX_AGE);
+    verify(localEventsDb, times(1)).removeOldEvents(MAX_AGE);
   }
 
   @After
