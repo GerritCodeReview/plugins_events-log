@@ -16,8 +16,8 @@ File 'gerrit.config'
 
 plugin.@PLUGIN@.maxAge
 :    Specify the maximum allowed age in days of the entries in the database.
-     Any entries that are older than this value will be removed on server startup.
-     When not specified, the default value is 30 days.
+     Any entries that are older than this value will be removed every day at
+     23:00 hours. When not specified, the default value is 30 days.
 
 plugin.@PLUGIN@.returnLimit
 :    Specify the max amount of events that will be returned for each query.
