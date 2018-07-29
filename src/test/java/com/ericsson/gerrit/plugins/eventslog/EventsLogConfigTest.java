@@ -75,7 +75,7 @@ public class EventsLogConfigTest {
   public void shouldReturnDefaultsWhenMissingConfig() {
     PluginConfig pluginConfig = new PluginConfig(PLUGIN_NAME, new Config());
     when(cfgFactoryMock.getFromGerritConfig(PLUGIN_NAME, true)).thenReturn(pluginConfig);
-    EventsLogConfig eventsLogConfig = new EventsLogConfig(cfgFactoryMock, site, PLUGIN_NAME);
+    EventsLogConfig eventsLogConfig = new EventsLogConfig(new Config(), cfgFactoryMock, site, PLUGIN_NAME);
     assertThat(eventsLogConfig.getCopyLocal()).isFalse();
     assertThat(eventsLogConfig.getMaxAge()).isEqualTo(DEFAULT_MAX_AGE);
     assertThat(eventsLogConfig.getMaxTries()).isEqualTo(DEFAULT_MAX_TRIES);
@@ -96,7 +96,7 @@ public class EventsLogConfigTest {
   public void shouldReturnConfigValues() {
     PluginConfig pluginConfig = new PluginConfig(PLUGIN_NAME, customConfig());
     when(cfgFactoryMock.getFromGerritConfig(PLUGIN_NAME, true)).thenReturn(pluginConfig);
-    EventsLogConfig eventsLogConfig = new EventsLogConfig(cfgFactoryMock, site, PLUGIN_NAME);
+    EventsLogConfig eventsLogConfig = new EventsLogConfig(new Config(), cfgFactoryMock, site, PLUGIN_NAME);
     assertThat(eventsLogConfig.getCopyLocal()).isTrue();
     assertThat(eventsLogConfig.getMaxAge()).isEqualTo(20);
     assertThat(eventsLogConfig.getMaxTries()).isEqualTo(5);

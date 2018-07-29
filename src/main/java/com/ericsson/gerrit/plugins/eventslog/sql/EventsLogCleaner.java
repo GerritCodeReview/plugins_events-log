@@ -19,6 +19,7 @@ import com.google.gerrit.extensions.events.ProjectDeletedListener;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @Singleton
 public class EventsLogCleaner implements ProjectDeletedListener {
@@ -44,5 +45,15 @@ public class EventsLogCleaner implements ProjectDeletedListener {
   public void removeProjectEventsAsync(String projectName) {
     pool.submit(() -> eventsDb.removeProjectEvents(projectName));
     pool.submit(() -> localEventsDb.removeProjectEvents(projectName));
+  }
+
+  public void scheduleCleaningWith(int maxAge, long initialDelay, long interval) {
+    pool.scheduleAtFixedRate(() -> eventsDb.removeOldEvents(maxAge), initialDelay, interval, TimeUnit.MILLISECONDS);
+    pool.scheduleAtFixedRate(() -> localEventsDb.removeOldEvents(maxAge), initialDelay, interval, TimeUnit.MILLISECONDS);
+  }
+
+  public void removeOldEventsAsync(int maxAge) {
+    pool.submit(() -> eventsDb.removeOldEvents(maxAge));
+    pool.submit(() -> localEventsDb.removeOldEvents(maxAge));
   }
 }
