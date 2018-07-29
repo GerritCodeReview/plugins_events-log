@@ -93,6 +93,7 @@ class SQLStore implements EventStore, LifecycleListener {
   @Override
   public void start() {
     setUp();
+    eventsLogCleaner.scheduleCleaningWith(maxAge);
   }
 
   @Override
@@ -192,7 +193,6 @@ class SQLStore implements EventStore, LifecycleListener {
     if (online) {
       restoreEventsFromLocal();
     }
-    getEventsDb().removeOldEvents(maxAge);
   }
 
   private SQLClient getEventsDb() {
