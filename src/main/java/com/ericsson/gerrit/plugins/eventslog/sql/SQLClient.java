@@ -191,6 +191,7 @@ class SQLClient {
               TABLE_NAME,
               DATE_ENTRY,
               new Timestamp(System.currentTimeMillis() - MILLISECONDS.convert(maxAge, DAYS))));
+      log.info("Events older than {} days were removed from database", maxAge);
     } catch (SQLException e) {
       log.warn("Cannot remove old event entries from database", e);
     }
