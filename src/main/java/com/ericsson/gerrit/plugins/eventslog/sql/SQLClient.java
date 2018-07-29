@@ -59,6 +59,11 @@ class SQLClient {
     isPostgresql = config.getJdbcUrl().contains("postgresql");
   }
 
+  @Override
+  public String toString() {
+    return ds.getPoolName();
+  }
+
   /**
    * Create the database if it has not yet been created.
    *
@@ -143,6 +148,7 @@ class SQLClient {
               TABLE_NAME,
               DATE_ENTRY,
               new Timestamp(System.currentTimeMillis() - MILLISECONDS.convert(maxAge, DAYS))));
+      log.info("Removed older events from {}", ds.getPoolName());
     } catch (SQLException e) {
       log.warn("Cannot remove old event entries from database", e);
     }
