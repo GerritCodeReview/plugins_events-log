@@ -35,6 +35,7 @@ import com.google.gerrit.server.project.NoSuchProjectException;
 import com.google.gerrit.server.project.ProjectControl;
 import com.google.gson.Gson;
 import com.google.inject.Provider;
+import com.zaxxer.hikari.HikariConfig;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.sql.Connection;
@@ -62,7 +63,6 @@ public class SQLStoreTest {
   private static final Logger log = LoggerFactory.getLogger(SQLStoreTest.class);
   private static final String TEST_URL = "jdbc:h2:mem:" + TABLE_NAME;
   private static final String TEST_LOCAL_URL = "jdbc:h2:mem:test";
-  private static final String TEST_DRIVER = "org.h2.Driver";
   private static final String TEST_OPTIONS = "DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false";
   private static final String TERM_CONN_MSG = "terminating connection";
   private static final String MSG = "message";
@@ -76,6 +76,7 @@ public class SQLStoreTest {
   private SQLClient eventsDb;
   private SQLClient localEventsDb;
   private SQLStore store;
+  private HikariConfig config;
   private ScheduledThreadPoolExecutor poolMock;
 
   private Statement stat;
@@ -84,6 +85,9 @@ public class SQLStoreTest {
 
   @Before
   public void setUp() throws SQLException {
+    config = new HikariConfig();
+    config.addDataSourceProperty("DB_CLOSE_DELAY", "-1");
+    config.addDataSourceProperty("DATABASE_TO_UPPER", "false");
     Connection conn = DriverManager.getConnection(TEST_URL + ";" + TEST_OPTIONS);
     stat = conn.createStatement();
     poolMock = new PoolMock();
@@ -97,8 +101,10 @@ public class SQLStoreTest {
   }
 
   private void setUpClient() {
-    eventsDb = new SQLClient(TEST_DRIVER, TEST_URL, TEST_OPTIONS);
-    localEventsDb = new SQLClient(TEST_DRIVER, TEST_LOCAL_URL, TEST_OPTIONS);
+    config.setJdbcUrl(TEST_URL);
+    eventsDb = new SQLClient(config);
+    config.setJdbcUrl(TEST_LOCAL_URL);
+    localEventsDb = new SQLClient(config);
     store =
         new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb, localEventsDb, poolMock);
     store.start();
@@ -269,8 +275,10 @@ public class SQLStoreTest {
     when(pc.isVisible()).thenReturn(true);
     doThrow(e).when(pcFactoryMock).controlFor((mockEvent3.getProjectNameKey()), userMock);
 
-    eventsDb = new SQLClient(TEST_DRIVER, TEST_URL, TEST_OPTIONS);
-    localEventsDb = new SQLClient(TEST_DRIVER, TEST_LOCAL_URL, TEST_OPTIONS);
+    config.setJdbcUrl(TEST_URL);
+    eventsDb = new SQLClient(config);
+    config.setJdbcUrl(TEST_LOCAL_URL);
+    localEventsDb = new SQLClient(config);
     store =
         new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb, localEventsDb, poolMock);
 
@@ -332,7 +340,8 @@ public class SQLStoreTest {
    */
   @Test
   public void testConnectionTask() throws Exception {
-    eventsDb = new SQLClient(TEST_DRIVER, TEST_URL, TEST_OPTIONS);
+    config.setJdbcUrl(TEST_URL);
+    eventsDb = new SQLClient(config);
     localEventsDb = mock(SQLClient.class);
     when(localEventsDb.dbExists()).thenReturn(true);
     when(localEventsDb.getAll()).thenReturn(ImmutableList.of(mock(SQLEntry.class)));
@@ -356,7 +365,8 @@ public class SQLStoreTest {
   private void checkConnectionAndRestore(boolean copy) throws Exception {
     MockEvent mockEvent = new MockEvent();
     eventsDb = mock(SQLClient.class);
-    localEventsDb = new SQLClient(TEST_DRIVER, TEST_LOCAL_URL, TEST_OPTIONS);
+    config.setJdbcUrl(TEST_LOCAL_URL);
+    localEventsDb = new SQLClient(config);
     localEventsDb.createDBIfNotCreated();
     localEventsDb.storeEvent(mockEvent);
     doThrow(new SQLException(new ConnectException()))

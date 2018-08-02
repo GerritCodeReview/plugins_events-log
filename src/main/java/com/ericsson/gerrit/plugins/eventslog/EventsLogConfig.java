@@ -14,7 +14,6 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
-import com.google.common.base.Joiner;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
@@ -31,7 +30,6 @@ public class EventsLogConfig {
   static final String CONFIG_MAX_AGE = "maxAge";
   static final String CONFIG_MAX_TRIES = "maxTries";
   static final String CONFIG_RETURN_LIMIT = "returnLimit";
-  static final String CONFIG_DRIVER = "storeDriver";
   static final String CONFIG_URL = "storeUrl";
   static final String CONFIG_LOCAL_PATH = "localStorePath";
   static final String CONFIG_URL_OPTIONS = "urlOptions";
@@ -39,7 +37,6 @@ public class EventsLogConfig {
   static final String CONFIG_PASSWORD = "storePassword";
   static final String CONFIG_WAIT_TIME = "retryTimeout";
   static final String CONFIG_CONN_TIME = "connectTimeout";
-  static final String CONFIG_EVICT_IDLE_TIME = "evictIdleTime";
   static final String CONFIG_MAX_CONNECTIONS = "maxConnections";
 
   static final boolean DEFAULT_COPY_LOCAL = false;
@@ -48,8 +45,6 @@ public class EventsLogConfig {
   static final int DEFAULT_RETURN_LIMIT = 5000;
   static final int DEFAULT_WAIT_TIME = 1000;
   static final int DEFAULT_CONN_TIME = 1000;
-  static final String DEFAULT_DRIVER = "org.h2.Driver";
-  static final int DEFAULT_EVICT_IDLE_TIME = 1000 * 60;
   static final int DEFAULT_MAX_CONNECTIONS = 8;
 
   private boolean copyLocal;
@@ -58,19 +53,15 @@ public class EventsLogConfig {
   private int returnLimit;
   private int waitTime;
   private int connectTime;
-  private String storeDriver;
   private String storeUrl;
   private Path localStorePath;
-  private String urlOptions;
+  private String[] urlOptions;
   private String storeUsername;
   private String storePassword;
-  private int evictIdleTime;
   private int maxConnections;
-  private String defaultUrl;
 
   @Inject
   EventsLogConfig(PluginConfigFactory cfgFactory, SitePaths site, @PluginName String pluginName) {
-    String defaultLocalPath = site.site_path.resolve("events-db").normalize().toString();
     PluginConfig cfg = cfgFactory.getFromGerritConfig(pluginName, true);
     copyLocal = cfg.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL);
     maxAge = cfg.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE);
@@ -78,14 +69,14 @@ public class EventsLogConfig {
     returnLimit = cfg.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT);
     waitTime = cfg.getInt(CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME);
     connectTime = cfg.getInt(CONFIG_CONN_TIME, DEFAULT_CONN_TIME);
-    storeDriver = cfg.getString(CONFIG_DRIVER, DEFAULT_DRIVER);
-    defaultUrl = "jdbc:h2:" + site.data_dir.resolve("db").normalize();
+
+    String defaultUrl = "jdbc:h2:" + site.data_dir.resolve("db").normalize();
     storeUrl = cfg.getString(CONFIG_URL, defaultUrl);
+    String defaultLocalPath = site.site_path.resolve("events-db").normalize().toString();
     localStorePath = Paths.get(cfg.getString(CONFIG_LOCAL_PATH, defaultLocalPath));
-    urlOptions = Joiner.on(";").join(cfg.getStringList(CONFIG_URL_OPTIONS));
+    urlOptions = cfg.getStringList(CONFIG_URL_OPTIONS);
     storeUsername = cfg.getString(CONFIG_USERNAME);
     storePassword = cfg.getString(CONFIG_PASSWORD);
-    evictIdleTime = cfg.getInt(CONFIG_EVICT_IDLE_TIME, DEFAULT_EVICT_IDLE_TIME);
     maxConnections = Math.max(cfg.getInt(CONFIG_MAX_CONNECTIONS, DEFAULT_MAX_CONNECTIONS), 1);
   }
 
@@ -105,15 +96,11 @@ public class EventsLogConfig {
     return connectTime;
   }
 
-  public String getStoreDriver() {
-    return storeDriver;
-  }
-
   public String getStoreUrl() {
     return storeUrl;
   }
 
-  public String getUrlOptions() {
+  public String[] getUrlOptions() {
     return urlOptions;
   }
 
@@ -129,21 +116,12 @@ public class EventsLogConfig {
     return maxTries;
   }
 
-  /** @return the local-store (database) driver which happens to be h2 */
-  public String getLocalStoreDriver() {
-    return DEFAULT_DRIVER;
-  }
-
   public Path getLocalStorePath() {
     return localStorePath;
   }
 
   public boolean getCopyLocal() {
     return copyLocal;
-  }
-
-  public int getEvictIdleTime() {
-    return evictIdleTime;
   }
 
   public int getMaxConnections() {

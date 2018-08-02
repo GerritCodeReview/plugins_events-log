@@ -33,7 +33,8 @@ import com.google.gerrit.server.events.ProjectEvent;
 import com.google.gerrit.server.events.SupplierSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.inject.Inject;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,66 +42,21 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 class SQLClient {
   private static final Logger log = LoggerFactory.getLogger(SQLClient.class);
   private final Gson gson;
-  private BasicDataSource ds;
+  private final boolean isPostgresql;
 
-  @Inject
-  SQLClient(String storeDriver, String storeUrl, String urlOptions) {
-    ds = new BasicDataSource();
-    ds.setDriverClassName(storeDriver);
-    ds.setUrl(storeUrl);
-    ds.setConnectionProperties(urlOptions);
-    ds.setMaxWait(MILLISECONDS.convert(30, SECONDS));
-    ds.setTestOnBorrow(true);
-    ds.setValidationQuery("SELECT 1");
-    ds.setValidationQueryTimeout(5);
+  private HikariDataSource ds;
 
+  public SQLClient(HikariConfig config) {
+    isPostgresql = config.getJdbcUrl().contains("postgresql");
     gson = new GsonBuilder().registerTypeAdapter(Supplier.class, new SupplierSerializer()).create();
-  }
 
-  /**
-   * Set the username to connect to the database.
-   *
-   * @param username the username as a string
-   */
-  void setUsername(String username) {
-    ds.setUsername(username);
-  }
-
-  /**
-   * Set the password to connect to the database.
-   *
-   * @param password the password as a string
-   */
-  void setPassword(String password) {
-    ds.setPassword(password);
-  }
-
-  /**
-   * Set the time before an idle connection is evicted as well as the time between eviction runs.
-   *
-   * @param evictIdleTime the time in milliseconds before eviction
-   */
-  void setEvictIdleTime(int evictIdleTime) {
-    ds.setMinEvictableIdleTimeMillis(evictIdleTime);
-    ds.setTimeBetweenEvictionRunsMillis(evictIdleTime / 2);
-  }
-
-  void setMaxConnections(int maxConnections) {
-    ds.setMaxActive(maxConnections);
-    ds.setMinIdle(maxConnections / 4);
-    int maxIdle = maxConnections / 2;
-    if (maxIdle == 0) {
-      maxIdle = maxConnections;
-    }
-    ds.setMaxIdle(maxIdle);
-    ds.setInitialSize(ds.getMinIdle());
+    ds = new HikariDataSource(config);
   }
 
   /**
@@ -109,9 +65,8 @@ class SQLClient {
    * @throws SQLException If there was a problem with the database
    */
   void createDBIfNotCreated() throws SQLException {
-    boolean postgresql = ds.getDriverClassName().contains("postgresql");
-    execute(SQLTable.createTableQuery(postgresql));
-    execute(SQLTable.createIndexes(postgresql));
+    execute(SQLTable.createTableQuery(isPostgresql));
+    execute(SQLTable.createIndexes(isPostgresql));
   }
 
   /**
@@ -128,11 +83,7 @@ class SQLClient {
   }
 
   void close() {
-    try {
-      ds.close();
-    } catch (SQLException e) {
-      log.warn("Cannot close datasource", e);
-    }
+    ds.close();
   }
 
   /**
