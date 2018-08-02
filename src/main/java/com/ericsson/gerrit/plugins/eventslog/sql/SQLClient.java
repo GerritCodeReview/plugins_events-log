@@ -33,6 +33,8 @@ import com.google.gerrit.server.events.ProjectEvent;
 import com.google.gerrit.server.events.SupplierSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,7 +42,6 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,58 +50,13 @@ class SQLClient {
   private final Gson gson;
   private final boolean isPostgresql;
 
-  private BasicDataSource ds;
+  private HikariDataSource ds;
 
-  SQLClient(String storeUrl, String urlOptions) {
-    ds = new BasicDataSource();
-    ds.setUrl(storeUrl);
-    ds.setConnectionProperties(urlOptions);
-    ds.setMaxWait(MILLISECONDS.convert(30, SECONDS));
-    ds.setTestOnBorrow(true);
-    ds.setValidationQuery("SELECT 1");
-    ds.setValidationQueryTimeout(5);
+  public SQLClient(HikariConfig config) {
+    ds = new HikariDataSource(config);
 
     gson = new GsonBuilder().registerTypeAdapter(Supplier.class, new SupplierSerializer()).create();
-    isPostgresql = storeUrl.contains("postgresql");
-  }
-
-  /**
-   * Set the username to connect to the database.
-   *
-   * @param username the username as a string
-   */
-  void setUsername(String username) {
-    ds.setUsername(username);
-  }
-
-  /**
-   * Set the password to connect to the database.
-   *
-   * @param password the password as a string
-   */
-  void setPassword(String password) {
-    ds.setPassword(password);
-  }
-
-  /**
-   * Set the time before an idle connection is evicted as well as the time between eviction runs.
-   *
-   * @param evictIdleTime the time in milliseconds before eviction
-   */
-  void setEvictIdleTime(int evictIdleTime) {
-    ds.setMinEvictableIdleTimeMillis(evictIdleTime);
-    ds.setTimeBetweenEvictionRunsMillis(evictIdleTime / 2);
-  }
-
-  void setMaxConnections(int maxConnections) {
-    ds.setMaxActive(maxConnections);
-    ds.setMinIdle(maxConnections / 4);
-    int maxIdle = maxConnections / 2;
-    if (maxIdle == 0) {
-      maxIdle = maxConnections;
-    }
-    ds.setMaxIdle(maxIdle);
-    ds.setInitialSize(ds.getMinIdle());
+    isPostgresql = config.getJdbcUrl().contains("postgresql");
   }
 
   /**
@@ -127,11 +83,7 @@ class SQLClient {
   }
 
   void close() {
-    try {
-      ds.close();
-    } catch (SQLException e) {
-      log.warn("Cannot close datasource", e);
-    }
+    ds.close();
   }
 
   /**
