@@ -31,3 +31,9 @@ def external_plugin_deps():
         artifact = "org.objenesis:objenesis:2.6",
         sha1 = "639033469776fd37c08358c6b92a4761feb2af4b",
     )
+
+    maven_jar(
+        name = "hikaricp",
+        artifact = "com.zaxxer:HikariCP:3.1.0",
+        sha1 = "6eda96598aa9d4c657ecfc3dfe88307d5fdb4b78"
+    )

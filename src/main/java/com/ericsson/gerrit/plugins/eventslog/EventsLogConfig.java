@@ -14,7 +14,6 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
-import com.google.common.base.Joiner;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
@@ -40,7 +39,6 @@ public class EventsLogConfig {
   static final String CONFIG_PASSWORD = "storePassword";
   static final String CONFIG_WAIT_TIME = "retryTimeout";
   static final String CONFIG_CONN_TIME = "connectTimeout";
-  static final String CONFIG_EVICT_IDLE_TIME = "evictIdleTime";
   static final String CONFIG_MAX_CONNECTIONS = "maxConnections";
 
   static final boolean DEFAULT_COPY_LOCAL = false;
@@ -49,7 +47,6 @@ public class EventsLogConfig {
   static final int DEFAULT_RETURN_LIMIT = 5000;
   static final int DEFAULT_WAIT_TIME = 1000;
   static final int DEFAULT_CONN_TIME = 1000;
-  static final int DEFAULT_EVICT_IDLE_TIME = 1000 * 60;
   static final int DEFAULT_MAX_CONNECTIONS = 8;
 
   private boolean copyLocal;
@@ -60,10 +57,9 @@ public class EventsLogConfig {
   private int connectTime;
   private String storeUrl;
   private Path localStorePath;
-  private String urlOptions;
+  private String[] urlOptions;
   private String storeUsername;
   private String storePassword;
-  private int evictIdleTime;
   private int maxConnections;
 
   @Inject
@@ -80,10 +76,9 @@ public class EventsLogConfig {
         Paths.get(
             cfg.getString(
                 CONFIG_LOCAL_PATH, site.site_path.resolve("events-db").normalize().toString()));
-    urlOptions = Joiner.on(";").join(cfg.getStringList(CONFIG_URL_OPTIONS));
+    urlOptions = cfg.getStringList(CONFIG_URL_OPTIONS);
     storeUsername = cfg.getString(CONFIG_USERNAME);
     storePassword = cfg.getString(CONFIG_PASSWORD);
-    evictIdleTime = cfg.getInt(CONFIG_EVICT_IDLE_TIME, DEFAULT_EVICT_IDLE_TIME);
     maxConnections = Math.max(cfg.getInt(CONFIG_MAX_CONNECTIONS, DEFAULT_MAX_CONNECTIONS), 1);
   }
 
@@ -107,7 +102,7 @@ public class EventsLogConfig {
     return storeUrl;
   }
 
-  public String getUrlOptions() {
+  public String[] getUrlOptions() {
     return urlOptions;
   }
 
@@ -129,10 +124,6 @@ public class EventsLogConfig {
 
   public boolean getCopyLocal() {
     return copyLocal;
-  }
-
-  public int getEvictIdleTime() {
-    return evictIdleTime;
   }
 
   public int getMaxConnections() {
