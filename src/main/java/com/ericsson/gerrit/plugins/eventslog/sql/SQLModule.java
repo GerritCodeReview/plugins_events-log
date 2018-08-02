@@ -14,6 +14,8 @@
 
 package com.ericsson.gerrit.plugins.eventslog.sql;
 
+import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.H2_DB_PREFIX;
+
 import com.ericsson.gerrit.plugins.eventslog.EventModule;
 import com.ericsson.gerrit.plugins.eventslog.EventStore;
 import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
@@ -25,8 +27,6 @@ import com.google.inject.Singleton;
 import com.google.inject.internal.UniqueAnnotations;
 
 class SQLModule extends AbstractModule {
-
-  private static final String H2_DB_PREFIX = "jdbc:h2:";
 
   @Override
   protected void configure() {
