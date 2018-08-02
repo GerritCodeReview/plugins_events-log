@@ -27,6 +27,8 @@ import java.nio.file.Paths;
 /** Holder of all things related to events-log plugin configuration. */
 @Singleton
 public class EventsLogConfig {
+  public static final String H2_DB_PREFIX = "jdbc:h2:";
+
   static final String CONFIG_COPY_LOCAL = "copyLocal";
   static final String CONFIG_MAX_AGE = "maxAge";
   static final String CONFIG_MAX_TRIES = "maxTries";
@@ -77,7 +79,7 @@ public class EventsLogConfig {
     waitTime = cfg.getInt(CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME);
     connectTime = cfg.getInt(CONFIG_CONN_TIME, DEFAULT_CONN_TIME);
     storeDriver = cfg.getString(CONFIG_DRIVER, DEFAULT_DRIVER);
-    storeUrl = cfg.getString(CONFIG_URL, "jdbc:h2:" + site.data_dir.resolve("db").normalize());
+    storeUrl = cfg.getString(CONFIG_URL, H2_DB_PREFIX + site.data_dir.resolve("db").normalize());
     localStorePath =
         Paths.get(
             cfg.getString(
