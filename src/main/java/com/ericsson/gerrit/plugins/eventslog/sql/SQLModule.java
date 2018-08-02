@@ -20,11 +20,13 @@ import com.ericsson.gerrit.plugins.eventslog.EventModule;
 import com.ericsson.gerrit.plugins.eventslog.EventStore;
 import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.internal.UniqueAnnotations;
+import com.zaxxer.hikari.HikariConfig;
 
 class SQLModule extends AbstractModule {
 
@@ -39,24 +41,34 @@ class SQLModule extends AbstractModule {
   @Provides
   @Singleton
   @EventsDb
-  SQLClient provideSqlClient(EventsLogConfig cfg) {
-    SQLClient sqlClient = new SQLClient(cfg.getStoreUrl(), cfg.getUrlOptions());
-    sqlClient.setUsername(cfg.getStoreUsername());
-    sqlClient.setPassword(cfg.getStorePassword());
-    sqlClient.setEvictIdleTime(cfg.getEvictIdleTime());
-    sqlClient.setMaxConnections(cfg.getMaxConnections());
-    return sqlClient;
+  SQLClient provideSqlClient(EventsLogConfig cfg, @PluginName String pluginName) {
+    HikariConfig dsConfig = new HikariConfig();
+    dsConfig.setJdbcUrl(cfg.getStoreUrl());
+    dsConfig.setUsername(cfg.getStoreUsername());
+    dsConfig.setPassword(cfg.getStorePassword());
+    dsConfig.setPoolName("[" + pluginName + "] EventsDb");
+    dsConfig.setMaximumPoolSize(cfg.getMaxConnections());
+    setDataSourceOptions(cfg, dsConfig);
+    return new SQLClient(dsConfig);
   }
 
   @Provides
   @Singleton
   @LocalEventsDb
-  SQLClient provideLocalSqlClient(EventsLogConfig cfg) {
-    SQLClient sqlClient =
-        new SQLClient(
-            H2_DB_PREFIX + cfg.getLocalStorePath().resolve(SQLTable.TABLE_NAME),
-            cfg.getUrlOptions());
-    sqlClient.setEvictIdleTime(cfg.getEvictIdleTime());
-    return sqlClient;
+  SQLClient provideLocalSqlClient(EventsLogConfig cfg, @PluginName String pluginName) {
+    HikariConfig dsConfig = new HikariConfig();
+    dsConfig.setJdbcUrl(H2_DB_PREFIX + cfg.getLocalStorePath().resolve(SQLTable.TABLE_NAME));
+    dsConfig.setPoolName("[" + pluginName + "] LocalEventsDb");
+    setDataSourceOptions(cfg, dsConfig);
+    return new SQLClient(dsConfig);
+  }
+
+  private void setDataSourceOptions(EventsLogConfig cfg, HikariConfig dsConfig) {
+    for (String option : cfg.getUrlOptions()) {
+      int equalsPos = option.indexOf('=');
+      String key = option.substring(0, equalsPos);
+      String value = option.substring(equalsPos + 1);
+      dsConfig.addDataSourceProperty(key, value);
+    }
   }
 }

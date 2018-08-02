@@ -17,6 +17,7 @@ gerrit_plugin(
         "Gerrit-HttpModule: com.ericsson.gerrit.plugins.eventslog.HttpModule",
     ],
     resources = glob(["src/main/resources/**/*"]),
+    deps = ["@hikaricp//jar"],
 )
 
 junit_tests(
@@ -36,5 +37,6 @@ java_library(
     exports = PLUGIN_DEPS + PLUGIN_TEST_DEPS + [
         ":events-log__plugin",
         "@mockito//jar",
+        "@hikaricp//jar",
     ],
 )
