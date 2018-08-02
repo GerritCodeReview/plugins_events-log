@@ -67,11 +67,6 @@ plugin.@PLUGIN@.copyLocal
      not be deleted and must be removed manually. When not specified, the default
      value is set to false.
 
-plugin.@PLUGIN@.evictIdleTime
-:    Interval of time in milliseconds after which an idle database connection is
-     evicted from the connection pool. When not specified, the default value is
-     set to 60000ms.
-
 plugin.@PLUGIN@.maxConnections
 :    Maximum number of instances in the connection pool to the database. Includes
      active and idle connections. By default 8.
