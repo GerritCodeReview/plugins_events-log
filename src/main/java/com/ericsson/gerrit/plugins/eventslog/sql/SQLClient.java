@@ -47,6 +47,8 @@ import org.slf4j.LoggerFactory;
 class SQLClient {
   private static final Logger log = LoggerFactory.getLogger(SQLClient.class);
   private final Gson gson;
+  private final boolean isPostgresql;
+
   private BasicDataSource ds;
 
   SQLClient(String storeUrl, String urlOptions) {
@@ -59,6 +61,7 @@ class SQLClient {
     ds.setValidationQueryTimeout(5);
 
     gson = new GsonBuilder().registerTypeAdapter(Supplier.class, new SupplierSerializer()).create();
+    isPostgresql = storeUrl.contains("postgresql");
   }
 
   /**
@@ -106,9 +109,8 @@ class SQLClient {
    * @throws SQLException If there was a problem with the database
    */
   void createDBIfNotCreated() throws SQLException {
-    boolean postgresql = ds.getUrl().contains("postgresql");
-    execute(SQLTable.createTableQuery(postgresql));
-    execute(SQLTable.createIndexes(postgresql));
+    execute(SQLTable.createTableQuery(isPostgresql));
+    execute(SQLTable.createIndexes(isPostgresql));
   }
 
   /**
