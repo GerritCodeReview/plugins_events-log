@@ -62,7 +62,6 @@ public class SQLStoreTest {
   private static final Logger log = LoggerFactory.getLogger(SQLStoreTest.class);
   private static final String TEST_URL = "jdbc:h2:mem:" + TABLE_NAME;
   private static final String TEST_LOCAL_URL = "jdbc:h2:mem:test";
-  private static final String TEST_DRIVER = "org.h2.Driver";
   private static final String TEST_OPTIONS = "DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false";
   private static final String TERM_CONN_MSG = "terminating connection";
   private static final String MSG = "message";
@@ -97,8 +96,8 @@ public class SQLStoreTest {
   }
 
   private void setUpClient() {
-    eventsDb = new SQLClient(TEST_DRIVER, TEST_URL, TEST_OPTIONS);
-    localEventsDb = new SQLClient(TEST_DRIVER, TEST_LOCAL_URL, TEST_OPTIONS);
+    eventsDb = new SQLClient(TEST_URL, TEST_OPTIONS);
+    localEventsDb = new SQLClient(TEST_LOCAL_URL, TEST_OPTIONS);
     store =
         new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb, localEventsDb, poolMock);
     store.start();
@@ -269,8 +268,8 @@ public class SQLStoreTest {
     when(pc.isVisible()).thenReturn(true);
     doThrow(e).when(pcFactoryMock).controlFor((mockEvent3.getProjectNameKey()), userMock);
 
-    eventsDb = new SQLClient(TEST_DRIVER, TEST_URL, TEST_OPTIONS);
-    localEventsDb = new SQLClient(TEST_DRIVER, TEST_LOCAL_URL, TEST_OPTIONS);
+    eventsDb = new SQLClient(TEST_URL, TEST_OPTIONS);
+    localEventsDb = new SQLClient(TEST_LOCAL_URL, TEST_OPTIONS);
     store =
         new SQLStore(pcFactoryMock, userProviderMock, cfgMock, eventsDb, localEventsDb, poolMock);
 
@@ -332,7 +331,7 @@ public class SQLStoreTest {
    */
   @Test
   public void testConnectionTask() throws Exception {
-    eventsDb = new SQLClient(TEST_DRIVER, TEST_URL, TEST_OPTIONS);
+    eventsDb = new SQLClient(TEST_URL, TEST_OPTIONS);
     localEventsDb = mock(SQLClient.class);
     when(localEventsDb.dbExists()).thenReturn(true);
     when(localEventsDb.getAll()).thenReturn(ImmutableList.of(mock(SQLEntry.class)));
@@ -356,7 +355,7 @@ public class SQLStoreTest {
   private void checkConnectionAndRestore(boolean copy) throws Exception {
     MockEvent mockEvent = new MockEvent();
     eventsDb = mock(SQLClient.class);
-    localEventsDb = new SQLClient(TEST_DRIVER, TEST_LOCAL_URL, TEST_OPTIONS);
+    localEventsDb = new SQLClient(TEST_LOCAL_URL, TEST_OPTIONS);
     localEventsDb.createDBIfNotCreated();
     localEventsDb.storeEvent(mockEvent);
     doThrow(new SQLException(new ConnectException()))
