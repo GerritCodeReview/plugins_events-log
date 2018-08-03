@@ -33,7 +33,6 @@ import com.google.gerrit.server.events.ProjectEvent;
 import com.google.gerrit.server.events.SupplierSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.inject.Inject;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -50,7 +49,6 @@ class SQLClient {
   private final Gson gson;
   private BasicDataSource ds;
 
-  @Inject
   SQLClient(String storeDriver, String storeUrl, String urlOptions) {
     ds = new BasicDataSource();
     ds.setDriverClassName(storeDriver);
