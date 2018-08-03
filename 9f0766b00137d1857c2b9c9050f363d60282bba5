@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3608e243_256c7782",
+        "filename": "external_plugin_deps.bzl",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2018-08-03T09:39:41Z",
+      "side": 1,
+      "message": "Note: the latest is 2.21.0. This can be upgraded in a separate commit though.",
+      "range": {
+        "startLine": 6,
+        "startChar": 45,
+        "endLine": 6,
+        "endChar": 51
+      },
+      "revId": "9f0766b00137d1857c2b9c9050f363d60282bba5",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
