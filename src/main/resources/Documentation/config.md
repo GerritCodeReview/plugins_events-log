@@ -23,10 +23,6 @@ plugin.@PLUGIN@.returnLimit
 :    Specify the max amount of events that will be returned for each query.
      When not specified, the default value is 5000.
 
-plugin.@PLUGIN@.storeDriver
-:    Specify the driver of the database. When not specified, the default driver is
-     org.h2.Driver.
-
 plugin.@PLUGIN@.storeUrl
 :    Specify the path to the directory in which to keep the database. When not
      specified, the default path is jdbc:h2:\<gerrit_site>/data/db.

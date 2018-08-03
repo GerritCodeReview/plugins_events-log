@@ -49,9 +49,8 @@ class SQLClient {
   private final Gson gson;
   private BasicDataSource ds;
 
-  SQLClient(String storeDriver, String storeUrl, String urlOptions) {
+  SQLClient(String storeUrl, String urlOptions) {
     ds = new BasicDataSource();
-    ds.setDriverClassName(storeDriver);
     ds.setUrl(storeUrl);
     ds.setConnectionProperties(urlOptions);
     ds.setMaxWait(MILLISECONDS.convert(30, SECONDS));
@@ -107,7 +106,7 @@ class SQLClient {
    * @throws SQLException If there was a problem with the database
    */
   void createDBIfNotCreated() throws SQLException {
-    boolean postgresql = ds.getDriverClassName().contains("postgresql");
+    boolean postgresql = ds.getUrl().contains("postgresql");
     execute(SQLTable.createTableQuery(postgresql));
     execute(SQLTable.createIndexes(postgresql));
   }

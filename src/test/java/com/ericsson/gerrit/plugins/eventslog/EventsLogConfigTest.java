@@ -16,7 +16,6 @@ package com.ericsson.gerrit.plugins.eventslog;
 
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_CONN_TIME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_COPY_LOCAL;
-import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_DRIVER;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_EVICT_IDLE_TIME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_LOCAL_PATH;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_MAX_AGE;
@@ -29,7 +28,6 @@ import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_URL_O
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_USERNAME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.CONFIG_WAIT_TIME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_CONN_TIME;
-import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_DRIVER;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_EVICT_IDLE_TIME;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_MAX_AGE;
 import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.DEFAULT_MAX_CONNECTIONS;
@@ -88,10 +86,8 @@ public class EventsLogConfigTest {
     assertThat(eventsLogConfig.getReturnLimit()).isEqualTo(DEFAULT_RETURN_LIMIT);
     assertThat(eventsLogConfig.getConnectTime()).isEqualTo(DEFAULT_CONN_TIME);
     assertThat(eventsLogConfig.getWaitTime()).isEqualTo(DEFAULT_WAIT_TIME);
-    assertThat(eventsLogConfig.getLocalStoreDriver()).isEqualTo(DEFAULT_DRIVER);
     assertThat(eventsLogConfig.getLocalStorePath().toString() + "/")
         .isEqualTo(site.site_path.toString() + "/events-db/");
-    assertThat(eventsLogConfig.getStoreDriver()).isEqualTo(DEFAULT_DRIVER);
     assertThat(eventsLogConfig.getStoreUrl())
         .isEqualTo("jdbc:h2:" + site.data_dir.toString() + "/db");
     assertThat(eventsLogConfig.getUrlOptions()).isEmpty();
@@ -112,9 +108,7 @@ public class EventsLogConfigTest {
     assertThat(eventsLogConfig.getReturnLimit()).isEqualTo(10000);
     assertThat(eventsLogConfig.getConnectTime()).isEqualTo(5000);
     assertThat(eventsLogConfig.getWaitTime()).isEqualTo(5000);
-    assertThat(eventsLogConfig.getLocalStoreDriver()).isEqualTo(DEFAULT_DRIVER);
     assertThat(eventsLogConfig.getLocalStorePath().toString() + "/").isEqualTo(LOCAL_STORE_PATH);
-    assertThat(eventsLogConfig.getStoreDriver()).isEqualTo("org.h2.Driver2");
     assertThat(eventsLogConfig.getStoreUrl()).isEqualTo("jdbc:h2:~/gerrit/db");
     assertThat(eventsLogConfig.getUrlOptions()).isEqualTo(Joiner.on(";").join(urlOptions));
     assertThat(eventsLogConfig.getStoreUsername()).isEqualTo("testUsername");
@@ -131,7 +125,6 @@ public class EventsLogConfigTest {
     config.setInt(PLUGIN, PLUGIN_NAME, CONFIG_RETURN_LIMIT, 10000);
     config.setInt(PLUGIN, PLUGIN_NAME, CONFIG_CONN_TIME, 5000);
     config.setInt(PLUGIN, PLUGIN_NAME, CONFIG_WAIT_TIME, 5000);
-    config.setString(PLUGIN, PLUGIN_NAME, CONFIG_DRIVER, "org.h2.Driver2");
     config.setString(PLUGIN, PLUGIN_NAME, CONFIG_URL, "jdbc:h2:~/gerrit/db");
     config.setString(PLUGIN, PLUGIN_NAME, CONFIG_LOCAL_PATH, LOCAL_STORE_PATH);
     config.setStringList(PLUGIN, PLUGIN_NAME, CONFIG_URL_OPTIONS, urlOptions);
