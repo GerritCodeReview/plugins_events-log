@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7fbe662a_ee64eeca",
+        "filename": "external_plugin_deps.bzl",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2018-08-07T19:25:08Z",
+      "side": 1,
+      "message": "missing coma:\n\"6c66db1c636ee90beb4c65fe34abd8ba9396bca6\",",
+      "range": {
+        "startLine": 38,
+        "startChar": 15,
+        "endLine": 38,
+        "endChar": 57
+      },
+      "revId": "1bc25db15f5dea1dce8d85b8f2ffcb3f0811d6c9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
