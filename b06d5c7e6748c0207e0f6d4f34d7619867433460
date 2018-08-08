@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "61b9ccd9_648166a5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1012987
+      },
+      "writtenOn": "2018-08-08T12:32:17Z",
+      "side": 1,
+      "message": "Do we really need to make this configurable?\n\nNot everything needs to be configurable. The maxAge unit is in days so can we simply clean up the outdated events once a day?",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 14
+      },
+      "revId": "b06d5c7e6748c0207e0f6d4f34d7619867433460",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
