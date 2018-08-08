@@ -22,6 +22,30 @@
       "revId": "b06d5c7e6748c0207e0f6d4f34d7619867433460",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a94178f_743d295a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1019328
+      },
+      "writtenOn": "2018-08-08T12:37:08Z",
+      "side": 1,
+      "message": "Yes, makes more sense. Will push another patch set later implementing this proposal.",
+      "parentUuid": "61b9ccd9_648166a5",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 14
+      },
+      "revId": "b06d5c7e6748c0207e0f6d4f34d7619867433460",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
