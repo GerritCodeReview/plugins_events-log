@@ -15,6 +15,7 @@
 package com.ericsson.gerrit.plugins.eventslog.sql;
 
 import com.ericsson.gerrit.plugins.eventslog.EventCleanerPool;
+import com.google.common.collect.ImmutableList;
 import com.google.gerrit.extensions.events.ProjectDeletedListener;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -22,8 +23,8 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @Singleton
 public class EventsLogCleaner implements ProjectDeletedListener {
-  private final SQLClient eventsDb;
-  private final SQLClient localEventsDb;
+  private final ImmutableList<SQLClient> clients;
+
   private ScheduledThreadPoolExecutor pool;
 
   @Inject
@@ -31,8 +32,7 @@ public class EventsLogCleaner implements ProjectDeletedListener {
       @EventsDb SQLClient eventsDb,
       @LocalEventsDb SQLClient localEventsDb,
       @EventCleanerPool ScheduledThreadPoolExecutor pool) {
-    this.eventsDb = eventsDb;
-    this.localEventsDb = localEventsDb;
+    this.clients = ImmutableList.of(eventsDb, localEventsDb);
     this.pool = pool;
   }
 
@@ -42,7 +42,8 @@ public class EventsLogCleaner implements ProjectDeletedListener {
   }
 
   public void removeProjectEventsAsync(String projectName) {
-    pool.submit(() -> eventsDb.removeProjectEvents(projectName));
-    pool.submit(() -> localEventsDb.removeProjectEvents(projectName));
+    for (SQLClient client : clients) {
+      pool.submit(() -> client.removeProjectEvents(projectName));
+    }
   }
 }
