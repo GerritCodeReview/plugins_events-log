@@ -36,7 +36,6 @@ public class EventsLogCleanerTest {
   @Mock private EventsLogConfig cfgMock;
   @Mock private EventsLogCleaner logCleanerMock;
   @Mock private SQLClient eventsDb;
-  @Mock private SQLClient localEventsDb;
   @Mock private ProjectDeletedListener.Event event;
 
   private ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
@@ -45,7 +44,7 @@ public class EventsLogCleanerTest {
   @Before
   public void setUp() throws Exception {
     when(event.getProjectName()).thenReturn(PROJECT);
-    eventsLogCleaner = new EventsLogCleaner(eventsDb, localEventsDb, executor);
+    eventsLogCleaner = new EventsLogCleaner(eventsDb, executor);
   }
 
   @Test
@@ -53,7 +52,6 @@ public class EventsLogCleanerTest {
     eventsLogCleaner.onProjectDeleted(event);
     executor.awaitTermination(1, TimeUnit.SECONDS);
     verify(eventsDb, times(1)).removeProjectEvents(PROJECT);
-    verify(localEventsDb, times(1)).removeProjectEvents(PROJECT);
   }
 
   @After

@@ -23,16 +23,13 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 @Singleton
 public class EventsLogCleaner implements ProjectDeletedListener {
   private final SQLClient eventsDb;
-  private final SQLClient localEventsDb;
   private ScheduledThreadPoolExecutor pool;
 
   @Inject
   EventsLogCleaner(
       @EventsDb SQLClient eventsDb,
-      @LocalEventsDb SQLClient localEventsDb,
       @EventCleanerPool ScheduledThreadPoolExecutor pool) {
     this.eventsDb = eventsDb;
-    this.localEventsDb = localEventsDb;
     this.pool = pool;
   }
 
@@ -43,6 +40,5 @@ public class EventsLogCleaner implements ProjectDeletedListener {
 
   public void removeProjectEventsAsync(String projectName) {
     pool.submit(() -> eventsDb.removeProjectEvents(projectName));
-    pool.submit(() -> localEventsDb.removeProjectEvents(projectName));
   }
 }
