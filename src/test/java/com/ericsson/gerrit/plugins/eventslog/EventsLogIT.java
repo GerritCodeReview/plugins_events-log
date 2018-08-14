@@ -22,10 +22,9 @@ import com.google.gerrit.acceptance.TestPlugin;
 import org.junit.Test;
 
 @TestPlugin(
-  name = "events-log",
-  sysModule = "com.ericsson.gerrit.plugins.eventslog.sql.SQLModule",
-  httpModule = "com.ericsson.gerrit.plugins.eventslog.HttpModule"
-)
+    name = "events-log",
+    sysModule = "com.ericsson.gerrit.plugins.eventslog.sql.SQLModule",
+    httpModule = "com.ericsson.gerrit.plugins.eventslog.HttpModule")
 public class EventsLogIT extends LightweightPluginDaemonTest {
 
   @Test

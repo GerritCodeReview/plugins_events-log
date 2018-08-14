@@ -59,22 +59,15 @@ class SQLQueryMaker implements QueryMaker {
       throw new MalformedQueryException(e);
     }
     return String.format(
-        "SELECT * FROM %s WHERE %s BETWEEN '%s' and '%s' LIMIT %d",
+        "SELECT * FROM %s WHERE %s BETWEEN '%s' and '%s' ORDER BY date_created LIMIT %d",
         TABLE_NAME, DATE_ENTRY, dates[0], dates[1], returnLimit);
   }
 
   @Override
   public String getDefaultQuery() {
-    return "SELECT * FROM(SELECT * FROM "
-        + TABLE_NAME
-        + " ORDER BY "
-        + PRIMARY_ENTRY
-        + " DESC LIMIT "
-        + returnLimit
-        + ")"
-        + " a ORDER BY "
-        + PRIMARY_ENTRY
-        + " ASC";
+    return String.format(
+        "SELECT * FROM (SELECT * FROM %s ORDER BY %s DESC LIMIT %s) a ORDER BY %s ASC",
+        TABLE_NAME, PRIMARY_ENTRY, returnLimit, PRIMARY_ENTRY);
   }
 
   private String[] parseDates(String dateOne, String dateTwo)
