@@ -1,4 +1,4 @@
-// Copyright (C) 2015 The Android Open Source Project
+// Copyright (C) 2018 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,22 +17,22 @@ package com.ericsson.gerrit.plugins.eventslog;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.server.git.WorkQueue;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import java.util.concurrent.ScheduledExecutorService;
 
-/** A queue for events to store. */
-public class EventQueue implements LifecycleListener {
+@Singleton
+public class EventCleanerQueue implements LifecycleListener {
   private final WorkQueue workQueue;
   private ScheduledExecutorService pool;
 
   @Inject
-  EventQueue(WorkQueue workQueue) {
+  public EventCleanerQueue(WorkQueue workQueue) {
     this.workQueue = workQueue;
   }
 
-  /** {@inheritDoc} Create a new executor queue in WorkQueue for storing events. */
   @Override
   public void start() {
-    pool = workQueue.createQueue(1, "Store events");
+    pool = workQueue.createQueue(1, "[events-log] Remove events");
   }
 
   @Override

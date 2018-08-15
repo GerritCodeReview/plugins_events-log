@@ -16,16 +16,12 @@ File 'gerrit.config'
 
 plugin.@PLUGIN@.maxAge
 :    Specify the maximum allowed age in days of the entries in the database.
-     Any entries that are older than this value will be removed on server startup.
-     When not specified, the default value is 30 days.
+     Any entries that are older than this value will be removed every day at
+     23:00 hours. When not specified, the default value is 30 days.
 
 plugin.@PLUGIN@.returnLimit
 :    Specify the max amount of events that will be returned for each query.
      When not specified, the default value is 5000.
-
-plugin.@PLUGIN@.storeDriver
-:    Specify the driver of the database. When not specified, the default driver is
-     org.h2.Driver.
 
 plugin.@PLUGIN@.storeUrl
 :    Specify the path to the directory in which to keep the database. When not
@@ -71,7 +67,6 @@ plugin.@PLUGIN@.copyLocal
      not be deleted and must be removed manually. When not specified, the default
      value is set to false.
 
-plugin.@PLUGIN@.evictIdleTime
-:    Interval of time in milliseconds after which an idle database connection is
-     evicted from the connection pool. When not specified, the default value is
-     set to 60000ms.
+plugin.@PLUGIN@.maxConnections
+:    Maximum number of instances in the connection pool to the database. Includes
+     active and idle connections. By default 8.

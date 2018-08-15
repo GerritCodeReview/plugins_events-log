@@ -1,4 +1,4 @@
-// Copyright (C) 2014 Ericsson
+// Copyright (C) 2014 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
 package com.ericsson.gerrit.plugins.eventslog.sql;
 
 import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.TABLE_NAME;
+import static java.util.stream.Collectors.toList;
 
 import com.ericsson.gerrit.plugins.eventslog.EventPool;
 import com.ericsson.gerrit.plugins.eventslog.EventStore;
 import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
 import com.ericsson.gerrit.plugins.eventslog.ServiceUnavailableException;
-import com.google.common.io.Files;
 import com.google.gerrit.common.TimeUtil;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.extensions.restapi.AuthException;
@@ -32,14 +32,13 @@ import com.google.gerrit.server.permissions.PermissionBackendException;
 import com.google.gerrit.server.permissions.ProjectPermission;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import java.io.File;
 import java.io.IOException;
 import java.net.ConnectException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledExecutorService;
@@ -53,6 +52,7 @@ class SQLStore implements EventStore, LifecycleListener {
   private static final Logger log = LoggerFactory.getLogger(SQLStore.class);
   private static final String H2_DB_SUFFIX = ".h2.db";
 
+  private final EventsLogCleaner eventsLogCleaner;
   private SQLClient eventsDb;
   private SQLClient localEventsDb;
   private final int maxAge;
@@ -72,7 +72,8 @@ class SQLStore implements EventStore, LifecycleListener {
       @EventsDb SQLClient eventsDb,
       @LocalEventsDb SQLClient localEventsDb,
       @EventPool ScheduledExecutorService pool,
-      PermissionBackend permissionBackend) {
+      PermissionBackend permissionBackend,
+      EventsLogCleaner eventsLogCleaner) {
     this.maxAge = cfg.getMaxAge();
     this.maxTries = cfg.getMaxTries();
     this.waitTime = cfg.getWaitTime();
@@ -80,6 +81,7 @@ class SQLStore implements EventStore, LifecycleListener {
     this.copyLocal = cfg.getCopyLocal();
     this.eventsDb = eventsDb;
     this.localEventsDb = localEventsDb;
+    this.eventsLogCleaner = eventsLogCleaner;
     this.pool = pool;
     this.permissionBackend = permissionBackend;
     this.localPath = cfg.getLocalStorePath();
@@ -88,6 +90,7 @@ class SQLStore implements EventStore, LifecycleListener {
   @Override
   public void start() {
     setUp();
+    eventsLogCleaner.scheduleCleaningWith(maxAge);
   }
 
   @Override
@@ -123,16 +126,7 @@ class SQLStore implements EventStore, LifecycleListener {
         log.warn("Cannot check project access permission", e);
       }
     }
-    return sortedEventsFromEntries(entries);
-  }
-
-  private List<String> sortedEventsFromEntries(List<SQLEntry> entries) {
-    Collections.sort(entries);
-    List<String> events = new ArrayList<>();
-    for (SQLEntry entry : entries) {
-      events.add(entry.getEvent());
-    }
-    return events;
+    return entries.stream().sorted().map(SQLEntry::getEvent).collect(toList());
   }
 
   /**
@@ -153,14 +147,14 @@ class SQLStore implements EventStore, LifecycleListener {
       try {
         getEventsDb().storeEvent(event);
       } catch (SQLException e) {
-        log.warn("Cannot store ChangeEvent for: " + projectName.get(), e);
+        log.warn("Cannot store ChangeEvent for: {}", projectName.get(), e);
         if (e.getCause() instanceof ConnectException
             || e.getMessage().contains("terminating connection")) {
           done = false;
           try {
             retryIfAllowed(failedConnections);
           } catch (InterruptedException e1) {
-            log.warn("Cannot store ChangeEvent for: " + projectName.get() + ": Interrupted");
+            log.warn("Cannot store ChangeEvent for {}: Interrupted", projectName.get());
             Thread.currentThread().interrupt();
             return;
           }
@@ -175,7 +169,7 @@ class SQLStore implements EventStore, LifecycleListener {
       log.info("Retrying store event");
       Thread.sleep(waitTime);
     } else {
-      log.error("Failed to store event " + maxTries + " times");
+      log.error("Failed to store event {} times", maxTries);
       setOnline(false);
     }
   }
@@ -193,7 +187,6 @@ class SQLStore implements EventStore, LifecycleListener {
     if (online) {
       restoreEventsFromLocal();
     }
-    getEventsDb().removeOldEvents(maxAge);
   }
 
   private SQLClient getEventsDb() {
@@ -288,12 +281,10 @@ class SQLStore implements EventStore, LifecycleListener {
     if (!copyLocal) {
       return;
     }
-    File file = localPath.resolve(TABLE_NAME + H2_DB_SUFFIX).toFile();
-    File copyFile =
-        localPath
-            .resolve(
-                TABLE_NAME + (TimeUnit.MILLISECONDS.toSeconds(TimeUtil.nowMs())) + H2_DB_SUFFIX)
-            .toFile();
+    Path file = localPath.resolve(TABLE_NAME + H2_DB_SUFFIX);
+    Path copyFile =
+        localPath.resolve(
+            TABLE_NAME + (TimeUnit.MILLISECONDS.toSeconds(TimeUtil.nowMs())) + H2_DB_SUFFIX);
     try {
       Files.copy(file, copyFile);
     } catch (IOException e) {

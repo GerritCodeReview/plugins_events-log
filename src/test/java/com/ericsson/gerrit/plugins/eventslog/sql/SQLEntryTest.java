@@ -1,4 +1,4 @@
-// Copyright (C) 2015 Ericsson
+// Copyright (C) 2015 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -66,6 +66,7 @@ public class SQLEntryTest {
     assertThat(entry2.compareTo(entry1)).isEqualTo(-1);
   }
 
+  @SuppressWarnings("unlikely-arg-type")
   @Test
   public void testEquals() throws Exception {
     assertThat(entry1.equals(null)).isFalse();

@@ -1,4 +1,4 @@
-// Copyright (C) 2014 Ericsson
+// Copyright (C) 2014 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,9 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
+import com.ericsson.gerrit.plugins.eventslog.sql.EventsLogCleaner;
 import com.google.gerrit.extensions.events.LifecycleListener;
+import com.google.gerrit.extensions.events.ProjectDeletedListener;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.server.events.EventListener;
 import com.google.inject.AbstractModule;
@@ -31,12 +33,22 @@ public class EventModule extends AbstractModule {
     bind(EventQueue.class).in(Scopes.SINGLETON);
     bind(EventHandler.class).in(Scopes.SINGLETON);
     bind(LifecycleListener.class).annotatedWith(UniqueAnnotations.create()).to(EventQueue.class);
+    bind(LifecycleListener.class)
+        .annotatedWith(UniqueAnnotations.create())
+        .to(EventCleanerQueue.class);
     DynamicSet.bind(binder(), EventListener.class).to(EventHandler.class);
+    DynamicSet.bind(binder(), ProjectDeletedListener.class).to(EventsLogCleaner.class);
   }
 
   @Provides
   @EventPool
   ScheduledExecutorService provideEventPool(EventQueue queue) {
+    return queue.getPool();
+  }
+
+  @Provides
+  @EventCleanerPool
+  ScheduledExecutorService provideEventCleanerPool(EventCleanerQueue queue) {
     return queue.getPool();
   }
 }

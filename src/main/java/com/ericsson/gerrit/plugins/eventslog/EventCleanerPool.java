@@ -1,4 +1,4 @@
-// Copyright (C) 2015 The Android Open Source Project
+// Copyright (C) 2018 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.ericsson.gerrit.plugins.eventslog.sql;
+package com.ericsson.gerrit.plugins.eventslog;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import com.google.inject.BindingAnnotation;
 import java.lang.annotation.Retention;
 
-/** Annotation applied to the SQLClient connected to the main database */
+/** Annotation applied to a ScheduledThreadPoolExecutor. */
 @Retention(RUNTIME)
 @BindingAnnotation
-public @interface EventsDb {}
+public @interface EventCleanerPool {}
