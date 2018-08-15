@@ -23,8 +23,7 @@ final class SQLTable {
   static final String DATE_ENTRY = "date_created";
   static final String EVENT_ENTRY = "event_info";
 
-  private SQLTable() {
-  }
+  private SQLTable() {}
 
   static String createTableQuery(boolean postgresql) {
     StringBuilder query = new StringBuilder();

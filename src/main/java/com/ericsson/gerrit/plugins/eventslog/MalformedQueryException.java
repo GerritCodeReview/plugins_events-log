@@ -20,20 +20,16 @@ public class MalformedQueryException extends EventsLogException {
   private static final String MESSAGE =
       "Query doesn't conform with the format required by the database";
 
-  /**
-   * Constructs a <code>MalformedQueryException</code> object with the default
-   * message.
-   */
+  /** Constructs a <code>MalformedQueryException</code> object with the default message. */
   public MalformedQueryException() {
     super(MESSAGE);
   }
 
   /**
-   * Constructs a <code>MalformedQueryException</code> object with the default
-   * message and a given <code>cause</code>.
+   * Constructs a <code>MalformedQueryException</code> object with the default message and a given
+   * <code>cause</code>.
    *
-   * @param cause the underlying reason for this
-   *        <code>MalformedQueryException</code>
+   * @param cause the underlying reason for this <code>MalformedQueryException</code>
    */
   public MalformedQueryException(Throwable cause) {
     super(MESSAGE, cause);

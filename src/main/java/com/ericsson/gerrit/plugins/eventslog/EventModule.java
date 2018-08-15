@@ -21,7 +21,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Scopes;
 import com.google.inject.internal.UniqueAnnotations;
-
 import java.util.concurrent.ScheduledExecutorService;
 
 /** Configures handling for an event queue while providing its pool. */
@@ -31,9 +30,7 @@ public class EventModule extends AbstractModule {
   protected void configure() {
     bind(EventQueue.class).in(Scopes.SINGLETON);
     bind(EventHandler.class).in(Scopes.SINGLETON);
-    bind(LifecycleListener.class)
-        .annotatedWith(UniqueAnnotations.create())
-        .to(EventQueue.class);
+    bind(LifecycleListener.class).annotatedWith(UniqueAnnotations.create()).to(EventQueue.class);
     DynamicSet.bind(binder(), EventListener.class).to(EventHandler.class);
   }
 

@@ -14,16 +14,15 @@
 
 package com.ericsson.gerrit.plugins.eventslog.sql;
 
+import com.ericsson.gerrit.plugins.eventslog.EventModule;
+import com.ericsson.gerrit.plugins.eventslog.EventStore;
+import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
+import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.internal.UniqueAnnotations;
-
-import com.ericsson.gerrit.plugins.eventslog.EventModule;
-import com.ericsson.gerrit.plugins.eventslog.EventStore;
-import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
-import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
 
 class SQLModule extends AbstractModule {
 
@@ -33,8 +32,7 @@ class SQLModule extends AbstractModule {
   protected void configure() {
     install(new EventModule());
     bind(EventStore.class).to(SQLStore.class);
-    bind(LifecycleListener.class).annotatedWith(UniqueAnnotations.create()).to(
-        SQLStore.class);
+    bind(LifecycleListener.class).annotatedWith(UniqueAnnotations.create()).to(SQLStore.class);
     bind(QueryMaker.class).to(SQLQueryMaker.class);
   }
 
@@ -42,8 +40,8 @@ class SQLModule extends AbstractModule {
   @Singleton
   @EventsDb
   SQLClient provideSqlClient(EventsLogConfig cfg) {
-    SQLClient sqlClient = new SQLClient(cfg.getStoreDriver(), cfg.getStoreUrl(),
-        cfg.getUrlOptions());
+    SQLClient sqlClient =
+        new SQLClient(cfg.getStoreDriver(), cfg.getStoreUrl(), cfg.getUrlOptions());
     sqlClient.setUsername(cfg.getStoreUsername());
     sqlClient.setPassword(cfg.getStorePassword());
     sqlClient.setEvictIdleTime(cfg.getEvictIdleTime());
@@ -56,8 +54,11 @@ class SQLModule extends AbstractModule {
   SQLClient provideLocalSqlClient(EventsLogConfig cfg) {
     String path = cfg.getLocalStorePath().toString();
     path = path.endsWith("/") ? path : path + "/";
-    SQLClient sqlClient = new SQLClient(cfg.getLocalStoreDriver(),
-        H2_DB_PREFIX + path + SQLTable.TABLE_NAME, cfg.getUrlOptions());
+    SQLClient sqlClient =
+        new SQLClient(
+            cfg.getLocalStoreDriver(),
+            H2_DB_PREFIX + path + SQLTable.TABLE_NAME,
+            cfg.getUrlOptions());
     sqlClient.setEvictIdleTime(cfg.getEvictIdleTime());
     return sqlClient;
   }

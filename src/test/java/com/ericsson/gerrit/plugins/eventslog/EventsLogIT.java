@@ -19,14 +19,12 @@ import static com.google.common.truth.Truth.assertThat;
 import com.google.gerrit.acceptance.GerritConfig;
 import com.google.gerrit.acceptance.LightweightPluginDaemonTest;
 import com.google.gerrit.acceptance.TestPlugin;
-
 import org.junit.Test;
 
 @TestPlugin(
     name = "events-log",
     sysModule = "com.ericsson.gerrit.plugins.eventslog.sql.SQLModule",
-    httpModule = "com.ericsson.gerrit.plugins.eventslog.HttpModule"
-)
+    httpModule = "com.ericsson.gerrit.plugins.eventslog.HttpModule")
 public class EventsLogIT extends LightweightPluginDaemonTest {
 
   @Test
