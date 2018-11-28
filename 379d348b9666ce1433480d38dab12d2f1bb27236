@@ -22,6 +22,30 @@
       "revId": "379d348b9666ce1433480d38dab12d2f1bb27236",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "301ceee5_540f1f62",
+        "filename": "WORKSPACE",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2018-11-28T00:26:56Z",
+      "side": 1,
+      "message": "Yes, I hadn\u0027t done a git pull on the bazlets repository and had an outdated master branch.\n\nDone.",
+      "parentUuid": "c472ead9_3d799cd5",
+      "range": {
+        "startLine": 6,
+        "startChar": 14,
+        "endLine": 6,
+        "endChar": 54
+      },
+      "revId": "379d348b9666ce1433480d38dab12d2f1bb27236",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
