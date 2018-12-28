@@ -23,9 +23,28 @@ final class SQLTable {
   static final String DATE_ENTRY = "date_created";
   static final String EVENT_ENTRY = "event_info";
 
+  /** This is the name of the index that tracks the created date. */
   private static final String CREATED_INDEX = "created_idx";
+  /** This is the name of the index that tracks the project. */
   private static final String PROJECT_INDEX = "project_idx";
+  /**
+   * This is the H2 idempotent index-creation query format. Inputs, in order: index-name,
+   * table-name, index-column
+   */
   private static final String H2_INDEX_CREATION_FORMAT = "CREATE INDEX IF NOT EXISTS %s ON %s (%s)";
+  /**
+   * This is the MySQL idempotent index-creation query format. Inputs, in order: table-name,
+   * index-name, table-name, index-name, index-column
+   */
+  private static final String MYSQL_INDEX_CREATION_FORMAT =
+      "SET @x := (SELECT COUNT(*) FROM information_schema.statistics WHERE table_name = '%s' AND index_name = '%s' AND table_schema = DATABASE());\n"
+          + "SET @sql := IF( @x > 0, 'SELECT ''Index exists.''', 'ALTER TABLE %s ADD INDEX %s (%s);');\n"
+          + "PREPARE stmt FROM @sql;\n"
+          + "EXECUTE stmt";
+  /**
+   * This is the Postgres idempotent index-creation query format. Inputs, in order: index-name,
+   * index-name, table-name, index-column
+   */
   private static final String POSTGRESQL_INDEX_CREATION_FORMAT =
       "DO $$\n"
           + "BEGIN\n"
@@ -42,13 +61,17 @@ final class SQLTable {
 
   private SQLTable() {}
 
-  static String createTableQuery(boolean postgresql) {
+  static String createTableQuery(SQLDialect databaseDialect) {
     StringBuilder query = new StringBuilder(140);
     query.append(format("CREATE TABLE IF NOT EXISTS %s(", TABLE_NAME));
-    if (postgresql) {
-      query.append(format("%s SERIAL PRIMARY KEY,", PRIMARY_ENTRY));
-    } else {
-      query.append(format("%s INT AUTO_INCREMENT PRIMARY KEY,", PRIMARY_ENTRY));
+    switch (databaseDialect) {
+      case POSTGRESQL:
+        query.append(format("%s SERIAL PRIMARY KEY,", PRIMARY_ENTRY));
+        break;
+      case MYSQL:
+      case H2:
+      default:
+        query.append(format("%s INT AUTO_INCREMENT PRIMARY KEY,", PRIMARY_ENTRY));
     }
     query.append(format("%s VARCHAR(255),", PROJECT_ENTRY));
     query.append(format("%s TIMESTAMP DEFAULT NOW(),", DATE_ENTRY));
@@ -56,11 +79,19 @@ final class SQLTable {
     return query.toString();
   }
 
-  static String createIndexes(boolean postgresql) {
-    return postgresql ? getPostgresqlQuery() : getH2Query();
+  static String createIndexes(SQLDialect databaseDialect) {
+    switch (databaseDialect) {
+      case POSTGRESQL:
+        return getPostgresqlIndexQuery();
+      case MYSQL:
+        return getMysqlIndexQuery();
+      case H2:
+      default:
+        return getH2IndexQuery();
+    }
   }
 
-  private static String getPostgresqlQuery() {
+  private static String getPostgresqlIndexQuery() {
     StringBuilder query = new StringBuilder(540);
     query.append(
         format(
@@ -80,7 +111,29 @@ final class SQLTable {
     return query.toString();
   }
 
-  private static String getH2Query() {
+  private static String getMysqlIndexQuery() {
+    StringBuilder query = new StringBuilder();
+    query.append(
+        format(
+            MYSQL_INDEX_CREATION_FORMAT,
+            TABLE_NAME,
+            CREATED_INDEX,
+            TABLE_NAME,
+            CREATED_INDEX,
+            DATE_ENTRY));
+    query.append(";");
+    query.append(
+        format(
+            MYSQL_INDEX_CREATION_FORMAT,
+            TABLE_NAME,
+            PROJECT_INDEX,
+            TABLE_NAME,
+            PROJECT_INDEX,
+            PROJECT_ENTRY));
+    return query.toString();
+  }
+
+  private static String getH2IndexQuery() {
     StringBuilder query = new StringBuilder();
     query.append(format(H2_INDEX_CREATION_FORMAT, CREATED_INDEX, TABLE_NAME, DATE_ENTRY));
     query.append(";");

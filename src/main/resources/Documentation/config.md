@@ -27,6 +27,11 @@ plugin.@PLUGIN@.storeUrl
 :    Specify the path to the directory in which to keep the database. When not
      specified, the default path is jdbc:h2:\<gerrit_site>/data/db.
 
+     Supported database engines:
+     * h2 (default)
+     * postgresql
+     * mysql
+
 plugin.@PLUGIN@.localStorePath
 :    Specify the path to the directory in which to keep the back up database.
      When not specified, the default path is \<gerrit_site>/events-db/.
@@ -44,6 +49,9 @@ plugin.@PLUGIN@.urlOptions
      separate line using the option=value format. For example:
        urlOptions = loglevel=INFO
        urlOptions = logUnclosedConnections=true
+
+     When using `mysql`, you must also specify:
+       urlOptions = allowMultiQueries=true
 
 plugin.@PLUGIN@.maxTries
 :    Maximum number of times the plugin should attempt to store the event if a
