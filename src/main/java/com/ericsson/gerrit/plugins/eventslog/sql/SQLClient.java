@@ -48,7 +48,7 @@ import org.slf4j.LoggerFactory;
 class SQLClient {
   private static final Logger log = LoggerFactory.getLogger(SQLClient.class);
   private final Gson gson;
-  private final boolean isPostgresql;
+  private final SQLDialect databaseDialect;
 
   private HikariDataSource ds;
 
@@ -56,7 +56,9 @@ class SQLClient {
     ds = new HikariDataSource(config);
 
     gson = new GsonBuilder().registerTypeAdapter(Supplier.class, new SupplierSerializer()).create();
-    isPostgresql = config.getJdbcUrl().contains("postgresql");
+
+    // Detect the database dialect from the JDBC URL.
+    databaseDialect = SQLDialect.fromJdbcUrl(config.getJdbcUrl());
   }
 
   /**
@@ -65,8 +67,8 @@ class SQLClient {
    * @throws SQLException If there was a problem with the database
    */
   void createDBIfNotCreated() throws SQLException {
-    execute(SQLTable.createTableQuery(isPostgresql));
-    execute(SQLTable.createIndexes(isPostgresql));
+    execute(SQLTable.createTableQuery(databaseDialect));
+    execute(SQLTable.createIndexes(databaseDialect));
   }
 
   /**
