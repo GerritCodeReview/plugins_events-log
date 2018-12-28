@@ -26,6 +26,7 @@ final class SQLTable {
   private static final String CREATED_INDEX = "created_idx";
   private static final String PROJECT_INDEX = "project_idx";
   private static final String H2_INDEX_CREATION_FORMAT = "CREATE INDEX IF NOT EXISTS %s ON %s (%s)";
+  private static final String MYSQL_INDEX_CREATION_FORMAT = "CREATE INDEX %s ON %s (%s)";
   private static final String POSTGRESQL_INDEX_CREATION_FORMAT =
       "DO $$\n"
           + "BEGIN\n"
@@ -42,10 +43,10 @@ final class SQLTable {
 
   private SQLTable() {}
 
-  static String createTableQuery(boolean postgresql) {
+  static String createTableQuery(String databaseType) {
     StringBuilder query = new StringBuilder(140);
     query.append(format("CREATE TABLE IF NOT EXISTS %s(", TABLE_NAME));
-    if (postgresql) {
+    if(databaseType.equals("postgres")) {
       query.append(format("%s SERIAL PRIMARY KEY,", PRIMARY_ENTRY));
     } else {
       query.append(format("%s INT AUTO_INCREMENT PRIMARY KEY,", PRIMARY_ENTRY));
@@ -56,8 +57,14 @@ final class SQLTable {
     return query.toString();
   }
 
-  static String createIndexes(boolean postgresql) {
-    return postgresql ? getPostgresqlQuery() : getH2Query();
+  static String createIndexes(String databaseType) {
+    if(databaseType.equals("postgres")) {
+      return getPostgresqlQuery();
+    } else if(databaseType.equals("mysql")) {
+      return getMysqlQuery();
+    } else {
+      return getH2Query();
+    }
   }
 
   private static String getPostgresqlQuery() {
@@ -77,6 +84,14 @@ final class SQLTable {
             PROJECT_INDEX,
             TABLE_NAME,
             PROJECT_ENTRY));
+    return query.toString();
+  }
+
+  private static String getMysqlQuery() {
+    StringBuilder query = new StringBuilder();
+    query.append(format(MYSQL_INDEX_CREATION_FORMAT, CREATED_INDEX, TABLE_NAME, DATE_ENTRY));
+    query.append(";");
+    query.append(format(MYSQL_INDEX_CREATION_FORMAT, PROJECT_INDEX, TABLE_NAME, PROJECT_ENTRY));
     return query.toString();
   }
 
