@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b4acd3c3_4aa4be0e",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLClient.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-12-29T07:24:15Z",
+      "side": 1,
+      "message": "Instead of relying on the string constants and spreading them all over the code, consider to use enum type, e.g.:\n\n  public enum SqlDialect {\n    H2,\n    MYSQL,\n    POSTGRESQL;\n  }\n\nthe you could just compare on enum equality:\n\n if (sqlDialect \u003d\u003d SqlDialect.MYSQL) {\n    // use MySql Dialect specific syntax.\n    [...]\n\nOr even use switch statement (you could do it on strings too).",
+      "range": {
+        "startLine": 60,
+        "startChar": 27,
+        "endLine": 60,
+        "endChar": 29
+      },
+      "revId": "e7c808facff91234c2f003fd2ac6744d05d3bef3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c673388_6af6d7b6",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLClient.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-12-29T07:24:15Z",
+      "side": 1,
+      "message": "Nit: blank between if and open paren. Here and below. Or just run the code through google-java-format 1.6. Consult gerrit/Documentation/dev-contributing.txt howto set it up and running: [1].\n\n* [1] https://github.com/GerritCodeReview/gerrit/blob/master/Documentation/dev-contributing.txt#L165-L177",
+      "revId": "e7c808facff91234c2f003fd2ac6744d05d3bef3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b03db2a5_2cd78dd7",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLTable.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-12-29T07:24:15Z",
+      "side": 1,
+      "message": "This is the standard create index syntax, so may be call it GENERIC_INDEX_CREATION_FORMAT. See also comment below.",
+      "range": {
+        "startLine": 29,
+        "startChar": 30,
+        "endLine": 29,
+        "endChar": 57
+      },
+      "revId": "e7c808facff91234c2f003fd2ac6744d05d3bef3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "50458b55_1cc93e16",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLTable.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-12-29T07:24:15Z",
+      "side": 1,
+      "message": "It seems to me, that H2 specific syntax \"to create index only if not exists\" is very specific dialect, and not widely supported and used (as you pointed out in the commit message). So for example, Oracle doesn\u0027t support it either. So instead of using H2 dialect, as else barnch in the if statement above, you could swap the logic and say, that H2 is more specific dialect in respect of providing more specific \"create index\" statement syntax (not tested):\n\n  static String createIndexes(SqlDialect dialect) {\n    switch(dialect) {\n      case H2:\n        return getH2Query();\n      case POSTESQGL:\n        return getPostgresqlQuery();\n      default:\n        return getGenericQuery();\n    }\n  }",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 67,
+        "endChar": 5
+      },
+      "revId": "e7c808facff91234c2f003fd2ac6744d05d3bef3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
