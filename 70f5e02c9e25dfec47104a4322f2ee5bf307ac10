@@ -185,6 +185,40 @@
     },
     {
       "key": {
+        "uuid": "00f5abcd_be3b2c70",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLTable.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2018-12-31T22:07:55Z",
+      "side": 1,
+      "message": "My local Eclipse IDE shows 2 warnings from this line. We usually keep Gerrit code free from Eclipse warnings.",
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3bc23bd_0161739b",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLTable.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2018-12-31T22:07:55Z",
+      "side": 1,
+      "message": "My eclipse also shows a (3rd) warning from this line.",
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "720e5cb0_1d660113",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLTable.java",
         "patchSetId": 3
