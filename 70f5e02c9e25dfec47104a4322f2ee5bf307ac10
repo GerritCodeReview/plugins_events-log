@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ca9ffa8b_040676d1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2018-12-31T18:33:11Z",
+      "side": 1,
+      "message": "I wouldn\u0027t call this a fix because it was never supported and implemented, but rather \"Add support for MySQL dialect\".",
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
