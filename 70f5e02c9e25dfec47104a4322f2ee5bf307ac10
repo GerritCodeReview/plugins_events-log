@@ -16,6 +16,195 @@
       "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "904b59e3_4f7b693e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2018-12-31T21:22:13Z",
+      "side": 1,
+      "message": "Fix MySQL\u0027s\n\n(Nit or minor comment, as we usually foster the active form like so.)",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 15
+      },
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7de9f3b2_69e1e383",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2018-12-31T21:22:13Z",
+      "side": 1,
+      "message": "bug introduced",
+      "range": {
+        "startLine": 9,
+        "startChar": 34,
+        "endLine": 9,
+        "endChar": 52
+      },
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fcd75aa4_1e2d8ae8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2018-12-31T21:22:13Z",
+      "side": 1,
+      "message": "This information should be integrated within the plugin documentation instead, with maybe just a mention of it in this commit message. Documentation usually does not use a personal or \u0027you\u0027 denomination.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 17
+      },
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ea89fe6_80908dd5",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLClient.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2018-12-31T21:22:13Z",
+      "side": 1,
+      "message": "Would remove this comment line, as the below line of code is already explicit enough I think.",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 53
+      },
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9944f951_f5a52c6d",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLDialect.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2018-12-31T21:22:13Z",
+      "side": 1,
+      "message": "2018 -or 2019 soon ;)",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 21
+      },
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "603ff449_a1f1f37d",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLDialect.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2018-12-31T21:22:13Z",
+      "side": 1,
+      "message": "Missing an @param item, for completeness.",
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f93658b_aa16ccf4",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLDialect.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2018-12-31T21:22:13Z",
+      "side": 1,
+      "message": "Would add a brief note about h2 being returned by default, if no other supported one detected.",
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "388dd22b_9e3e954b",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLTable.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2018-12-31T21:22:13Z",
+      "side": 1,
+      "message": "A change usually does not include unrelated changes or improvements such as these added comments. One can use another change (or more) to do so, each change focusing on one single act. This case is simple enough to stay as is, though.",
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "720e5cb0_1d660113",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLTable.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2018-12-31T21:22:13Z",
+      "side": 1,
+      "message": "Same comment as above would apply to renaming slightly unrelated methods. Again, can be ok for this time around.",
+      "range": {
+        "startLine": 91,
+        "startChar": 37,
+        "endLine": 91,
+        "endChar": 42
+      },
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
