@@ -42,6 +42,48 @@
     },
     {
       "key": {
+        "uuid": "6140e8af_c17e4d9b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1055293
+      },
+      "writtenOn": "2019-01-03T19:10:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca9ffa8b_040676d1",
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c16af176_18510b32",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1055293
+      },
+      "writtenOn": "2019-01-03T19:10:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "904b59e3_4f7b693e",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 15
+      },
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7de9f3b2_69e1e383",
         "filename": "/COMMIT_MSG",
         "patchSetId": 3
@@ -62,6 +104,30 @@
       "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c7258b94_7779b294",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1055293
+      },
+      "writtenOn": "2019-01-03T19:10:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7de9f3b2_69e1e383",
+      "range": {
+        "startLine": 9,
+        "startChar": 34,
+        "endLine": 9,
+        "endChar": 52
+      },
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "1a8c408d_f55b48b0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1055293
+      },
+      "writtenOn": "2019-01-03T19:10:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcd75aa4_1e2d8ae8",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 17
+      },
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2ea89fe6_80908dd5",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLClient.java",
         "patchSetId": 3
@@ -108,6 +198,30 @@
       "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "373d454d_9c0dd321",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLClient.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1055293
+      },
+      "writtenOn": "2019-01-03T19:10:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ea89fe6_80908dd5",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 53
+      },
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -134,6 +248,30 @@
     },
     {
       "key": {
+        "uuid": "c67a7e7f_e9b3baf9",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLDialect.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1055293
+      },
+      "writtenOn": "2019-01-03T19:10:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9944f951_f5a52c6d",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 21
+      },
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "603ff449_a1f1f37d",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLDialect.java",
         "patchSetId": 3
@@ -148,6 +286,24 @@
       "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c6d487a_044549e7",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLDialect.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1055293
+      },
+      "writtenOn": "2019-01-03T19:10:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "603ff449_a1f1f37d",
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -168,6 +324,24 @@
     },
     {
       "key": {
+        "uuid": "f1e11dc8_32314fd5",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLDialect.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1055293
+      },
+      "writtenOn": "2019-01-03T19:10:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f93658b_aa16ccf4",
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "388dd22b_9e3e954b",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLTable.java",
         "patchSetId": 3
@@ -182,6 +356,24 @@
       "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f1af7c3_5471c388",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLTable.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1055293
+      },
+      "writtenOn": "2019-01-03T19:10:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "388dd22b_9e3e954b",
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -202,6 +394,24 @@
     },
     {
       "key": {
+        "uuid": "458c8507_b1a3330c",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLTable.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1055293
+      },
+      "writtenOn": "2019-01-03T19:10:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00f5abcd_be3b2c70",
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c3bc23bd_0161739b",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLTable.java",
         "patchSetId": 3
@@ -216,6 +426,24 @@
       "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e45dc582_8c94d5c7",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLTable.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1055293
+      },
+      "writtenOn": "2019-01-03T19:10:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3bc23bd_0161739b",
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -239,6 +467,30 @@
       "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4fd399f_24fc85a8",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLTable.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1055293
+      },
+      "writtenOn": "2019-01-03T19:10:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "720e5cb0_1d660113",
+      "range": {
+        "startLine": 91,
+        "startChar": 37,
+        "endLine": 91,
+        "endChar": 42
+      },
+      "revId": "70f5e02c9e25dfec47104a4322f2ee5bf307ac10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
