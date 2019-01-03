@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f8abb45_3ecb1f6d",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLDialect.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2019-01-03T21:37:35Z",
+      "side": 1,
+      "message": "jdbcUrl (Lends a warning in Eclipse otherwise.)",
+      "range": {
+        "startLine": 28,
+        "startChar": 12,
+        "endLine": 28,
+        "endChar": 19
+      },
+      "revId": "12c436cb09d16066106c837846c7a10146cfdace",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a63118b3_082a702f",
+        "filename": "src/main/resources/Documentation/config.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2019-01-03T21:37:35Z",
+      "side": 1,
+      "message": "Renders like this onto [1], my locally generated test site with this plugin installed in it:\n\n(...)\nSupported database engines: * h2 (default) * postgresql * mysql\n(...)\n\n-Not sure that is the list as you were expecting it; would refactor.\n\n[1] http://localhost:8080/plugins/events-log/Documentation/config.md",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 12
+      },
+      "revId": "12c436cb09d16066106c837846c7a10146cfdace",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4083a0ac_dfff0ef2",
+        "filename": "src/main/resources/Documentation/config.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2019-01-03T21:37:35Z",
+      "side": 1,
+      "message": "this option must be specified\n\n(Minimising personal form use.)",
+      "range": {
+        "startLine": 53,
+        "startChar": 25,
+        "endLine": 53,
+        "endChar": 46
+      },
+      "revId": "12c436cb09d16066106c837846c7a10146cfdace",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
