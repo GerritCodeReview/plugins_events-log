@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "6dbbeafb_048dc79f",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLDialect.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1055293
+      },
+      "writtenOn": "2019-01-04T14:26:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f8abb45_3ecb1f6d",
+      "range": {
+        "startLine": 28,
+        "startChar": 12,
+        "endLine": 28,
+        "endChar": 19
+      },
+      "revId": "12c436cb09d16066106c837846c7a10146cfdace",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a63118b3_082a702f",
         "filename": "src/main/resources/Documentation/config.md",
         "patchSetId": 4
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "cfc5ac2e_2f346736",
+        "filename": "src/main/resources/Documentation/config.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1055293
+      },
+      "writtenOn": "2019-01-04T14:26:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a63118b3_082a702f",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 12
+      },
+      "revId": "12c436cb09d16066106c837846c7a10146cfdace",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4083a0ac_dfff0ef2",
         "filename": "src/main/resources/Documentation/config.md",
         "patchSetId": 4
@@ -68,6 +116,30 @@
       "revId": "12c436cb09d16066106c837846c7a10146cfdace",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7761855_1b929ea0",
+        "filename": "src/main/resources/Documentation/config.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1055293
+      },
+      "writtenOn": "2019-01-04T14:26:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4083a0ac_dfff0ef2",
+      "range": {
+        "startLine": 53,
+        "startChar": 25,
+        "endLine": 53,
+        "endChar": 46
+      },
+      "revId": "12c436cb09d16066106c837846c7a10146cfdace",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
