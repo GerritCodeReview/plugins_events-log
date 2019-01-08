@@ -21,9 +21,8 @@ public enum SQLDialect {
   POSTGRESQL;
 
   /**
-   * This attempts to determine the SQL dialect from the JDBC URL.
-   * If the URL does not match one of the supported dialects, then
-   * H2 will be returned by default.
+   * This attempts to determine the SQL dialect from the JDBC URL. If the URL does not match one of
+   * the supported dialects, then H2 will be returned by default.
    *
    * @param jdbcUrl The JDBC URL.
    * @return The dialect for the JDBC URL.
