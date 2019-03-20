@@ -14,9 +14,9 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
-import com.google.gerrit.httpd.plugins.HttpPluginModule;
+import com.google.inject.servlet.ServletModule;
 
-class HttpModule extends HttpPluginModule {
+class HttpModule extends ServletModule {
   @Override
   protected void configureServlets() {
     serve("/events/").with(EventsRestApiServlet.class);
