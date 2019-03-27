@@ -22,6 +22,7 @@ import com.ericsson.gerrit.plugins.eventslog.EventStore;
 import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
 import com.ericsson.gerrit.plugins.eventslog.ServiceUnavailableException;
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.extensions.restapi.AuthException;
 import com.google.gerrit.reviewdb.client.Project;
@@ -44,12 +45,10 @@ import java.util.Map.Entry;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Singleton
 class SQLStore implements EventStore, LifecycleListener {
-  private static final Logger log = LoggerFactory.getLogger(SQLStore.class);
+  private static final FluentLogger log = FluentLogger.forEnclosingClass();
   private static final String H2_DB_SUFFIX = ".h2.db";
 
   private final EventsLogCleaner eventsLogCleaner;
@@ -123,7 +122,7 @@ class SQLStore implements EventStore, LifecycleListener {
       } catch (AuthException e) {
         // Ignore
       } catch (PermissionBackendException e) {
-        log.warn("Cannot check project access permission", e);
+        log.atFine().withCause(e).log("Cannot check project access permission");
       }
     }
     return entries.stream().sorted().map(SQLEntry::getEvent).collect(toList());
@@ -147,14 +146,14 @@ class SQLStore implements EventStore, LifecycleListener {
       try {
         getEventsDb().storeEvent(event);
       } catch (SQLException e) {
-        log.warn("Cannot store ChangeEvent for: {}", projectName.get(), e);
+        log.atWarning().withCause(e).log("Cannot store ChangeEvent for: %s}", projectName.get());
         if (e.getCause() instanceof ConnectException
             || e.getMessage().contains("terminating connection")) {
           done = false;
           try {
             retryIfAllowed(failedConnections);
           } catch (InterruptedException e1) {
-            log.warn("Cannot store ChangeEvent for {}: Interrupted", projectName.get());
+            log.atWarning().log("Cannot store ChangeEvent for %s: Interrupted", projectName.get());
             Thread.currentThread().interrupt();
             return;
           }
@@ -166,10 +165,10 @@ class SQLStore implements EventStore, LifecycleListener {
 
   private void retryIfAllowed(int failedConnections) throws InterruptedException {
     if (failedConnections < maxTries - 1) {
-      log.info("Retrying store event");
+      log.atInfo().log("Retrying store event");
       Thread.sleep(waitTime);
     } else {
-      log.error("Failed to store event {} times", maxTries);
+      log.atSevere().log("Failed to store event %d times", maxTries);
       setOnline(false);
     }
   }
@@ -178,10 +177,9 @@ class SQLStore implements EventStore, LifecycleListener {
     try {
       getEventsDb().createDBIfNotCreated();
     } catch (SQLException e) {
-      log.warn(
+      log.atWarning().withCause(e).log(
           "Cannot start the database. Events will be stored locally"
-              + " until database connection can be established",
-          e);
+              + " until database connection can be established");
       setOnline(false);
     }
     if (online) {
@@ -218,14 +216,14 @@ class SQLStore implements EventStore, LifecycleListener {
     try {
       List<SQLEntry> entries = localEventsDb.getAll();
       if (entries.isEmpty()) {
-        log.debug("No events to restore from local");
+        log.atFine().log("No events to restore from local");
         return;
       }
       for (SQLEntry entry : entries) {
         restoreEvent(entry);
       }
     } catch (SQLException e) {
-      log.warn("Could not query all events from local", e);
+      log.atWarning().withCause(e).log("Could not query all events from local");
     }
     copyFile(copyLocal);
     localEventsDb.removeOldEvents(0);
@@ -235,7 +233,7 @@ class SQLStore implements EventStore, LifecycleListener {
     try {
       eventsDb.storeEvent(entry.getName(), entry.getTimestamp(), entry.getEvent());
     } catch (SQLException e) {
-      log.warn("Could not restore events from local", e);
+      log.atWarning().withCause(e).log("Could not restore events from local");
     }
   }
 
@@ -246,7 +244,7 @@ class SQLStore implements EventStore, LifecycleListener {
     public void run() {
       if (checkConnection()) {
         setOnline(true);
-        log.info("Connected to database");
+        log.atInfo().log("Connected to database");
       }
     }
 
@@ -256,12 +254,12 @@ class SQLStore implements EventStore, LifecycleListener {
     }
 
     private boolean checkConnection() {
-      log.debug("Checking database connection...");
+      log.atFine().log("Checking database connection...");
       try {
         eventsDb.queryOne();
         return true;
       } catch (SQLException e) {
-        log.error("Problem checking database connection", e);
+        log.atSevere().withCause(e).log("Problem checking database connection");
         return false;
       }
     }
@@ -272,7 +270,8 @@ class SQLStore implements EventStore, LifecycleListener {
     try {
       exists = localEventsDb.dbExists();
     } catch (SQLException e) {
-      log.warn("Could not check existence of local database, assume that it doesn't exist", e);
+      log.atWarning().withCause(e).log(
+          "Could not check existence of local database, assume that it doesn't exist");
     }
     return exists;
   }
@@ -288,7 +287,7 @@ class SQLStore implements EventStore, LifecycleListener {
     try {
       Files.copy(file, copyFile);
     } catch (IOException e) {
-      log.warn("Could not copy local database file with timestamp", e);
+      log.atWarning().withCause(e).log("Could not copy local database file with timestamp");
     }
   }
 }
