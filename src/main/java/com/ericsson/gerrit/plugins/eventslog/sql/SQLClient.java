@@ -29,6 +29,7 @@ import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
 import com.google.common.base.Supplier;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.server.events.ProjectEvent;
 import com.google.gerrit.server.events.SupplierSerializer;
 import com.google.gson.Gson;
@@ -42,11 +43,9 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 class SQLClient {
-  private static final Logger log = LoggerFactory.getLogger(SQLClient.class);
+  private static final FluentLogger log = FluentLogger.forEnclosingClass();
   private final Gson gson;
   private final SQLDialect databaseDialect;
 
@@ -144,9 +143,11 @@ class SQLClient {
               TABLE_NAME,
               DATE_ENTRY,
               new Timestamp(System.currentTimeMillis() - MILLISECONDS.convert(maxAge, DAYS))));
-      log.info("Events older than {} days were removed from database {}", maxAge, ds.getPoolName());
+      log.atInfo().log(
+          "Events older than %d days were removed from database %s", maxAge, ds.getPoolName());
     } catch (SQLException e) {
-      log.warn("Cannot remove old event entries from database {}", ds.getPoolName(), e);
+      log.atWarning().withCause(e).log(
+          "Cannot remove old event entries from database %s", ds.getPoolName());
     }
   }
 
@@ -159,7 +160,7 @@ class SQLClient {
     try {
       execute(format("DELETE FROM %s WHERE project = '%s'", TABLE_NAME, project));
     } catch (SQLException e) {
-      log.warn("Cannot remove project {} events from database", project, e);
+      log.atWarning().withCause(e).log("Cannot remove project %s events from database", project);
     }
   }
 
