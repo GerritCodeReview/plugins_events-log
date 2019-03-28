@@ -14,6 +14,7 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.restapi.Url;
 import com.google.gerrit.server.CurrentUser;
 import com.google.inject.Inject;
@@ -27,12 +28,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Singleton
 class EventsRestApiServlet extends HttpServlet {
-  private static final Logger log = LoggerFactory.getLogger(EventsRestApiServlet.class);
+  private static final FluentLogger log = FluentLogger.forEnclosingClass();
   private static final long serialVersionUID = 1L;
 
   private final EventStore store;
@@ -63,13 +62,13 @@ class EventsRestApiServlet extends HttpServlet {
         out.write(event + "\n");
       }
     } catch (MalformedQueryException e) {
-      log.error("Bad Request", e);
+      log.atSevere().withCause(e).log("Bad Request");
       rsp.sendError(HttpServletResponse.SC_BAD_REQUEST);
     } catch (ServiceUnavailableException e) {
-      log.error("Service Unavailable", e);
+      log.atSevere().withCause(e).log("Service Unavailable");
       rsp.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
     } catch (EventsLogException e) {
-      log.error("Could not query from request parameters", e);
+      log.atSevere().withCause(e).log("Could not query from request parameters");
     }
   }
 

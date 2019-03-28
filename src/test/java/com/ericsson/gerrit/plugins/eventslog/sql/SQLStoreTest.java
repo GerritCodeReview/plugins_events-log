@@ -28,6 +28,7 @@ import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
 import com.ericsson.gerrit.plugins.eventslog.ServiceUnavailableException;
 import com.google.common.collect.ImmutableList;
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.events.ProjectEvent;
 import com.google.gerrit.server.permissions.PermissionBackend;
@@ -55,12 +56,10 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SQLStoreTest {
-  private static final Logger log = LoggerFactory.getLogger(SQLStoreTest.class);
+  private static final FluentLogger log = FluentLogger.forEnclosingClass();
   private static final String TEST_URL = "jdbc:h2:mem:" + TABLE_NAME;
   private static final String TEST_LOCAL_URL = "jdbc:h2:mem:test";
   private static final String TEST_OPTIONS = "DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false";
@@ -413,7 +412,7 @@ public class SQLStoreTest {
     @Override
     public ScheduledFuture<?> scheduleWithFixedDelay(
         Runnable command, long initialDelay, long delay, TimeUnit unit) {
-      log.info(command.toString());
+      log.atInfo().log(command.toString());
       command.run();
       return null;
     }
