@@ -116,7 +116,7 @@ class SQLStore implements EventStore, LifecycleListener {
       try {
         permissionBackend
             .currentUser()
-            .project(new Project.NameKey(projectName))
+            .project(Project.nameKey(projectName))
             .check(ProjectPermission.ACCESS);
         entries.addAll(entry.getValue());
       } catch (AuthException e) {
