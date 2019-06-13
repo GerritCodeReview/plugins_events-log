@@ -36,7 +36,6 @@ java_library(
     visibility = ["//visibility:public"],
     exports = PLUGIN_DEPS + PLUGIN_TEST_DEPS + [
         ":events-log__plugin",
-        "@mockito//jar",
         "@hikaricp//jar",
     ],
 )
