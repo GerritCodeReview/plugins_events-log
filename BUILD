@@ -21,7 +21,7 @@ gerrit_plugin(
 )
 
 junit_tests(
-    name = "events_log_tests",
+    name = "events-log_tests",
     testonly = 1,
     srcs = glob(["src/test/java/**/*.java"]),
     tags = ["events-log"],
@@ -36,7 +36,6 @@ java_library(
     visibility = ["//visibility:public"],
     exports = PLUGIN_DEPS + PLUGIN_TEST_DEPS + [
         ":events-log__plugin",
-        "@mockito//jar",
         "@hikaricp//jar",
     ],
 )
