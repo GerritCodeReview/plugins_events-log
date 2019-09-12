@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d78282b_1a1cbafb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2019-09-12T12:14:13Z",
+      "side": 1,
+      "message": "usually",
+      "range": {
+        "startLine": 17,
+        "startChar": 32,
+        "endLine": 17,
+        "endChar": 39
+      },
+      "revId": "7bf1698ed5b3ef91f619d1e03b2ea99690ce62bd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3a7cd75_cfb9d91b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2019-09-12T12:14:13Z",
+      "side": 1,
+      "message": "OTOH Python 2 is going EOL in 2020, so that we could assume, that Python3 is on the path on Linux too, and just assume Python 3.",
+      "range": {
+        "startLine": 17,
+        "startChar": 47,
+        "endLine": 17,
+        "endChar": 63
+      },
+      "revId": "7bf1698ed5b3ef91f619d1e03b2ea99690ce62bd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a3f8262_b0c92922",
+        "filename": "tools/workspace-status.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2019-09-12T12:14:13Z",
+      "side": 1,
+      "message": "Make it one liner:\n\n  output \u003d check_output(\n       [[\u0027git\u0027, \u0027describe\u0027, \u0027--always\u0027, \u0027--match\u0027, \u0027v[0-9].*\u0027, \u0027--dirty\u0027]]).strip().decode(\u0027UTF-8\u0027)",
+      "range": {
+        "startLine": 18,
+        "startChar": 2,
+        "endLine": 18,
+        "endChar": 90
+      },
+      "revId": "7bf1698ed5b3ef91f619d1e03b2ea99690ce62bd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "325dd12d_8312afa4",
+        "filename": "tools/workspace-status.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2019-09-12T12:14:13Z",
+      "side": 1,
+      "message": "Integrate that call on line 18 above.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 32
+      },
+      "revId": "7bf1698ed5b3ef91f619d1e03b2ea99690ce62bd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1f7e9cf_3ea0701f",
+        "filename": "tools/workspace-status.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2019-09-12T12:14:13Z",
+      "side": 1,
+      "message": "You missed to stript the output, and here you are adding another new line. Old output with bash command:\n\n  $ bash workspace-status.sh\n  STABLE_BUILD_EVENTS-LOG_LABEL 9a256db\n  $\n\nNew output with python script:\n  $ python workspace-status.py\n  STABLE_BUILD_EVENTS-LOG_LABEL 9a256db\n\n  $",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 51
+      },
+      "revId": "7bf1698ed5b3ef91f619d1e03b2ea99690ce62bd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
