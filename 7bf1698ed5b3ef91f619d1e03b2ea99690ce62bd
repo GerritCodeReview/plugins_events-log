@@ -72,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "54178921_e06e118b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1088820
+      },
+      "writtenOn": "2019-09-12T15:17:40Z",
+      "side": 1,
+      "message": "Ok, this will make things even simpler :)\nI could delete the first import then. Should I?",
+      "parentUuid": "b3a7cd75_cfb9d91b",
+      "range": {
+        "startLine": 17,
+        "startChar": 47,
+        "endLine": 17,
+        "endChar": 63
+      },
+      "revId": "7bf1698ed5b3ef91f619d1e03b2ea99690ce62bd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "0a3f8262_b0c92922",
         "filename": "tools/workspace-status.py",
         "patchSetId": 1
