@@ -29,7 +29,7 @@ import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
 import com.ericsson.gerrit.plugins.eventslog.ServiceUnavailableException;
 import com.google.common.collect.ImmutableList;
 import com.google.common.flogger.FluentLogger;
-import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.events.ProjectEvent;
 import com.google.gerrit.server.permissions.PermissionBackend;
 import com.google.gerrit.server.permissions.PermissionBackendException;
