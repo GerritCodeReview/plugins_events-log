@@ -78,7 +78,7 @@ Add the plugin name to the `CUSTOM_PLUGINS` and to the
 To execute the tests run:
 
 ```
-  bazel test plugins/@PLUGIN@:events_log_tests
+  bazel test plugins/@PLUGIN@:events-log_tests
 ```
 
 More information about Buck can be found in the [Gerrit
