@@ -32,6 +32,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class EventsLogCleanerTest {
   private static final String PROJECT = "testProject";
+  private static final String PLUGIN_NAME = "events-log";
 
   @Mock private EventsLogConfig cfgMock;
   @Mock private EventsLogCleaner logCleanerMock;
@@ -44,7 +45,7 @@ public class EventsLogCleanerTest {
   @Before
   public void setUp() throws Exception {
     when(event.getProjectName()).thenReturn(PROJECT);
-    eventsLogCleaner = new EventsLogCleaner(eventsDb, executor);
+    eventsLogCleaner = new EventsLogCleaner(eventsDb, executor, PLUGIN_NAME);
   }
 
   @Test
