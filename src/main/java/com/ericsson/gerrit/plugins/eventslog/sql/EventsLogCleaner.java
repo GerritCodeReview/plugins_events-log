@@ -46,12 +46,12 @@ public class EventsLogCleaner implements ProjectDeletedListener {
   }
 
   public void removeProjectEventsAsync(String projectName) {
-    pool.submit(() -> eventsDb.removeProjectEvents(projectName));
+    pool.submit(new RemoveProjectEventsTask(projectName));
   }
 
   public void scheduleCleaningWith(int maxAge) {
     pool.scheduleAtFixedRate(
-        () -> eventsDb.removeOldEvents(maxAge), getInitialDelay(), INTERVAL, TimeUnit.SECONDS);
+        new RemoveOldEventsTask(maxAge), getInitialDelay(), INTERVAL, TimeUnit.SECONDS);
   }
 
   private long getInitialDelay() {
@@ -61,5 +61,41 @@ public class EventsLogCleaner implements ProjectDeletedListener {
       next = next.plusDays(1);
     }
     return Duration.between(now, next).getSeconds();
+  }
+
+  private class RemoveProjectEventsTask implements Runnable {
+    private final String projectName;
+
+    RemoveProjectEventsTask(String projectName) {
+      this.projectName = projectName;
+    }
+
+    @Override
+    public void run() {
+      eventsDb.removeProjectEvents(projectName);
+    }
+
+    @Override
+    public String toString() {
+      return "(EventsLog) Remove events for project " + projectName;
+    }
+  }
+
+  private class RemoveOldEventsTask implements Runnable {
+    private final int maxAge;
+
+    RemoveOldEventsTask(int maxAge) {
+      this.maxAge = maxAge;
+    }
+
+    @Override
+    public void run() {
+      eventsDb.removeOldEvents(maxAge);
+    }
+
+    @Override
+    public String toString() {
+      return "(EventsLog) Remove old events";
+    }
   }
 }
