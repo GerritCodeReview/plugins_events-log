@@ -23,6 +23,7 @@ import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
 import com.ericsson.gerrit.plugins.eventslog.ServiceUnavailableException;
 import com.google.common.flogger.FluentLogger;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.extensions.restapi.AuthException;
 import com.google.gerrit.reviewdb.client.Project;
@@ -62,6 +63,7 @@ class SQLStore implements EventStore, LifecycleListener {
   private boolean copyLocal;
   private final ScheduledExecutorService pool;
   private final PermissionBackend permissionBackend;
+  private final String pluginName;
   private ScheduledFuture<?> checkConnTask;
   private Path localPath;
 
@@ -72,7 +74,8 @@ class SQLStore implements EventStore, LifecycleListener {
       @LocalEventsDb SQLClient localEventsDb,
       @EventPool ScheduledExecutorService pool,
       PermissionBackend permissionBackend,
-      EventsLogCleaner eventsLogCleaner) {
+      EventsLogCleaner eventsLogCleaner,
+      @PluginName String pluginName) {
     this.maxAge = cfg.getMaxAge();
     this.maxTries = cfg.getMaxTries();
     this.waitTime = cfg.getWaitTime();
@@ -84,6 +87,7 @@ class SQLStore implements EventStore, LifecycleListener {
     this.pool = pool;
     this.permissionBackend = permissionBackend;
     this.localPath = cfg.getLocalStorePath();
+    this.pluginName = pluginName;
   }
 
   @Override
@@ -197,7 +201,7 @@ class SQLStore implements EventStore, LifecycleListener {
     if (!online) {
       checkConnTask =
           pool.scheduleWithFixedDelay(
-              new CheckConnectionTask(), 0, connectTime, TimeUnit.MILLISECONDS);
+              new CheckConnectionTask(pluginName), 0, connectTime, TimeUnit.MILLISECONDS);
     } else {
       cancelCheckConnectionTaskIfScheduled(false);
     }
@@ -238,7 +242,11 @@ class SQLStore implements EventStore, LifecycleListener {
   }
 
   class CheckConnectionTask implements Runnable {
-    CheckConnectionTask() {}
+    private final String taskName;
+
+    CheckConnectionTask(String prefix) {
+      this.taskName = String.format("[%s] Connect to database", prefix);
+    }
 
     @Override
     public void run() {
@@ -250,7 +258,7 @@ class SQLStore implements EventStore, LifecycleListener {
 
     @Override
     public String toString() {
-      return "(Events-log) Connect to database";
+      return taskName;
     }
 
     private boolean checkConnection() {

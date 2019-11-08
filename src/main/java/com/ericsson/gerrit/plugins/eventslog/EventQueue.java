@@ -14,6 +14,7 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.gerrit.server.git.WorkQueue;
 import com.google.inject.Inject;
@@ -22,17 +23,19 @@ import java.util.concurrent.ScheduledExecutorService;
 /** A queue for events to store. */
 public class EventQueue implements LifecycleListener {
   private final WorkQueue workQueue;
+  private final String pluginName;
   private ScheduledExecutorService pool;
 
   @Inject
-  EventQueue(WorkQueue workQueue) {
+  EventQueue(WorkQueue workQueue, @PluginName String pluginName) {
     this.workQueue = workQueue;
+    this.pluginName = pluginName;
   }
 
   /** {@inheritDoc} Create a new executor queue in WorkQueue for storing events. */
   @Override
   public void start() {
-    pool = workQueue.createQueue(1, "Store events");
+    pool = workQueue.createQueue(1, String.format("[%s] Store events", pluginName));
   }
 
   @Override
