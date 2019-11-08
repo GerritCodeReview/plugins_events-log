@@ -15,6 +15,7 @@
 package com.ericsson.gerrit.plugins.eventslog.sql;
 
 import com.ericsson.gerrit.plugins.eventslog.EventCleanerPool;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.events.ProjectDeletedListener;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -31,12 +32,17 @@ public class EventsLogCleaner implements ProjectDeletedListener {
   private static final long INTERVAL = TimeUnit.DAYS.toSeconds(1);
 
   private final SQLClient eventsDb;
+  private final String pluginName;
 
   private ScheduledExecutorService pool;
 
   @Inject
-  EventsLogCleaner(@EventsDb SQLClient eventsDb, @EventCleanerPool ScheduledExecutorService pool) {
+  EventsLogCleaner(
+      @EventsDb SQLClient eventsDb,
+      @EventCleanerPool ScheduledExecutorService pool,
+      @PluginName String pluginName) {
     this.eventsDb = eventsDb;
+    this.pluginName = pluginName;
     this.pool = pool;
   }
 
@@ -46,12 +52,12 @@ public class EventsLogCleaner implements ProjectDeletedListener {
   }
 
   public void removeProjectEventsAsync(String projectName) {
-    pool.submit(() -> eventsDb.removeProjectEvents(projectName));
+    pool.submit(new RemoveProjectEventsTask(pluginName, projectName));
   }
 
   public void scheduleCleaningWith(int maxAge) {
     pool.scheduleAtFixedRate(
-        () -> eventsDb.removeOldEvents(maxAge), getInitialDelay(), INTERVAL, TimeUnit.SECONDS);
+        new RemoveOldEventsTask(pluginName, maxAge), getInitialDelay(), INTERVAL, TimeUnit.SECONDS);
   }
 
   private long getInitialDelay() {
@@ -61,5 +67,45 @@ public class EventsLogCleaner implements ProjectDeletedListener {
       next = next.plusDays(1);
     }
     return Duration.between(now, next).getSeconds();
+  }
+
+  private class RemoveProjectEventsTask implements Runnable {
+    private final String projectName;
+    private final String taskName;
+
+    RemoveProjectEventsTask(String prefix, String projectName) {
+      this.projectName = projectName;
+      this.taskName = String.format("[%s] Remove events for project %s", prefix, projectName);
+    }
+
+    @Override
+    public void run() {
+      eventsDb.removeProjectEvents(projectName);
+    }
+
+    @Override
+    public String toString() {
+      return taskName;
+    }
+  }
+
+  private class RemoveOldEventsTask implements Runnable {
+    private final int maxAge;
+    private final String taskName;
+
+    RemoveOldEventsTask(String prefix, int maxAge) {
+      this.maxAge = maxAge;
+      this.taskName = String.format("[%s] Remove old events", prefix);
+    }
+
+    @Override
+    public void run() {
+      eventsDb.removeOldEvents(maxAge);
+    }
+
+    @Override
+    public String toString() {
+      return taskName;
+    }
   }
 }
