@@ -66,6 +66,7 @@ public class SQLStoreTest {
   private static final String TERM_CONN_MSG = "terminating connection";
   private static final String MSG = "message";
   private static final String GENERIC_QUERY = "SELECT * FROM " + TABLE_NAME;
+  private static final String PLUGIN_NAME = "events-log";
 
   @Mock private EventsLogConfig cfgMock;
   @Mock private PermissionBackend permissionBackendMock;
@@ -159,7 +160,13 @@ public class SQLStoreTest {
     doThrow(exceptions).doNothing().when(eventsDb).queryOne();
     store =
         new SQLStore(
-            cfgMock, eventsDb, localEventsDb, poolMock, permissionBackendMock, logCleanerMock);
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            permissionBackendMock,
+            logCleanerMock,
+            PLUGIN_NAME);
 
     store.start();
     store.storeEvent(mockEvent);
@@ -178,7 +185,13 @@ public class SQLStoreTest {
 
     store =
         new SQLStore(
-            cfgMock, eventsDb, localEventsDb, poolMock, permissionBackendMock, logCleanerMock);
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            permissionBackendMock,
+            logCleanerMock,
+            PLUGIN_NAME);
 
     store.start();
     store.storeEvent(mockEvent);
@@ -194,7 +207,13 @@ public class SQLStoreTest {
 
     store =
         new SQLStore(
-            cfgMock, eventsDb, localEventsDb, poolMock, permissionBackendMock, logCleanerMock);
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            permissionBackendMock,
+            logCleanerMock,
+            PLUGIN_NAME);
 
     store.start();
     store.storeEvent(mockEvent);
@@ -212,7 +231,13 @@ public class SQLStoreTest {
 
     store =
         new SQLStore(
-            cfgMock, eventsDb, localEventsDb, poolMock, permissionBackendMock, logCleanerMock);
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            permissionBackendMock,
+            logCleanerMock,
+            PLUGIN_NAME);
 
     store.start();
     store.storeEvent(mockEvent);
@@ -227,7 +252,13 @@ public class SQLStoreTest {
 
     store =
         new SQLStore(
-            cfgMock, eventsDb, localEventsDb, poolMock, permissionBackendMock, logCleanerMock);
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            permissionBackendMock,
+            logCleanerMock,
+            PLUGIN_NAME);
 
     store.start();
     store.storeEvent(mockEvent);
@@ -249,7 +280,13 @@ public class SQLStoreTest {
     localEventsDb = new SQLClient(config);
     store =
         new SQLStore(
-            cfgMock, eventsDb, localEventsDb, poolMock, permissionBackendMock, logCleanerMock);
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            permissionBackendMock,
+            logCleanerMock,
+            PLUGIN_NAME);
 
     localEventsDb.createDBIfNotCreated();
     localEventsDb.storeEvent(mockEvent);
@@ -274,7 +311,13 @@ public class SQLStoreTest {
 
     store =
         new SQLStore(
-            cfgMock, eventsDb, localEventsDb, poolMock, permissionBackendMock, logCleanerMock);
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            permissionBackendMock,
+            logCleanerMock,
+            PLUGIN_NAME);
 
     store.start();
     verify(localEventsDb).createDBIfNotCreated();
@@ -288,7 +331,13 @@ public class SQLStoreTest {
 
     store =
         new SQLStore(
-            cfgMock, eventsDb, localEventsDb, poolMock, permissionBackendMock, logCleanerMock);
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            permissionBackendMock,
+            logCleanerMock,
+            PLUGIN_NAME);
 
     store.start();
     store.storeEvent(mockEvent);
@@ -304,7 +353,13 @@ public class SQLStoreTest {
 
     store =
         new SQLStore(
-            cfgMock, eventsDb, localEventsDb, poolMock, permissionBackendMock, logCleanerMock);
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            permissionBackendMock,
+            logCleanerMock,
+            PLUGIN_NAME);
 
     store.start();
     store.storeEvent(mockEvent);
@@ -317,7 +372,13 @@ public class SQLStoreTest {
     localEventsDb = new SQLClient(config);
     store =
         new SQLStore(
-            cfgMock, eventsDb, localEventsDb, poolMock, permissionBackendMock, logCleanerMock);
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            permissionBackendMock,
+            logCleanerMock,
+            PLUGIN_NAME);
 
     store.start();
   }
@@ -343,10 +404,17 @@ public class SQLStoreTest {
 
     store =
         new SQLStore(
-            cfgMock, eventsDb, localEventsDb, poolMock, permissionBackendMock, logCleanerMock);
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            permissionBackendMock,
+            logCleanerMock,
+            PLUGIN_NAME);
 
     store.start();
-    poolMock.scheduleWithFixedDelay(store.new CheckConnectionTask(), 0, 0, TimeUnit.MILLISECONDS);
+    poolMock.scheduleWithFixedDelay(
+        store.new CheckConnectionTask(PLUGIN_NAME), 0, 0, TimeUnit.MILLISECONDS);
     verify(localEventsDb, times(2)).removeOldEvents(0);
   }
 
@@ -377,7 +445,13 @@ public class SQLStoreTest {
 
     store =
         new SQLStore(
-            cfgMock, eventsDb, localEventsDb, poolMock, permissionBackendMock, logCleanerMock);
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            permissionBackendMock,
+            logCleanerMock,
+            PLUGIN_NAME);
 
     store.start();
     verify(eventsDb).queryOne();
