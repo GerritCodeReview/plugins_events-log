@@ -16,7 +16,7 @@ package com.ericsson.gerrit.plugins.eventslog;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import com.google.gerrit.acceptance.GerritConfig;
+import com.google.gerrit.acceptance.config.GerritConfig;
 import com.google.gerrit.acceptance.LightweightPluginDaemonTest;
 import com.google.gerrit.acceptance.TestPlugin;
 import org.junit.Test;
