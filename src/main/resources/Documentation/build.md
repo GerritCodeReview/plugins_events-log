@@ -66,6 +66,13 @@ The output is created in
   bazel-bin/plugins/@PLUGIN@/@PLUGIN@.jar
 ```
 
+To execute the tests run either one of:
+
+```
+  bazel test --test_tag_filters=@PLUGIN@ //...
+  bazel test plugins/@PLUGIN@:@PLUGIN@_tests
+```
+
 This project can be imported into the Eclipse IDE.
 Add the plugin name to the `CUSTOM_PLUGINS` and to the
 `CUSTOM_PLUGINS_TEST_DEPS` set in Gerrit core in
@@ -75,12 +82,9 @@ Add the plugin name to the `CUSTOM_PLUGINS` and to the
   ./tools/eclipse/project.py
 ```
 
-To execute the tests run either one of:
+More information about Bazel can be found in the [Gerrit
+documentation](../../../Documentation/dev-bazel.html).	
 
-```
-  bazel test --test_tag_filters=@PLUGIN@ //...
-  bazel test plugins/@PLUGIN@:@PLUGIN@_tests
-```
+[Back to @PLUGIN@ documentation index][index]
 
-More information about Buck can be found in the [Gerrit
-documentation](../../../Documentation/dev-bazel.html).
+[index]: index.html
