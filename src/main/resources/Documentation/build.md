@@ -82,5 +82,9 @@ Add the plugin name to the `CUSTOM_PLUGINS` and to the
   ./tools/eclipse/project.py
 ```
 
-More information about Buck can be found in the [Gerrit
+More information about Bazel can be found in the [Gerrit
 documentation](../../../Documentation/dev-bazel.html).
+
+[Back to @PLUGIN@ documentation index][index]
+
+[index]: index.html
