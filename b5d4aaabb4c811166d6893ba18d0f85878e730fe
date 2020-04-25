@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b51ab314_b1f6bb76",
+        "filename": "WORKSPACE",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2020-04-25T05:30:29Z",
+      "side": 1,
+      "message": "Replace this with the release API",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 14,
+        "endChar": 1
+      },
+      "revId": "b5d4aaabb4c811166d6893ba18d0f85878e730fe",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
