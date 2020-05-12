@@ -1,4 +1,4 @@
-@PLUGIN@ - /events/ REST API
+@PLUGIN@ - /plugins/@PLUGIN@/events/ REST API
 ==================
 
 Events Endpoints
@@ -6,7 +6,7 @@ Events Endpoints
 
 ### List Events
 
-'GET /events/'
+'GET /plugins/@PLUGIN@/events/'
 
 Lists events that have happened. Will list the _n_ most recent events where _n_
 is the limit specified in the plugin configuration. See stream-events command
@@ -16,7 +16,7 @@ documentation for the types definition:
 Request
 
 ```
-  GET /events/ HTTP/1.0
+  GET /plugins/@PLUGIN@/events/ HTTP/1.0
 ```
 
 Response
