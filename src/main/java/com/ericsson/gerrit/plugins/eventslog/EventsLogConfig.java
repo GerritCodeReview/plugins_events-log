@@ -14,14 +14,15 @@
 
 package com.ericsson.gerrit.plugins.eventslog;
 
+import com.google.common.base.MoreObjects;
 import com.google.gerrit.extensions.annotations.PluginName;
-import com.google.gerrit.server.config.PluginConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.gerrit.server.config.SitePaths;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import org.eclipse.jgit.lib.Config;
 
 /** Holder of all things related to events-log plugin configuration. */
 @Singleton
@@ -64,22 +65,28 @@ public class EventsLogConfig {
 
   @Inject
   EventsLogConfig(PluginConfigFactory cfgFactory, SitePaths site, @PluginName String pluginName) {
-    PluginConfig cfg = cfgFactory.getFromGerritConfig(pluginName, true);
-    copyLocal = cfg.getBoolean(CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL);
-    maxAge = cfg.getInt(CONFIG_MAX_AGE, DEFAULT_MAX_AGE);
-    maxTries = cfg.getInt(CONFIG_MAX_TRIES, DEFAULT_MAX_TRIES);
-    returnLimit = cfg.getInt(CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT);
-    waitTime = cfg.getInt(CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME);
-    connectTime = cfg.getInt(CONFIG_CONN_TIME, DEFAULT_CONN_TIME);
-    storeUrl = cfg.getString(CONFIG_URL, H2_DB_PREFIX + site.data_dir.resolve("db").normalize());
+    Config cfg = cfgFactory.getGlobalPluginConfig(pluginName);
+    copyLocal = cfg.getBoolean(pluginName, CONFIG_COPY_LOCAL, DEFAULT_COPY_LOCAL);
+    maxAge = cfg.getInt(pluginName, CONFIG_MAX_AGE, DEFAULT_MAX_AGE);
+    maxTries = cfg.getInt(pluginName, CONFIG_MAX_TRIES, DEFAULT_MAX_TRIES);
+    returnLimit = cfg.getInt(pluginName, CONFIG_RETURN_LIMIT, DEFAULT_RETURN_LIMIT);
+    waitTime = cfg.getInt(pluginName, CONFIG_WAIT_TIME, DEFAULT_WAIT_TIME);
+    connectTime = cfg.getInt(pluginName, CONFIG_CONN_TIME, DEFAULT_CONN_TIME);
+    storeUrl =
+        MoreObjects.firstNonNull(
+            cfg.getString(pluginName, null, CONFIG_URL),
+            H2_DB_PREFIX + site.data_dir.resolve("db").normalize());
+
     localStorePath =
         Paths.get(
-            cfg.getString(
-                CONFIG_LOCAL_PATH, site.site_path.resolve("events-db").normalize().toString()));
-    urlOptions = cfg.getStringList(CONFIG_URL_OPTIONS);
-    storeUsername = cfg.getString(CONFIG_USERNAME);
-    storePassword = cfg.getString(CONFIG_PASSWORD);
-    maxConnections = Math.max(cfg.getInt(CONFIG_MAX_CONNECTIONS, DEFAULT_MAX_CONNECTIONS), 1);
+            MoreObjects.firstNonNull(
+                cfg.getString(pluginName, null, CONFIG_LOCAL_PATH),
+                site.resolve("events-db").normalize().toString()));
+    urlOptions = cfg.getStringList(pluginName, null, CONFIG_URL_OPTIONS);
+    storeUsername = cfg.getString(pluginName, null, CONFIG_USERNAME);
+    storePassword = cfg.getString(pluginName, null, CONFIG_PASSWORD);
+    maxConnections =
+        Math.max(cfg.getInt(pluginName, CONFIG_MAX_CONNECTIONS, DEFAULT_MAX_CONNECTIONS), 1);
   }
 
   public int getMaxAge() {

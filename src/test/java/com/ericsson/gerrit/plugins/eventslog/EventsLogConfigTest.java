@@ -54,7 +54,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class EventsLogConfigTest {
   private static final String LOCAL_STORE_PATH = "~/gerrit/events-db/";
-  private static final String PLUGIN = "plugin";
   private static final String PLUGIN_NAME = "eventsLog";
   private static final int CUSTOM_MAX_CONNECTIONS = 32;
   private static final List<String> urlOptions = ImmutableList.of("DB_CLOSE_DELAY=10");
@@ -73,8 +72,8 @@ public class EventsLogConfigTest {
 
   @Test
   public void shouldReturnDefaultsWhenMissingConfig() {
-    PluginConfig pluginConfig = new PluginConfig(PLUGIN_NAME, new Config());
-    when(cfgFactoryMock.getFromGerritConfig(PLUGIN_NAME, true)).thenReturn(pluginConfig);
+    Config pluginConfig = new Config();
+    when(cfgFactoryMock.getGlobalPluginConfig(PLUGIN_NAME)).thenReturn(pluginConfig);
     EventsLogConfig eventsLogConfig = new EventsLogConfig(cfgFactoryMock, site, PLUGIN_NAME);
     assertThat(eventsLogConfig.getCopyLocal()).isFalse();
     assertThat(eventsLogConfig.getMaxAge()).isEqualTo(DEFAULT_MAX_AGE);
@@ -94,8 +93,7 @@ public class EventsLogConfigTest {
 
   @Test
   public void shouldReturnConfigValues() {
-    PluginConfig pluginConfig = new PluginConfig(PLUGIN_NAME, customConfig());
-    when(cfgFactoryMock.getFromGerritConfig(PLUGIN_NAME, true)).thenReturn(pluginConfig);
+    when(cfgFactoryMock.getGlobalPluginConfig(PLUGIN_NAME)).thenReturn(customConfig());
     EventsLogConfig eventsLogConfig = new EventsLogConfig(cfgFactoryMock, site, PLUGIN_NAME);
     assertThat(eventsLogConfig.getCopyLocal()).isTrue();
     assertThat(eventsLogConfig.getMaxAge()).isEqualTo(20);
@@ -113,18 +111,18 @@ public class EventsLogConfigTest {
 
   private Config customConfig() {
     Config config = new Config();
-    config.setBoolean(PLUGIN, PLUGIN_NAME, CONFIG_COPY_LOCAL, true);
-    config.setInt(PLUGIN, PLUGIN_NAME, CONFIG_MAX_AGE, 20);
-    config.setInt(PLUGIN, PLUGIN_NAME, CONFIG_MAX_TRIES, 5);
-    config.setInt(PLUGIN, PLUGIN_NAME, CONFIG_RETURN_LIMIT, 10000);
-    config.setInt(PLUGIN, PLUGIN_NAME, CONFIG_CONN_TIME, 5000);
-    config.setInt(PLUGIN, PLUGIN_NAME, CONFIG_WAIT_TIME, 5000);
-    config.setString(PLUGIN, PLUGIN_NAME, CONFIG_URL, "jdbc:h2:~/gerrit/db");
-    config.setString(PLUGIN, PLUGIN_NAME, CONFIG_LOCAL_PATH, LOCAL_STORE_PATH);
-    config.setStringList(PLUGIN, PLUGIN_NAME, CONFIG_URL_OPTIONS, urlOptions);
-    config.setString(PLUGIN, PLUGIN_NAME, CONFIG_USERNAME, "testUsername");
-    config.setString(PLUGIN, PLUGIN_NAME, CONFIG_PASSWORD, "testPassword");
-    config.setInt(PLUGIN, PLUGIN_NAME, CONFIG_MAX_CONNECTIONS, CUSTOM_MAX_CONNECTIONS);
+    config.setBoolean(PLUGIN_NAME, null, CONFIG_COPY_LOCAL, true);
+    config.setInt(PLUGIN_NAME, null, CONFIG_MAX_AGE, 20);
+    config.setInt(PLUGIN_NAME, null, CONFIG_MAX_TRIES, 5);
+    config.setInt(PLUGIN_NAME, null, CONFIG_RETURN_LIMIT, 10000);
+    config.setInt(PLUGIN_NAME, null, CONFIG_CONN_TIME, 5000);
+    config.setInt(PLUGIN_NAME, null, CONFIG_WAIT_TIME, 5000);
+    config.setString(PLUGIN_NAME, null, CONFIG_URL, "jdbc:h2:~/gerrit/db");
+    config.setString(PLUGIN_NAME, null, CONFIG_LOCAL_PATH, LOCAL_STORE_PATH);
+    config.setStringList(PLUGIN_NAME, null, CONFIG_URL_OPTIONS, urlOptions);
+    config.setString(PLUGIN_NAME, null, CONFIG_USERNAME, "testUsername");
+    config.setString(PLUGIN_NAME, null, CONFIG_PASSWORD, "testPassword");
+    config.setInt(PLUGIN_NAME, null, CONFIG_MAX_CONNECTIONS, CUSTOM_MAX_CONNECTIONS);
     return config;
   }
 }
