@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75bb4297_d807a8d2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1108586
+      },
+      "writtenOn": "2020-07-18T16:24:08Z",
+      "side": 1,
+      "message": "I\u0027m going to hurt you",
+      "revId": "ca4f001a21a93b77a6fcfa1487fc2c82eb414dc7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
