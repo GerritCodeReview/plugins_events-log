@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5871b580_fce20e59",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2020-07-21T15:41:49Z",
+      "side": 1,
+      "message": "are\n\nAlternatively, you could make \u0027configurations\u0027 singular, here and in the subject above. If you rather choose \u0027are\u0027, then this line will need new wrapping.",
+      "range": {
+        "startLine": 9,
+        "startChar": 43,
+        "endLine": 9,
+        "endChar": 45
+      },
+      "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9ba1d439_3b58ade1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2020-07-21T15:41:49Z",
+      "side": 1,
+      "message": "Did we confirm this behaviour as genuine or expected on Gerrit\u0027s own (core) behalf? Maybe add a sentence here about that aspect.",
+      "range": {
+        "startLine": 10,
+        "startChar": 9,
+        "endLine": 10,
+        "endChar": 44
+      },
+      "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89ed85ee_b3a53b39",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2020-07-21T15:41:49Z",
+      "side": 1,
+      "message": "Extra blank line.",
+      "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "692be4d0_e822ef0f",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfig.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2020-07-21T15:41:49Z",
+      "side": 1,
+      "message": "This refactoring looks unrelated; extract to own change?\n\nThese new uses of null may be inadequate, as opposed to introducing a helper method instead.",
+      "range": {
+        "startLine": 74,
+        "startChar": 41,
+        "endLine": 77,
+        "endChar": 5
+      },
+      "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a131d396_2016bc57",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfig.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2020-07-21T15:41:49Z",
+      "side": 1,
+      "message": "Same comment as above.",
+      "range": {
+        "startLine": 78,
+        "startChar": 50,
+        "endLine": 83,
+        "endChar": 43
+      },
+      "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3fa4e4c1_c9992907",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfig.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2020-07-21T15:41:49Z",
+      "side": 1,
+      "message": "(Unrelated blank line inserted?)",
+      "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e66c4e5_f0b10ecc",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfigTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2020-07-21T15:41:49Z",
+      "side": 1,
+      "message": "Likely unused in turn (below comment).",
+      "range": {
+        "startLine": 43,
+        "startChar": 21,
+        "endLine": 44,
+        "endChar": 26
+      },
+      "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3441be60_b74cc58f",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfigTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2020-07-21T15:41:49Z",
+      "side": 1,
+      "message": "Unused? -You can check your Eclipse warnings to ultimately confirm this.",
+      "range": {
+        "startLine": 62,
+        "startChar": 28,
+        "endLine": 62,
+        "endChar": 37
+      },
+      "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
