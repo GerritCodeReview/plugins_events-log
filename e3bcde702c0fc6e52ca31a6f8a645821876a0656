@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2d2e96c8_364d2ef5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1083195
+      },
+      "writtenOn": "2020-07-22T18:29:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5871b580_fce20e59",
+      "range": {
+        "startLine": 9,
+        "startChar": 43,
+        "endLine": 9,
+        "endChar": 45
+      },
+      "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9ba1d439_3b58ade1",
         "filename": "/COMMIT_MSG",
         "patchSetId": 7
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "7b0493eb_57b5992c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1083195
+      },
+      "writtenOn": "2020-07-22T18:29:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ba1d439_3b58ade1",
+      "range": {
+        "startLine": 10,
+        "startChar": 9,
+        "endLine": 10,
+        "endChar": 44
+      },
+      "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "89ed85ee_b3a53b39",
         "filename": "/COMMIT_MSG",
         "patchSetId": 7
@@ -62,6 +110,24 @@
       "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4e36e263_a534f253",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1083195
+      },
+      "writtenOn": "2020-07-22T18:29:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89ed85ee_b3a53b39",
+      "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "d4c3ede7_32e00163",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfig.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1083195
+      },
+      "writtenOn": "2020-07-22T18:29:46Z",
+      "side": 1,
+      "message": "null in the getString indicates subsection, I didn\u0027t put storeurl under any of subsections so it is null there. PluginConfig has default value for getString, while Config doesn\u0027t. I will reuse the asme mechanism PluginConfig uses to deal with default values.",
+      "parentUuid": "692be4d0_e822ef0f",
+      "range": {
+        "startLine": 74,
+        "startChar": 41,
+        "endLine": 77,
+        "endChar": 5
+      },
+      "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a131d396_2016bc57",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfig.java",
         "patchSetId": 7
@@ -111,6 +201,30 @@
     },
     {
       "key": {
+        "uuid": "b2c1b729_e9717c71",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfig.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1083195
+      },
+      "writtenOn": "2020-07-22T18:29:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a131d396_2016bc57",
+      "range": {
+        "startLine": 78,
+        "startChar": 50,
+        "endLine": 83,
+        "endChar": 43
+      },
+      "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fa4e4c1_c9992907",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfig.java",
         "patchSetId": 7
@@ -125,6 +239,24 @@
       "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d8a15549_92e9dddb",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfig.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1083195
+      },
+      "writtenOn": "2020-07-22T18:29:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fa4e4c1_c9992907",
+      "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -151,6 +283,30 @@
     },
     {
       "key": {
+        "uuid": "20123561_b52fe750",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfigTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1083195
+      },
+      "writtenOn": "2020-07-22T18:29:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3e66c4e5_f0b10ecc",
+      "range": {
+        "startLine": 43,
+        "startChar": 21,
+        "endLine": 44,
+        "endChar": 26
+      },
+      "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3441be60_b74cc58f",
         "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfigTest.java",
         "patchSetId": 7
@@ -171,6 +327,30 @@
       "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbcbe3a4_4ce8cb17",
+        "filename": "src/test/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfigTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1083195
+      },
+      "writtenOn": "2020-07-22T18:29:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3441be60_b74cc58f",
+      "range": {
+        "startLine": 62,
+        "startChar": 28,
+        "endLine": 62,
+        "endChar": 37
+      },
+      "revId": "e3bcde702c0fc6e52ca31a6f8a645821876a0656",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
