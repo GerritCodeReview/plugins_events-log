@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8551bcaf_d907ef2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2020-07-23T16:51:52Z",
+      "side": 1,
+      "message": "Is this change based on the latest off that branch? -Zuul says:\n\n\"Merge Failed. This change or one of its cross-repo dependencies was unable to be automatically merged with the current state of its repository. Please rebase the change and upload a new patchset.\"",
+      "revId": "e6a30be087aeaa6e05c58ffbf9a7f0c3031255ab",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
