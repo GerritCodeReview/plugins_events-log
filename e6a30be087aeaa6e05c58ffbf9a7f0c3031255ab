@@ -16,6 +16,23 @@
       "revId": "e6a30be087aeaa6e05c58ffbf9a7f0c3031255ab",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "59429573_bb31347d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1083195
+      },
+      "writtenOn": "2020-07-23T16:55:39Z",
+      "side": 1,
+      "message": "I created this change through gerrit UI. I think its maybe due to this change being on refs/meta/config and it cant build it.",
+      "revId": "e6a30be087aeaa6e05c58ffbf9a7f0c3031255ab",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
