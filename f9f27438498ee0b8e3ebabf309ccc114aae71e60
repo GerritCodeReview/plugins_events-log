@@ -1,11 +1,13 @@
 {
   "checks": {
     "zuul-check:plugins_events-log": {
-      "state": "SCHEDULED",
-      "message": "Change has been enqueued in check",
+      "state": "FAILED",
+      "message": "Change failed",
+      "url": "https://ci.gerritcodereview.com/t/gerrit/buildset/e151a979a7b742bca9335408a837fba1",
       "started": "2020-07-23T17:04:32Z",
+      "finished": "2020-07-23T17:04:34Z",
       "created": "2020-07-23T17:04:33Z",
-      "updated": "2020-07-23T17:04:33Z"
+      "updated": "2020-07-23T17:04:34Z"
     }
   }
 }
