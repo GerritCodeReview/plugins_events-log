@@ -42,6 +42,48 @@
     },
     {
       "key": {
+        "uuid": "215b21e4_b0a932d1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1083195
+      },
+      "writtenOn": "2020-07-24T17:13:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e3889f2_1f7e4b28",
+      "revId": "c85a49cf7e5821ceb0eeeaac369261d51e890933",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c4d6b22c_3637074a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1083195
+      },
+      "writtenOn": "2020-07-24T17:13:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0542c5d7_4a26988b",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 13
+      },
+      "revId": "c85a49cf7e5821ceb0eeeaac369261d51e890933",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa016117_58a3cf56",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 10
@@ -73,6 +115,24 @@
       "revId": "c85a49cf7e5821ceb0eeeaac369261d51e890933",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e38f4458_1ded76c5",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsLogConfig.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1083195
+      },
+      "writtenOn": "2020-07-24T17:13:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "839e4d65_ab15bddc",
+      "revId": "c85a49cf7e5821ceb0eeeaac369261d51e890933",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
