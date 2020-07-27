@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9c224856_87df7ca5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2020-07-27T20:51:15Z",
+      "side": 1,
+      "message": "Blocking merge-ability explicitly, until the base changes are submitted (first).",
+      "revId": "8d29bc1ea866acc3b5e1a34fdbf2970bb6169150",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
