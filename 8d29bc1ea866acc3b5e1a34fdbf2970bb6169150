@@ -16,6 +16,29 @@
       "revId": "8d29bc1ea866acc3b5e1a34fdbf2970bb6169150",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c2d9480f_fcc043e4",
+        "filename": "src/main/resources/Documentation/config.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2020-07-27T21:03:02Z",
+      "side": 1,
+      "message": "May be just config, because this file already called events-log.config?",
+      "range": {
+        "startLine": 8,
+        "startChar": 2,
+        "endLine": 8,
+        "endChar": 12
+      },
+      "revId": "8d29bc1ea866acc3b5e1a34fdbf2970bb6169150",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
