@@ -39,6 +39,30 @@
       "revId": "8d29bc1ea866acc3b5e1a34fdbf2970bb6169150",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6e5d4956_89e55264",
+        "filename": "src/main/resources/Documentation/config.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2020-07-27T21:04:09Z",
+      "side": 1,
+      "message": "Or, never mind, just checked reviewers plugin, and indeed it also has plugin name repetition:\n\n```\n  [reviewers]\n    enableREST \u003d true\n    suggestOnly \u003d false\n    ignoreWip \u003d false\n    ignorePrivate \u003d false\n```",
+      "parentUuid": "c2d9480f_fcc043e4",
+      "range": {
+        "startLine": 8,
+        "startChar": 2,
+        "endLine": 8,
+        "endChar": 12
+      },
+      "revId": "8d29bc1ea866acc3b5e1a34fdbf2970bb6169150",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
