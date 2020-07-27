@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d58c699_fe817b41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2020-07-27T19:08:05Z",
+      "side": 1,
+      "message": "I can do the merge-up once I reach this branch for the ongoing bazlets upgrades (latest releases).",
+      "revId": "5a922f1ce5d1a4ef39e2170e5a1d05b140214960",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
