@@ -34,6 +34,24 @@
       "revId": "5a922f1ce5d1a4ef39e2170e5a1d05b140214960",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "93b51087_ea8d182b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012732
+      },
+      "writtenOn": "2020-07-27T20:26:02Z",
+      "side": 1,
+      "message": "\u003e Thanks, I will merge this changes then.\n\nHold on, let me rebase it on the ones I\u0027m about to push, please.",
+      "parentUuid": "c1f281c3_d09f3a06",
+      "revId": "5a922f1ce5d1a4ef39e2170e5a1d05b140214960",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
