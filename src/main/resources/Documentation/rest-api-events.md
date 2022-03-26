@@ -64,9 +64,8 @@ EXAMPLES
 
 Query the change events which happened between 2014-09-01 and 2014-10-01
 
->    curl --user joe:secret http://host:port/plugins/@PLUGIN@/events/?t1=2014-09-01;t2=2014-10-01
+>    curl --user joe:secret http://host:port/a/plugins/@PLUGIN@/events/?t1=2014-09-01;t2=2014-10-01
 
 Query the change events which happened between 2014-10-29 10:00:00 and 2014-10-29 11:00:00
 
->    curl --user joe:secret "http://host:port/plugins/@PLUGIN@/events/?t1=2014-10-29%2010%3A00%3A00.000;t2=2014-10-29%2011%3A00%3A00"
-
+>    curl --user joe:secret "http://host:port/a/plugins/@PLUGIN@/events/?t1=2014-10-29%2010%3A00%3A00.000;t2=2014-10-29%2011%3A00%3A00"
