@@ -16,6 +16,23 @@
       "message": "Looks ok form me if no one have objections I will approve it",
       "revId": "7d2dfa784dd8eb3bbeb3a95177e1346ef09f42de",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8adbefa_6a605cfc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1153995
+      },
+      "writtenOn": "2022-11-23T13:44:37Z",
+      "side": 1,
+      "message": "authenticated Reset API URL n example",
+      "revId": "7d2dfa784dd8eb3bbeb3a95177e1346ef09f42de",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ],
   "submitRequirementResults": [
