@@ -486,7 +486,7 @@ public class SQLStoreTest {
     @Override
     public ScheduledFuture<?> scheduleWithFixedDelay(
         Runnable command, long initialDelay, long delay, TimeUnit unit) {
-      log.atInfo().log(command.toString());
+      log.atInfo().log("%s", command);
       command.run();
       return null;
     }
