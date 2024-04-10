@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ba730f6_a5bed25f",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLTable.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1065256
+      },
+      "writtenOn": "2024-04-10T11:42:15Z",
+      "side": 1,
+      "message": "Doesn\u0027t that have to go below the POSTGRESQL case? Otherwise it will also be used for MYSQL and H2",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 14
+      },
+      "revId": "f9debb023e09fd17e56c97de549787a222eed228",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
