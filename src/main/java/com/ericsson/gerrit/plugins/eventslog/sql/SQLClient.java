@@ -66,7 +66,14 @@ class SQLClient {
    */
   void createDBIfNotCreated() throws SQLException {
     execute(SQLTable.createTableQuery(databaseDialect));
-    execute(SQLTable.createIndexes(databaseDialect));
+    switch (databaseDialect) {
+      case SPANNER:
+        execute(SQLTable.createSpannerDateIndex());
+        execute(SQLTable.createSpannerProjectIndex());
+        break;
+      default:
+        execute(SQLTable.createIndexes(databaseDialect));
+    }
   }
 
   /**
