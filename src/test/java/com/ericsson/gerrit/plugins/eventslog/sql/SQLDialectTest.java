@@ -35,4 +35,9 @@ public class SQLDialectTest {
   public void postgresqlIsParsed() throws Exception {
     assertThat(SQLDialect.fromJdbcUrl("jdbc:postgresql://")).isEqualTo(SQLDialect.POSTGRESQL);
   }
+
+  @Test
+  public void spannerIsParsed() throws Exception {
+    assertThat(SQLDialect.fromJdbcUrl("jdbc:cloudspanner://")).isEqualTo(SQLDialect.SPANNER);
+  }
 }

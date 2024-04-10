@@ -18,7 +18,8 @@ package com.ericsson.gerrit.plugins.eventslog.sql;
 public enum SQLDialect {
   H2,
   MYSQL,
-  POSTGRESQL;
+  POSTGRESQL,
+  SPANNER;
 
   /**
    * This attempts to determine the SQL dialect from the JDBC URL. If the URL does not match one of
@@ -32,6 +33,8 @@ public enum SQLDialect {
       return POSTGRESQL;
     } else if (jdbcUrl.contains("mysql")) {
       return MYSQL;
+    } else if (jdbcUrl.contains("cloudspanner")) {
+      return SPANNER;
     }
     return H2;
   }
