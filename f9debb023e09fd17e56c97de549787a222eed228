@@ -22,6 +22,30 @@
       },
       "revId": "f9debb023e09fd17e56c97de549787a222eed228",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a4614ef_b1bfa9bf",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLTable.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1144862
+      },
+      "writtenOn": "2024-04-10T11:51:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ba730f6_a5bed25f",
+      "range": {
+        "startLine": 80,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 14
+      },
+      "revId": "f9debb023e09fd17e56c97de549787a222eed228",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
