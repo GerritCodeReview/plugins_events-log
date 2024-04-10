@@ -59,6 +59,13 @@ final class SQLTable {
           + "END IF;\n"
           + "END$$;";
 
+  /**
+   * This is the Spanner idempotent index-creation query format. Inputs, in order: index-name,
+   * table-name, index-column
+   */
+  private static final String SPANNER_INDEX_CREATION_FORMAT =
+      "CREATE INDEX IF NOT EXISTS %s ON %s (%s)";
+
   private SQLTable() {}
 
   static String createTableQuery(SQLDialect databaseDialect) {
@@ -68,14 +75,26 @@ final class SQLTable {
       case POSTGRESQL:
         query.append(format("%s SERIAL PRIMARY KEY,", PRIMARY_ENTRY));
         break;
+      case SPANNER:
+        query.append(format("%s STRING(36) DEFAULT (GENERATE_UUID()), ", PRIMARY_ENTRY));
+        break;
       case MYSQL:
       case H2:
       default:
         query.append(format("%s INT AUTO_INCREMENT PRIMARY KEY,", PRIMARY_ENTRY));
     }
-    query.append(format("%s VARCHAR(255),", PROJECT_ENTRY));
-    query.append(format("%s TIMESTAMP DEFAULT NOW(),", DATE_ENTRY));
-    query.append(format("%s TEXT)", EVENT_ENTRY));
+    switch (databaseDialect) {
+      case SPANNER:
+        query.append(format("%s STRING(255),", PROJECT_ENTRY));
+        query.append(format("%s TIMESTAMP DEFAULT (CURRENT_TIMESTAMP()),", DATE_ENTRY));
+        query.append(format("%s STRING(MAX))", EVENT_ENTRY));
+        query.append(format(" PRIMARY KEY (%s)", PRIMARY_ENTRY));
+        break;
+      default:
+        query.append(format("%s VARCHAR(255),", PROJECT_ENTRY));
+        query.append(format("%s TIMESTAMP DEFAULT NOW(),", DATE_ENTRY));
+        query.append(format("%s TEXT)", EVENT_ENTRY));
+    }
     return query.toString();
   }
 
@@ -138,6 +157,18 @@ final class SQLTable {
     query.append(format(H2_INDEX_CREATION_FORMAT, CREATED_INDEX, TABLE_NAME, DATE_ENTRY));
     query.append(";");
     query.append(format(H2_INDEX_CREATION_FORMAT, PROJECT_INDEX, TABLE_NAME, PROJECT_ENTRY));
+    return query.toString();
+  }
+
+  static String createSpannerDateIndex() {
+    StringBuilder query = new StringBuilder();
+    query.append(format(SPANNER_INDEX_CREATION_FORMAT, CREATED_INDEX, TABLE_NAME, DATE_ENTRY));
+    return query.toString();
+  }
+
+  static String createSpannerProjectIndex() {
+    StringBuilder query = new StringBuilder();
+    query.append(format(SPANNER_INDEX_CREATION_FORMAT, PROJECT_INDEX, TABLE_NAME, PROJECT_ENTRY));
     return query.toString();
   }
 }
