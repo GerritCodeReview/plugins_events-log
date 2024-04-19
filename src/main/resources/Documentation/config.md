@@ -30,6 +30,7 @@ File '@PLUGIN@.config'
 * h2 (default)
 * postgresql
 * mysql
+* cloudspanner
 
 @PLUGIN@.localStorePath
 :    Specify the path to the directory in which to keep the back up database.
