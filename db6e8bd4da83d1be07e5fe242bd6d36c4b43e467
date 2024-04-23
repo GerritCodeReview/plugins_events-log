@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "497813b7_f4e92b96",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1003873
+      },
+      "writtenOn": "2024-04-23T14:45:00Z",
+      "side": 1,
+      "message": "How do we know that this is a correct implementation?\nWhen is one instance of `SQLEntry` considered lesser/greater than the other?\nWhich part of the code uses `SQLEntry` as `Comparable`?",
+      "revId": "db6e8bd4da83d1be07e5fe242bd6d36c4b43e467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cb02130_bccf6c50",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1003873
+      },
+      "writtenOn": "2024-04-23T14:45:00Z",
+      "side": 1,
+      "message": "Based on the documentation of `Objects.equals` [1] all of the above checks are unnecessary. So this method can be reduced to this single line of code.\n\n[1] https://docs.oracle.com/javase/8/docs/api/java/util/Objects.html#equals-java.lang.Object-java.lang.Object-",
+      "revId": "db6e8bd4da83d1be07e5fe242bd6d36c4b43e467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
