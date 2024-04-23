@@ -195,10 +195,11 @@ class SQLClient {
       while (rs.next()) {
         entries.add(
             new SQLEntry(
+                databaseDialect,
                 rs.getString(PROJECT_ENTRY),
                 rs.getTimestamp(DATE_ENTRY),
                 rs.getString(EVENT_ENTRY),
-                rs.getInt(PRIMARY_ENTRY)));
+                rs.getObject(PRIMARY_ENTRY)));
       }
       return entries;
     }
@@ -211,10 +212,11 @@ class SQLClient {
       while (rs.next()) {
         SQLEntry entry =
             new SQLEntry(
+                databaseDialect,
                 rs.getString(PROJECT_ENTRY),
                 rs.getTimestamp(DATE_ENTRY),
                 rs.getString(EVENT_ENTRY),
-                rs.getInt(PRIMARY_ENTRY));
+                rs.getObject(PRIMARY_ENTRY));
         result.put(rs.getString(PROJECT_ENTRY), entry);
       }
       return result;
