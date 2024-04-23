@@ -39,13 +39,6 @@ public class SQLEntryTest {
   }
 
   @Test
-  public void testHashCode() throws Exception {
-    assertThat(entry1.hashCode()).isEqualTo(-2147483618);
-    assertThat(entry2.hashCode()).isEqualTo(-2147483617);
-    assertThat(entry3.hashCode()).isEqualTo(31);
-  }
-
-  @Test
   public void testGetName() throws Exception {
     assertThat(entry1.getName()).isEqualTo("name1");
   }

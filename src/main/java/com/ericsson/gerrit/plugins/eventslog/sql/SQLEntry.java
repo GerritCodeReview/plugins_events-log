@@ -15,15 +15,15 @@
 package com.ericsson.gerrit.plugins.eventslog.sql;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 class SQLEntry implements Comparable<SQLEntry> {
-  private static final int SEED = 31;
   private String name;
   private Timestamp timestamp;
   private String event;
-  private int id;
+  private Object id;
 
-  SQLEntry(String name, Timestamp timestamp, String event, int id) {
+  SQLEntry(String name, Timestamp timestamp, String event, Object id) {
     this.name = name;
     this.timestamp = timestamp;
     this.event = event;
@@ -44,22 +44,23 @@ class SQLEntry implements Comparable<SQLEntry> {
 
   @Override
   public int compareTo(SQLEntry o) {
-    return Integer.compare(this.id, o.id);
+    if (id instanceof Integer && o.id instanceof Integer) {
+      return Integer.compare((int) id, (int) o.id);
+    }
+    return String.valueOf(id).compareTo(String.valueOf(o.id));
   }
 
   @Override
   public boolean equals(Object o) {
-    if (o == null) {
-      return false;
-    }
-    if (this.getClass() != o.getClass()) {
-      return false;
-    }
-    return this.id == ((SQLEntry) o).id;
+    if (this == o) return true;
+    if (o == null) return false;
+    if (getClass() != o.getClass()) return false;
+    SQLEntry other = (SQLEntry) o;
+    return Objects.equals(id, other.id);
   }
 
   @Override
   public int hashCode() {
-    return SEED + id;
+    return Objects.hash(id);
   }
 }
