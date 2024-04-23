@@ -16,6 +16,24 @@
       "message": "SQLStore#queryChangeEvents sorts SQLEntrys by natural order, I wonder what this means for events stored in spanner, sorting lexicographically by uuid doesn\u0027t seem to make sense.\n\nFor integers that\u0027s the order events have been added to the database since their id is an integer sequence.\n\nIf we want to sort events by age also when using spanner the closest thing would be sorting by timestamp.",
       "revId": "6cfcd104c4355e8c4ed0c3ff7b941ec5a42c06ee",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f810661_f4d87657",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1144862
+      },
+      "writtenOn": "2024-04-23T12:29:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65d31e30_99c96c87",
+      "revId": "6cfcd104c4355e8c4ed0c3ff7b941ec5a42c06ee",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
