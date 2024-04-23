@@ -28,21 +28,38 @@ public class SQLEntryTest {
   private SQLEntry entry2;
   private SQLEntry entry3;
   private SQLEntry entry4;
+  private SQLEntry entry5;
+  private SQLEntry entry6;
+  private SQLEntry entry7;
 
   @Before
   public void setUp() {
     Timestamp timestamp = new Timestamp(NOW);
-    entry1 = new SQLEntry("name1", timestamp, "event1", Integer.MAX_VALUE);
-    entry2 = new SQLEntry("name2", timestamp, "event2", Integer.MIN_VALUE);
-    entry3 = new SQLEntry("name3", timestamp, "event3", 0);
-    entry4 = new SQLEntry("name4", timestamp, "event4", Integer.MAX_VALUE);
-  }
-
-  @Test
-  public void testHashCode() throws Exception {
-    assertThat(entry1.hashCode()).isEqualTo(-2147483618);
-    assertThat(entry2.hashCode()).isEqualTo(-2147483617);
-    assertThat(entry3.hashCode()).isEqualTo(31);
+    entry1 = new SQLEntry(SQLDialect.H2, "name1", timestamp, "event1", Integer.MAX_VALUE);
+    entry2 = new SQLEntry(SQLDialect.H2, "name2", timestamp, "event2", Integer.MIN_VALUE);
+    entry3 = new SQLEntry(SQLDialect.H2, "name3", timestamp, "event3", 0);
+    entry4 = new SQLEntry(SQLDialect.H2, "name4", timestamp, "event4", Integer.MAX_VALUE);
+    entry5 =
+        new SQLEntry(
+            SQLDialect.SPANNER,
+            "name5",
+            timestamp,
+            "event1",
+            "b54e6b86-7686-4c3e-a4e4-8edd60ae328e");
+    entry6 =
+        new SQLEntry(
+            SQLDialect.SPANNER,
+            "name6",
+            timestamp,
+            "event2",
+            "0ebc1d7f-5888-45d8-8cd1-244eda611a38");
+    entry7 =
+        new SQLEntry(
+            SQLDialect.SPANNER,
+            "name7",
+            timestamp,
+            "event2",
+            "0ebc1d7f-5888-45d8-8cd1-244eda611a38");
   }
 
   @Test
@@ -73,5 +90,8 @@ public class SQLEntryTest {
     assertThat(entry1.equals("String object")).isFalse();
     assertThat(entry1.equals(entry2)).isFalse();
     assertThat(entry1.equals(entry4)).isTrue();
+    assertThat(entry4.equals(entry5)).isFalse();
+    assertThat(entry5.equals(entry6)).isFalse();
+    assertThat(entry6.equals(entry7)).isTrue();
   }
 }
