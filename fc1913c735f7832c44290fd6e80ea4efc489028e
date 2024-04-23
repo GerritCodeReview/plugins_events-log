@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "97a2e465_1d1c67d7",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1004034
+      },
+      "writtenOn": "2024-04-23T11:19:03Z",
+      "side": 1,
+      "message": "this seems hacky, which comparison to use should be based on SQLDialect",
+      "revId": "fc1913c735f7832c44290fd6e80ea4efc489028e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb2ec8ef_ca29a53d",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
         "patchSetId": 2
@@ -14,6 +31,23 @@
       "writtenOn": "2024-04-23T09:55:57Z",
       "side": 1,
       "message": "The reason I only check id instead of name, timestamp, and event as well, is because of the equality test at the end of SqlEntryTest.java (see \u003cnext\u003e file to review). There, they assert that two different entries with the same ID should be identified as identical. Given that previous decision, I opted to inherit the previous implementation here. Not 100% sure about this choice though I think it\u0027s a bit of a moot point since ID can never be reused across entries as long as it\u0027s the primary key in the db implementation.",
+      "revId": "fc1913c735f7832c44290fd6e80ea4efc489028e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfa0b9b5_4d8b22c6",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1004034
+      },
+      "writtenOn": "2024-04-23T11:19:03Z",
+      "side": 1,
+      "message": "Doesn\u0027t this break the first two requirements of the hashcode contract ?\nSee https://www.baeldung.com/java-equals-hashcode-contracts#1-the-hashcode-contract\n- internal consistency: the value of hashCode() may only change if a property that is in equals() changes\n- equals consistency: objects that are equal to each other must return the same hashCode\n- collisions: unequal objects may have the same hashCode",
       "revId": "fc1913c735f7832c44290fd6e80ea4efc489028e",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
