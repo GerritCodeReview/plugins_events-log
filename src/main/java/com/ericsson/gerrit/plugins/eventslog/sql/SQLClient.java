@@ -195,10 +195,11 @@ class SQLClient {
       while (rs.next()) {
         entries.add(
             new SQLEntry(
+                databaseDialect,
                 rs.getString(PROJECT_ENTRY),
                 rs.getTimestamp(DATE_ENTRY),
                 rs.getString(EVENT_ENTRY),
-                rs.getInt(PRIMARY_ENTRY)));
+                rs.getObject(PRIMARY_ENTRY)));
       }
       return entries;
     }
@@ -208,13 +209,15 @@ class SQLClient {
       throws MalformedQueryException {
     try (ResultSet rs = stat.executeQuery(query)) {
       ListMultimap<String, SQLEntry> result = ArrayListMultimap.create();
+      SQLEntry entry;
       while (rs.next()) {
-        SQLEntry entry =
+        entry =
             new SQLEntry(
+                databaseDialect,
                 rs.getString(PROJECT_ENTRY),
                 rs.getTimestamp(DATE_ENTRY),
                 rs.getString(EVENT_ENTRY),
-                rs.getInt(PRIMARY_ENTRY));
+                rs.getObject(PRIMARY_ENTRY));
         result.put(rs.getString(PROJECT_ENTRY), entry);
       }
       return result;
