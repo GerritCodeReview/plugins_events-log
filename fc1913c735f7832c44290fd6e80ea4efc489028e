@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89b97fde_64ca13a4",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1144862
+      },
+      "writtenOn": "2024-04-23T11:42:37Z",
+      "side": 1,
+      "message": "Refactored SQLEntry now to take database dialect.",
+      "parentUuid": "97a2e465_1d1c67d7",
+      "revId": "fc1913c735f7832c44290fd6e80ea4efc489028e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb2ec8ef_ca29a53d",
