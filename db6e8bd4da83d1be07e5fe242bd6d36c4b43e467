@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7d7b4fa8_f5406dd8",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1004034
+      },
+      "writtenOn": "2024-04-23T15:12:19Z",
+      "side": 1,
+      "message": "SQLStore#queryChangeEvents sorts SQLEntrys by natural order",
+      "parentUuid": "497813b7_f4e92b96",
+      "revId": "db6e8bd4da83d1be07e5fe242bd6d36c4b43e467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5cb02130_bccf6c50",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
         "patchSetId": 6
