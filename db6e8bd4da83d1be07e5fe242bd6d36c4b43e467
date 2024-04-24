@@ -54,6 +54,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ba35f8a_188b43ce",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1003873
+      },
+      "writtenOn": "2024-04-24T08:00:59Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d8da33b7_0cc24ac6",
+      "revId": "db6e8bd4da83d1be07e5fe242bd6d36c4b43e467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5cb02130_bccf6c50",

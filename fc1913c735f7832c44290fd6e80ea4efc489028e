@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3cff9868_fd4cddcb",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1003873
+      },
+      "writtenOn": "2024-04-24T08:00:59Z",
+      "side": 1,
+      "message": "I think this is fine. Two different instances with the same ID are of course possible in memory and this `equals` implementation considers them as equal.",
+      "parentUuid": "bb2ec8ef_ca29a53d",
+      "revId": "fc1913c735f7832c44290fd6e80ea4efc489028e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cfa0b9b5_4d8b22c6",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
         "patchSetId": 2
