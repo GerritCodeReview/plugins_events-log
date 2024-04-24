@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6a8ea35a_8a9cec9b",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1004034
+      },
+      "writtenOn": "2024-04-24T09:42:18Z",
+      "side": 1,
+      "message": "nit: I think we should check `o instanceof SQLEntry` since using `#getClass` rules out subclasses of `SQLEntry` (which don\u0027t exist)",
+      "revId": "a9bb695f71f6cafd5f8368f251d1ed9cc055b4be",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b9862da3_c9a7c103",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
         "patchSetId": 8
