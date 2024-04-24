@@ -35,6 +35,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9eed9a4_e80ff037",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1144862
+      },
+      "writtenOn": "2024-04-24T08:55:08Z",
+      "side": 1,
+      "message": "I had these originally... removed based on: https://gerrit-review.googlesource.com/c/plugins/events-log/+/422020/comment/5cb02130_bccf6c50/\n\nWill add my checks back.",
+      "parentUuid": "5b73b6ed_63be39fd",
+      "revId": "b6b71e0082a2b17ebd36bfb263d2269274149c6e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80d612f3_4db64ec1",
@@ -48,6 +66,30 @@
       "writtenOn": "2024-04-24T08:43:47Z",
       "side": 1,
       "message": "accessing `id` if `other` is `null` throws an NPE\n\n```suggestion\n    return Objects.equals(id, other \u003d\u003d null ? null: other.id);\n```",
+      "range": {
+        "startLine": 64,
+        "startChar": 30,
+        "endLine": 64,
+        "endChar": 38
+      },
+      "revId": "b6b71e0082a2b17ebd36bfb263d2269274149c6e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae20fe7f_066bdb02",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLEntry.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1144862
+      },
+      "writtenOn": "2024-04-24T08:55:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "80d612f3_4db64ec1",
       "range": {
         "startLine": 64,
         "startChar": 30,
