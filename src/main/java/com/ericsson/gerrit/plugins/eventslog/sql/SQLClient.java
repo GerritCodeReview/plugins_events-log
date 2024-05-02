@@ -132,9 +132,21 @@ class SQLClient {
    * @throws SQLException If there was a problem with the database
    */
   void storeEvent(String projectName, Timestamp timestamp, String event) throws SQLException {
+    String values;
+    switch (databaseDialect) {
+      case SPANNER:
+        // Workaround since Spanner converts java.sql.Timestamp objects
+        String timeStr = (timestamp != null) ? timestamp.toInstant().toString() : null;
+        values = format("VALUES('%s', '%s', '%s')", projectName, timeStr, event);
+        break;
+      default:
+        values = format("VALUES('%s', '%s', '%s')", projectName, timestamp, event);
+        break;
+    }
+
     execute(
         format("INSERT INTO %s(%s, %s, %s) ", TABLE_NAME, PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
-            + format("VALUES('%s', '%s', '%s')", projectName, timestamp, event));
+            + values);
   }
 
   /**
