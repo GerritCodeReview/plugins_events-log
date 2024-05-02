@@ -22,7 +22,6 @@ import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.TABLE_NAME;
 import static java.lang.String.format;
 import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
@@ -41,6 +40,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,7 +119,7 @@ class SQLClient {
   void storeEvent(ProjectEvent event) throws SQLException {
     storeEvent(
         event.getProjectNameKey().get(),
-        new Timestamp(SECONDS.toMillis(event.eventCreatedOn)),
+        Timestamp.from(Instant.ofEpochSecond(event.eventCreatedOn)),
         gson.toJson(event));
   }
 
@@ -132,9 +132,21 @@ class SQLClient {
    * @throws SQLException If there was a problem with the database
    */
   void storeEvent(String projectName, Timestamp timestamp, String event) throws SQLException {
+    String values;
+    switch (databaseDialect) {
+      case SPANNER:
+        // Workaround since Spanner converts java.sql.Timestamp objects
+        Instant instant = (timestamp != null) ? timestamp.toInstant() : null;
+        values = format("VALUES('%s', '%s', '%s')", projectName, instant, event);
+        break;
+      default:
+        values = format("VALUES('%s', '%s', '%s')", projectName, timestamp, event);
+        break;
+    }
+
     execute(
         format("INSERT INTO %s(%s, %s, %s) ", TABLE_NAME, PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
-            + format("VALUES('%s', '%s', '%s')", projectName, timestamp, event));
+            + values);
   }
 
   /**
