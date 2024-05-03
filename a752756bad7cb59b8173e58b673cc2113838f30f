@@ -16,6 +16,23 @@
       "message": "Alternatively, we can use Spanner\u0027s built-in TIMESTAMP_SECONDS() and the epoch seconds (event.eventCreatedOn). So `format(\"VALUES(\u0027%s\u0027, TIMESTAMP_SECONDS(%s), \u0027%s\u0027)\", projectName, event.eventCreatedOn, event);` The downside is we\u0027d need to refactor the method to pass the event data just for this purpose.\n\nhttps://cloud.google.com/spanner/docs/reference/standard-sql/timestamp_functions#timestamp_seconds",
       "revId": "a752756bad7cb59b8173e58b673cc2113838f30f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0565732_c7dbe5fc",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLClient.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1004034
+      },
+      "writtenOn": "2024-05-03T10:58:59Z",
+      "side": 1,
+      "message": "I propose we replace formatting SQL statements as `String` by using `PreparedStatement` and its typed setter methods to set parameters.\n\nThat\u0027s faster, prevents vulnerabilities by SQL injection and allows to delegate type conversions to the JDBC driver. For setting the event timestamp I\u0027d use the `PreparedStatement#setTime(int parameterIndex, Time x, Calendar cal)` method passing a `Calendar` for the UTC timezone.\n\nhttps://docs.oracle.com/en/java/javase/17/docs/api/java.sql/java/sql/PreparedStatement.html#setTime(int,java.sql.Time,java.util.Calendar)",
+      "revId": "a752756bad7cb59b8173e58b673cc2113838f30f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
