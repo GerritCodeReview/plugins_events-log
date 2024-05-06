@@ -16,6 +16,24 @@
       "message": "Why is this needed? First, this code change affects all supported dialects (not only spanner). Second, now we have double conversion:\nInstant -\u003e Timestamp -\u003e Instant",
       "revId": "d79e0a9a4c3411892de838ab7ea5eda80aa8da7f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34852344_d213f28f",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLClient.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1144862
+      },
+      "writtenOn": "2024-05-06T10:46:30Z",
+      "side": 1,
+      "message": "I initially made this change because it was suggested by Matthias on Thursday but it didn\u0027t affect the issue. I have reverted this part back now.",
+      "parentUuid": "be02cdca_9f872880",
+      "revId": "d79e0a9a4c3411892de838ab7ea5eda80aa8da7f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
