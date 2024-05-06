@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5dc97bd2_283774c9",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLClient.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1003873
+      },
+      "writtenOn": "2024-05-06T09:08:44Z",
+      "side": 1,
+      "message": "This sentence looks unfinished to me",
+      "revId": "a752756bad7cb59b8173e58b673cc2113838f30f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ef164fcf_fd26b9fe",
         "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLClient.java",
         "patchSetId": 4
@@ -31,6 +48,24 @@
       "writtenOn": "2024-05-03T10:58:59Z",
       "side": 1,
       "message": "I propose we replace formatting SQL statements as `String` by using `PreparedStatement` and its typed setter methods to set parameters.\n\nThat\u0027s faster, prevents vulnerabilities by SQL injection and allows to delegate type conversions to the JDBC driver. For setting the event timestamp I\u0027d use the `PreparedStatement#setTime(int parameterIndex, Time x, Calendar cal)` method passing a `Calendar` for the UTC timezone.\n\nhttps://docs.oracle.com/en/java/javase/17/docs/api/java.sql/java/sql/PreparedStatement.html#setTime(int,java.sql.Time,java.util.Calendar)",
+      "revId": "a752756bad7cb59b8173e58b673cc2113838f30f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de7d0786_20162da2",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLClient.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1003873
+      },
+      "writtenOn": "2024-05-06T09:08:44Z",
+      "side": 1,
+      "message": "This proposal is OK but it would affect all supported SQL dialects in this plugin and shall be rather done in a separate change.",
+      "parentUuid": "a0565732_c7dbe5fc",
       "revId": "a752756bad7cb59b8173e58b673cc2113838f30f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
