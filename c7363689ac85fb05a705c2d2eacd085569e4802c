@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75749964_6caa4f63",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1003873
+      },
+      "writtenOn": "2024-05-06T11:10:19Z",
+      "side": 1,
+      "message": "Yes, I can confirm that with this short `jshell` session:\n```\njshell\u003e import java.time.Ins\nInstant         InstantSource\njshell\u003e import java.time.Instant;\n\njshell\u003e Instant n \u003d Instant.now();\nn \u003d\u003d\u003e 2024-05-06T11:08:32.065638Z\n\njshell\u003e String.format(\"%s\", n);\n$3 \u003d\u003d\u003e \"2024-05-06T11:08:32.065638Z\"\n```",
+      "revId": "c7363689ac85fb05a705c2d2eacd085569e4802c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
