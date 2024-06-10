@@ -35,14 +35,11 @@ class EventsRestApiServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   private final EventStore store;
-  private final QueryMaker queryMaker;
   private final Provider<CurrentUser> userProvider;
 
   @Inject
-  EventsRestApiServlet(
-      EventStore store, QueryMaker queryMaker, Provider<CurrentUser> userProvider) {
+  EventsRestApiServlet(EventStore store, Provider<CurrentUser> userProvider) {
     this.store = store;
-    this.queryMaker = queryMaker;
     this.userProvider = userProvider;
   }
 
@@ -57,8 +54,7 @@ class EventsRestApiServlet extends HttpServlet {
     Map<String, String> params = req.getQueryString() != null ? getParameters(req) : null;
 
     try (Writer out = rsp.getWriter()) {
-      String query = queryMaker.formQueryFromRequestParameters(params);
-      for (String event : store.queryChangeEvents(query)) {
+      for (String event : store.queryChangeEvents(params)) {
         out.write(event + "\n");
       }
     } catch (MalformedQueryException e) {

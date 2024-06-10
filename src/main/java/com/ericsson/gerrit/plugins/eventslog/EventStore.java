@@ -16,6 +16,7 @@ package com.ericsson.gerrit.plugins.eventslog;
 
 import com.google.gerrit.server.events.ProjectEvent;
 import java.util.List;
+import java.util.Map;
 
 /** A store for change events to query. */
 public interface EventStore {
@@ -30,9 +31,9 @@ public interface EventStore {
   /**
    * Returns events from the store based on the given query.
    *
-   * @param query the query used to get events
+   * @param params the query parameters used to get events
    * @return a list of events in String format.
    * @throws EventsLogException if the given query can't be processed
    */
-  List<String> queryChangeEvents(String query) throws EventsLogException;
+  List<String> queryChangeEvents(Map<String, String> params) throws EventsLogException;
 }
