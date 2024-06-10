@@ -19,6 +19,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.ericsson.gerrit.plugins.eventslog.sql.SQLStore;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gerrit.server.CurrentUser;
@@ -41,8 +42,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 public class EventsRestApiServletTest {
   private static final String RANDOM_QUERY = "random query";
 
-  @Mock private EventStore storeMock;
-  @Mock private QueryMaker queryMakerMock;
+  @Mock private SQLStore storeMock;
   @Mock private Provider<CurrentUser> userProviderMock;
   @Mock private CurrentUser userMock;
   @Mock private HttpServletRequest reqMock;
@@ -53,7 +53,7 @@ public class EventsRestApiServletTest {
 
   @Before
   public void setUp() {
-    eventServlet = new EventsRestApiServlet(storeMock, queryMakerMock, userProviderMock);
+    eventServlet = new EventsRestApiServlet(storeMock, userProviderMock);
 
     when(userProviderMock.get()).thenReturn(userMock);
     when(userMock.isIdentifiedUser()).thenReturn(true);
@@ -62,8 +62,7 @@ public class EventsRestApiServletTest {
   @Test
   public void queryStringSplitting() throws Exception {
     when(reqMock.getQueryString()).thenReturn("a=1;b=2");
-    when(queryMakerMock.formQueryFromRequestParameters(captor.capture())).thenReturn(RANDOM_QUERY);
-    when(storeMock.queryChangeEvents(RANDOM_QUERY)).thenReturn(new ArrayList<>());
+    when(storeMock.queryChangeEvents(captor.capture())).thenReturn(new ArrayList<>());
     eventServlet.doGet(reqMock, rspMock);
     assertThat(ImmutableMap.of("a", "1", "b", "2")).isEqualTo(captor.getValue());
   }
@@ -71,8 +70,7 @@ public class EventsRestApiServletTest {
   @Test
   public void badQueryString() throws Exception {
     when(reqMock.getQueryString()).thenReturn("a;b");
-    when(queryMakerMock.formQueryFromRequestParameters(captor.capture())).thenReturn(RANDOM_QUERY);
-    when(storeMock.queryChangeEvents(RANDOM_QUERY)).thenReturn(new ArrayList<>());
+    when(storeMock.queryChangeEvents(captor.capture())).thenReturn(new ArrayList<>());
     eventServlet.doGet(reqMock, rspMock);
     assertThat(captor.getValue()).isEmpty();
   }
@@ -88,8 +86,7 @@ public class EventsRestApiServletTest {
   public void testBadRequestCode() throws Exception {
     when(reqMock.getQueryString()).thenReturn("@@");
     Map<String, String> emptyParams = ImmutableMap.of();
-    when(queryMakerMock.formQueryFromRequestParameters(emptyParams))
-        .thenThrow(new MalformedQueryException());
+    when(storeMock.queryChangeEvents(emptyParams)).thenThrow(new MalformedQueryException());
     eventServlet.doGet(reqMock, rspMock);
     verify(rspMock).sendError(HttpServletResponse.SC_BAD_REQUEST);
   }
@@ -100,8 +97,7 @@ public class EventsRestApiServletTest {
     PrintWriter outMock = mock(PrintWriter.class);
     List<String> listMock = ImmutableList.of("event one", "event two");
     when(rspMock.getWriter()).thenReturn(outMock);
-    when(queryMakerMock.formQueryFromRequestParameters(captor.capture())).thenReturn(RANDOM_QUERY);
-    when(storeMock.queryChangeEvents(RANDOM_QUERY)).thenReturn(listMock);
+    when(storeMock.queryChangeEvents(captor.capture())).thenReturn(listMock);
     eventServlet.doGet(reqMock, rspMock);
     verify(outMock).write(listMock.get(0) + "\n");
     verify(outMock).write(listMock.get(1) + "\n");
