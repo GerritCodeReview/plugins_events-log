@@ -26,6 +26,7 @@ import static org.mockito.Mockito.when;
 
 import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
+import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
 import com.ericsson.gerrit.plugins.eventslog.ServiceUnavailableException;
 import com.google.common.collect.ImmutableList;
 import com.google.common.flogger.FluentLogger;
@@ -78,6 +79,7 @@ public class SQLStoreTest {
   private SQLClient localEventsDb;
   private SQLStore store;
   private ScheduledExecutorService poolMock;
+  private QueryMaker queryMaker;
   private HikariConfig config;
 
   private Statement stat;
@@ -95,6 +97,7 @@ public class SQLStoreTest {
     mockEvent = new MockEvent();
     stat = conn.createStatement();
     poolMock = new PoolMock();
+    queryMaker = new SQLQueryMaker(cfgMock);
     when(cfgMock.getMaxAge()).thenReturn(5);
     when(cfgMock.getLocalStorePath()).thenReturn(testFolder.getRoot().toPath());
   }
@@ -163,6 +166,7 @@ public class SQLStoreTest {
             cfgMock,
             eventsDb,
             localEventsDb,
+            queryMaker,
             poolMock,
             permissionBackendMock,
             logCleanerMock,
@@ -188,6 +192,7 @@ public class SQLStoreTest {
             cfgMock,
             eventsDb,
             localEventsDb,
+            queryMaker,
             poolMock,
             permissionBackendMock,
             logCleanerMock,
@@ -210,6 +215,7 @@ public class SQLStoreTest {
             cfgMock,
             eventsDb,
             localEventsDb,
+            queryMaker,
             poolMock,
             permissionBackendMock,
             logCleanerMock,
@@ -234,6 +240,7 @@ public class SQLStoreTest {
             cfgMock,
             eventsDb,
             localEventsDb,
+            queryMaker,
             poolMock,
             permissionBackendMock,
             logCleanerMock,
@@ -255,6 +262,7 @@ public class SQLStoreTest {
             cfgMock,
             eventsDb,
             localEventsDb,
+            queryMaker,
             poolMock,
             permissionBackendMock,
             logCleanerMock,
@@ -283,6 +291,7 @@ public class SQLStoreTest {
             cfgMock,
             eventsDb,
             localEventsDb,
+            queryMaker,
             poolMock,
             permissionBackendMock,
             logCleanerMock,
@@ -314,6 +323,7 @@ public class SQLStoreTest {
             cfgMock,
             eventsDb,
             localEventsDb,
+            queryMaker,
             poolMock,
             permissionBackendMock,
             logCleanerMock,
@@ -334,6 +344,7 @@ public class SQLStoreTest {
             cfgMock,
             eventsDb,
             localEventsDb,
+            queryMaker,
             poolMock,
             permissionBackendMock,
             logCleanerMock,
@@ -356,6 +367,7 @@ public class SQLStoreTest {
             cfgMock,
             eventsDb,
             localEventsDb,
+            queryMaker,
             poolMock,
             permissionBackendMock,
             logCleanerMock,
@@ -375,6 +387,7 @@ public class SQLStoreTest {
             cfgMock,
             eventsDb,
             localEventsDb,
+            queryMaker,
             poolMock,
             permissionBackendMock,
             logCleanerMock,
@@ -407,6 +420,7 @@ public class SQLStoreTest {
             cfgMock,
             eventsDb,
             localEventsDb,
+            queryMaker,
             poolMock,
             permissionBackendMock,
             logCleanerMock,
@@ -448,6 +462,7 @@ public class SQLStoreTest {
             cfgMock,
             eventsDb,
             localEventsDb,
+            queryMaker,
             poolMock,
             permissionBackendMock,
             logCleanerMock,
