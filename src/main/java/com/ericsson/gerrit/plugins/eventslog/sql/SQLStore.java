@@ -21,7 +21,9 @@ import com.ericsson.gerrit.plugins.eventslog.EventPool;
 import com.ericsson.gerrit.plugins.eventslog.EventStore;
 import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
+import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
 import com.ericsson.gerrit.plugins.eventslog.ServiceUnavailableException;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.extensions.annotations.PluginName;
@@ -42,19 +44,22 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 @Singleton
-class SQLStore implements EventStore, LifecycleListener {
+@VisibleForTesting
+public class SQLStore implements EventStore, LifecycleListener {
   private static final FluentLogger log = FluentLogger.forEnclosingClass();
   private static final String H2_DB_SUFFIX = ".h2.db";
 
   private final EventsLogCleaner eventsLogCleaner;
   private SQLClient eventsDb;
   private SQLClient localEventsDb;
+  private final QueryMaker queryMaker;
   private final int maxAge;
   private final int maxTries;
   private final int waitTime;
@@ -72,6 +77,7 @@ class SQLStore implements EventStore, LifecycleListener {
       EventsLogConfig cfg,
       @EventsDb SQLClient eventsDb,
       @LocalEventsDb SQLClient localEventsDb,
+      QueryMaker queryMaker,
       @EventPool ScheduledExecutorService pool,
       PermissionBackend permissionBackend,
       EventsLogCleaner eventsLogCleaner,
@@ -83,6 +89,7 @@ class SQLStore implements EventStore, LifecycleListener {
     this.copyLocal = cfg.getCopyLocal();
     this.eventsDb = eventsDb;
     this.localEventsDb = localEventsDb;
+    this.queryMaker = queryMaker;
     this.eventsLogCleaner = eventsLogCleaner;
     this.pool = pool;
     this.permissionBackend = permissionBackend;
@@ -109,6 +116,12 @@ class SQLStore implements EventStore, LifecycleListener {
    * @throws ServiceUnavailableException if working in offline mode
    */
   @Override
+  public List<String> queryChangeEvents(Map<String, String> params) throws EventsLogException {
+    String query = queryMaker.formQueryFromRequestParameters(params);
+    return queryChangeEvents(query);
+  }
+
+  @VisibleForTesting
   public List<String> queryChangeEvents(String query) throws EventsLogException {
     if (!online) {
       throw new ServiceUnavailableException();
