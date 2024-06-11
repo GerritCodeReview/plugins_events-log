@@ -33,6 +33,7 @@ class SQLQueryMaker {
   private static final int TWO = 2;
   private static final String TIME_ONE = "t1";
   private static final String TIME_TWO = "t2";
+  private static final String UTC = "+00:00";
   private static final DateTimeFormatter DATE_TIME_FORMAT =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
   private static final DateTimeFormatter DATE_ONLY_FORMAT =
@@ -57,8 +58,8 @@ class SQLQueryMaker {
       throw new MalformedQueryException(e);
     }
     return String.format(
-        "SELECT * FROM %s WHERE %s BETWEEN '%s' and '%s' ORDER BY date_created LIMIT %d",
-        TABLE_NAME, DATE_ENTRY, dates[0], dates[1], returnLimit);
+        "SELECT * FROM %s WHERE %s BETWEEN '%s%s' and '%s%s' ORDER BY date_created LIMIT %d",
+        TABLE_NAME, DATE_ENTRY, dates[0], UTC, dates[1], UTC, returnLimit);
   }
 
   public String getDefaultQuery() {

@@ -41,7 +41,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
@@ -469,7 +469,7 @@ public class SQLStoreTest {
 
     store.start();
     verify(eventsDb).queryOne();
-    verify(eventsDb).storeEvent(any(String.class), any(Timestamp.class), any(String.class));
+    verify(eventsDb).storeEvent(any(String.class), any(Instant.class), any(String.class));
     List<SQLEntry> entries = localEventsDb.getAll();
     assertThat(entries).isEmpty();
   }
