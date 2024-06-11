@@ -20,7 +20,6 @@ import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.TABLE_NAME;
 
 import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
-import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.time.LocalDate;
@@ -30,7 +29,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Map;
 
 @Singleton
-class SQLQueryMaker implements QueryMaker {
+class SQLQueryMaker {
   private static final int TWO = 2;
   private static final String TIME_ONE = "t1";
   private static final String TIME_TWO = "t2";
@@ -47,7 +46,6 @@ class SQLQueryMaker implements QueryMaker {
     this.returnLimit = config.getReturnLimit();
   }
 
-  @Override
   public String formQueryFromRequestParameters(Map<String, String> params)
       throws MalformedQueryException {
     if (params == null) {
@@ -64,7 +62,6 @@ class SQLQueryMaker implements QueryMaker {
         TABLE_NAME, DATE_ENTRY, dates[0], UTC, dates[1], UTC, returnLimit);
   }
 
-  @Override
   public String getDefaultQuery() {
     return String.format(
         "SELECT * FROM (SELECT * FROM %s ORDER BY %s DESC LIMIT %s) a ORDER BY %s ASC",

@@ -19,7 +19,6 @@ import static org.mockito.Mockito.when;
 
 import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
-import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +33,7 @@ public class QueryMakerTest {
   private static final String OLD_DATE = "2013-10-10 10:00:00";
   private static final String NEW_DATE = "2014-10-10 10:00:00";
 
-  private QueryMaker queryMaker;
+  private SQLQueryMaker queryMaker;
   private String defaultQuery;
 
   @Mock private EventsLogConfig cfgMock;
