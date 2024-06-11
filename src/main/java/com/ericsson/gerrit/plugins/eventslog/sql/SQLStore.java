@@ -21,7 +21,6 @@ import com.ericsson.gerrit.plugins.eventslog.EventPool;
 import com.ericsson.gerrit.plugins.eventslog.EventStore;
 import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
 import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
-import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
 import com.ericsson.gerrit.plugins.eventslog.ServiceUnavailableException;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.flogger.FluentLogger;
@@ -59,7 +58,7 @@ public class SQLStore implements EventStore, LifecycleListener {
   private final EventsLogCleaner eventsLogCleaner;
   private SQLClient eventsDb;
   private SQLClient localEventsDb;
-  private final QueryMaker queryMaker;
+  private final SQLQueryMaker queryMaker;
   private final int maxAge;
   private final int maxTries;
   private final int waitTime;
@@ -77,7 +76,7 @@ public class SQLStore implements EventStore, LifecycleListener {
       EventsLogConfig cfg,
       @EventsDb SQLClient eventsDb,
       @LocalEventsDb SQLClient localEventsDb,
-      QueryMaker queryMaker,
+      SQLQueryMaker queryMaker,
       @EventPool ScheduledExecutorService pool,
       PermissionBackend permissionBackend,
       EventsLogCleaner eventsLogCleaner,
