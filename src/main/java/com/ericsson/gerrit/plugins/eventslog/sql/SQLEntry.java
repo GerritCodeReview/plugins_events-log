@@ -18,22 +18,16 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 class SQLEntry implements Comparable<SQLEntry> {
-  private SQLDialect dialect;
   private String name;
   private Timestamp timestamp;
   private String event;
   private Object id;
 
-  SQLEntry(SQLDialect dialect, String name, Timestamp timestamp, String event, Object id) {
-    this.dialect = dialect;
+  SQLEntry(String name, Timestamp timestamp, String event, Object id) {
     this.name = name;
     this.timestamp = timestamp;
     this.event = event;
     this.id = id;
-  }
-
-  public SQLDialect getDialect() {
-    return dialect;
   }
 
   public String getName() {
@@ -50,12 +44,7 @@ class SQLEntry implements Comparable<SQLEntry> {
 
   @Override
   public int compareTo(SQLEntry o) {
-    switch (dialect) {
-      case SPANNER:
-        return timestamp.compareTo(o.timestamp);
-      default:
-        return Integer.compare((int) id, (int) o.id);
-    }
+    return timestamp.compareTo(o.timestamp);
   }
 
   @Override

@@ -208,7 +208,6 @@ class SQLClient {
       while (rs.next()) {
         entries.add(
             new SQLEntry(
-                databaseDialect,
                 rs.getString(PROJECT_ENTRY),
                 rs.getTimestamp(DATE_ENTRY),
                 rs.getString(EVENT_ENTRY),
@@ -225,7 +224,6 @@ class SQLClient {
       while (rs.next()) {
         SQLEntry entry =
             new SQLEntry(
-                databaseDialect,
                 rs.getString(PROJECT_ENTRY),
                 rs.getTimestamp(DATE_ENTRY),
                 rs.getString(EVENT_ENTRY),
