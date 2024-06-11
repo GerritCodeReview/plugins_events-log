@@ -61,13 +61,13 @@ public class QueryMakerTest {
   @Test
   public void dateOneOnly() throws Exception {
     query = queryMaker.formQueryFromRequestParameters(ImmutableMap.of(T1, OLD_DATE));
-    assertThat(query).contains(String.format("'%s' and ", OLD_DATE));
+    assertThat(query).contains(String.format("'%sZ' and ", OLD_DATE));
   }
 
   @Test
   public void dateTwoOnly() throws Exception {
     query = queryMaker.formQueryFromRequestParameters(ImmutableMap.of(T2, OLD_DATE));
-    assertThat(query).contains(String.format("'%s' and ", OLD_DATE));
+    assertThat(query).contains(String.format("'%sZ' and ", OLD_DATE));
   }
 
   @Test(expected = MalformedQueryException.class)
@@ -78,10 +78,10 @@ public class QueryMakerTest {
   @Test
   public void dateOrdering() throws Exception {
     query = queryMaker.formQueryFromRequestParameters(ImmutableMap.of(T1, OLD_DATE, T2, NEW_DATE));
-    assertThat(query).contains(String.format("'%s' and '%s'", OLD_DATE, NEW_DATE));
+    assertThat(query).contains(String.format("'%sZ' and '%sZ'", OLD_DATE, NEW_DATE));
 
     query = queryMaker.formQueryFromRequestParameters(ImmutableMap.of(T1, NEW_DATE, T2, OLD_DATE));
-    assertThat(query).contains(String.format("'%s' and '%s'", OLD_DATE, NEW_DATE));
+    assertThat(query).contains(String.format("'%sZ' and '%sZ'", OLD_DATE, NEW_DATE));
   }
 
   @Test
