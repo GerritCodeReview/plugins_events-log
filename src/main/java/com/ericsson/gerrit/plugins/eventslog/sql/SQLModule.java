@@ -19,7 +19,6 @@ import static com.ericsson.gerrit.plugins.eventslog.EventsLogConfig.H2_DB_PREFIX
 import com.ericsson.gerrit.plugins.eventslog.EventModule;
 import com.ericsson.gerrit.plugins.eventslog.EventStore;
 import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
-import com.ericsson.gerrit.plugins.eventslog.QueryMaker;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.events.LifecycleListener;
 import com.google.inject.AbstractModule;
@@ -35,7 +34,7 @@ class SQLModule extends AbstractModule {
     install(new EventModule());
     bind(EventStore.class).to(SQLStore.class);
     bind(LifecycleListener.class).annotatedWith(UniqueAnnotations.create()).to(SQLStore.class);
-    bind(QueryMaker.class).to(SQLQueryMaker.class);
+    bind(SQLQueryMaker.class);
   }
 
   @Provides
