@@ -35,31 +35,15 @@ public class SQLEntryTest {
   @Before
   public void setUp() {
     Timestamp timestamp = new Timestamp(NOW);
-    entry1 = new SQLEntry(SQLDialect.H2, "name1", timestamp, "event1", Integer.MAX_VALUE);
-    entry2 = new SQLEntry(SQLDialect.H2, "name2", timestamp, "event2", Integer.MIN_VALUE);
-    entry3 = new SQLEntry(SQLDialect.H2, "name3", timestamp, "event3", 0);
-    entry4 = new SQLEntry(SQLDialect.H2, "name4", timestamp, "event4", Integer.MAX_VALUE);
-    entry5 =
-        new SQLEntry(
-            SQLDialect.SPANNER,
-            "name5",
-            timestamp,
-            "event1",
-            "b54e6b86-7686-4c3e-a4e4-8edd60ae328e");
-    entry6 =
-        new SQLEntry(
-            SQLDialect.SPANNER,
-            "name6",
-            timestamp,
-            "event2",
-            "0ebc1d7f-5888-45d8-8cd1-244eda611a38");
-    entry7 =
-        new SQLEntry(
-            SQLDialect.SPANNER,
-            "name7",
-            timestamp,
-            "event2",
-            "0ebc1d7f-5888-45d8-8cd1-244eda611a38");
+    Timestamp past = new Timestamp(0);
+    Timestamp future = new Timestamp(NOW + 60000);
+    entry1 = new SQLEntry("name1", future, "event1", Integer.MAX_VALUE);
+    entry2 = new SQLEntry("name2", past, "event2", Integer.MIN_VALUE);
+    entry3 = new SQLEntry("name3", timestamp, "event3", 0);
+    entry4 = new SQLEntry("name4", future, "event4", Integer.MAX_VALUE);
+    entry5 = new SQLEntry("name5", timestamp, "event1", "b54e6b86-7686-4c3e-a4e4-8edd60ae328e");
+    entry6 = new SQLEntry("name6", timestamp, "event2", "0ebc1d7f-5888-45d8-8cd1-244eda611a38");
+    entry7 = new SQLEntry("name7", timestamp, "event2", "0ebc1d7f-5888-45d8-8cd1-244eda611a38");
   }
 
   @Test
@@ -69,7 +53,7 @@ public class SQLEntryTest {
 
   @Test
   public void testGetTimestamp() throws Exception {
-    assertThat(entry1.getTimestamp()).isEqualTo(new Timestamp(NOW));
+    assertThat(entry3.getTimestamp()).isEqualTo(new Timestamp(NOW));
   }
 
   @Test
@@ -79,8 +63,8 @@ public class SQLEntryTest {
 
   @Test
   public void testCompareTo() throws Exception {
-    assertThat(entry1.compareTo(entry2)).isEqualTo(1);
-    assertThat(entry2.compareTo(entry1)).isEqualTo(-1);
+    assertThat(entry3.compareTo(entry2)).isEqualTo(1);
+    assertThat(entry3.compareTo(entry1)).isEqualTo(-1);
   }
 
   @SuppressWarnings("unlikely-arg-type")
