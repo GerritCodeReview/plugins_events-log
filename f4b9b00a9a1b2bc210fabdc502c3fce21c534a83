@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5994101b_800c5c8b",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLQueryMaker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1003873
+      },
+      "writtenOn": "2024-07-16T11:38:03Z",
+      "side": 1,
+      "message": "The whole change looks OK but I only have a concern here as we will append the UTC timezone to the timestamp string. Will that work in all supported SQL dialects (mysql, postgres, h2)?",
+      "revId": "f4b9b00a9a1b2bc210fabdc502c3fce21c534a83",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
