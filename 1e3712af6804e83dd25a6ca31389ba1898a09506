@@ -22,6 +22,30 @@
       },
       "revId": "1e3712af6804e83dd25a6ca31389ba1898a09506",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a33b091_512bbd73",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1144862
+      },
+      "writtenOn": "2024-10-08T12:24:14Z",
+      "side": 1,
+      "message": "I think the main benefit is: https://gerrit-review.googlesource.com/c/plugins/events-log/+/429518/2/src/main/java/com/ericsson/gerrit/plugins/eventslog/EventsRestApiServlet.java#b61\n\nHere the Servlet no longer needs to \u0027know\u0027 the query, just store the parameters?\n\nI don\u0027t think the `EventStore` depends on the `QueryMaker`. Rather the `SQLStore` does.",
+      "parentUuid": "dc8722df_15a5bdff",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 70
+      },
+      "revId": "1e3712af6804e83dd25a6ca31389ba1898a09506",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
