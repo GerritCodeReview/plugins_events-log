@@ -132,6 +132,14 @@ class SQLClient {
    * @throws SQLException If there was a problem with the database
    */
   void storeEvent(String projectName, Instant timestamp, String event) throws SQLException {
+    switch (databaseDialect) {
+      case SPANNER:
+        if (event != null) {
+          event = event.replace("\\n", "\\\\n");
+        }
+        break;
+      default:
+    }
     String values = format("VALUES('%s', '%s', '%s')", projectName, timestamp, event);
     execute(
         format("INSERT INTO %s(%s, %s, %s) ", TABLE_NAME, PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
