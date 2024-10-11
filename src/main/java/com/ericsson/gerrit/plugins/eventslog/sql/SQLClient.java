@@ -22,7 +22,6 @@ import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.TABLE_NAME;
 import static java.lang.String.format;
 import static java.util.concurrent.TimeUnit.DAYS;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
@@ -120,7 +119,7 @@ class SQLClient {
   void storeEvent(ProjectEvent event) throws SQLException {
     storeEvent(
         event.getProjectNameKey().get(),
-        new Timestamp(SECONDS.toMillis(event.eventCreatedOn)),
+        Instant.ofEpochSecond(event.eventCreatedOn),
         gson.toJson(event));
   }
 
@@ -128,23 +127,20 @@ class SQLClient {
    * Store the event in the database.
    *
    * @param projectName The project in which this event happened
-   * @param timestamp The time at which this event took place
+   * @param timestamp The instant at which this event took place
    * @param event The event as a string
    * @throws SQLException If there was a problem with the database
    */
-  void storeEvent(String projectName, Timestamp timestamp, String event) throws SQLException {
-    String values;
+  void storeEvent(String projectName, Instant timestamp, String event) throws SQLException {
     switch (databaseDialect) {
       case SPANNER:
-        // Workaround since Spanner assumes timestamps without explicit time zone to be US/LA
-        Instant instant = (timestamp != null) ? timestamp.toInstant() : null;
-        values = format("VALUES('%s', '%s', '%s')", projectName, instant, event);
+        if (event != null) {
+          event = event.replace("\\n", "\\\\n");
+        }
         break;
       default:
-        values = format("VALUES('%s', '%s', '%s')", projectName, timestamp, event);
-        break;
     }
-
+    String values = format("VALUES('%s', '%s', '%s')", projectName, timestamp, event);
     execute(
         format("INSERT INTO %s(%s, %s, %s) ", TABLE_NAME, PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
             + values);
@@ -209,7 +205,7 @@ class SQLClient {
         entries.add(
             new SQLEntry(
                 rs.getString(PROJECT_ENTRY),
-                rs.getTimestamp(DATE_ENTRY),
+                rs.getTimestamp(DATE_ENTRY).toInstant(),
                 rs.getString(EVENT_ENTRY),
                 rs.getObject(PRIMARY_ENTRY)));
       }
@@ -225,7 +221,7 @@ class SQLClient {
         SQLEntry entry =
             new SQLEntry(
                 rs.getString(PROJECT_ENTRY),
-                rs.getTimestamp(DATE_ENTRY),
+                rs.getTimestamp(DATE_ENTRY).toInstant(),
                 rs.getString(EVENT_ENTRY),
                 rs.getObject(PRIMARY_ENTRY));
         result.put(rs.getString(PROJECT_ENTRY), entry);

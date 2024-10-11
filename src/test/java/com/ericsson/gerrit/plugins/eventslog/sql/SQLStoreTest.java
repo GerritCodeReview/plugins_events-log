@@ -41,7 +41,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
@@ -54,6 +54,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -115,6 +116,29 @@ public class SQLStoreTest {
     List<String> events = store.queryChangeEvents(GENERIC_QUERY);
     String json = new Gson().toJson(mockEvent);
     assertThat(events).containsExactly(json).inOrder();
+  }
+
+  @Test
+  public void storeThenCheckInstantStored() throws Exception {
+    eventsDb = mock(SQLClient.class);
+    config.setJdbcUrl(TEST_LOCAL_URL);
+    localEventsDb = new SQLClient(config);
+    localEventsDb.createDBIfNotCreated();
+    localEventsDb.storeEvent(mockEvent);
+    store =
+        new SQLStore(
+            cfgMock,
+            eventsDb,
+            localEventsDb,
+            poolMock,
+            permissionBackendMock,
+            logCleanerMock,
+            PLUGIN_NAME);
+
+    store.start();
+    ArgumentCaptor<Instant> captor = ArgumentCaptor.forClass(Instant.class);
+    verify(eventsDb).storeEvent(any(String.class), captor.capture(), any(String.class));
+    assertThat(captor.getValue()).isEqualTo(Instant.ofEpochSecond(mockEvent.eventCreatedOn));
   }
 
   @Test
@@ -455,7 +479,7 @@ public class SQLStoreTest {
 
     store.start();
     verify(eventsDb).queryOne();
-    verify(eventsDb).storeEvent(any(String.class), any(Timestamp.class), any(String.class));
+    verify(eventsDb).storeEvent(any(String.class), any(Instant.class), any(String.class));
     List<SQLEntry> entries = localEventsDb.getAll();
     assertThat(entries).isEmpty();
   }

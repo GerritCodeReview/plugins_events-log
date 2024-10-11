@@ -33,6 +33,7 @@ public class QueryMakerTest {
   private static final String T1 = "t1";
   private static final String OLD_DATE = "2013-10-10 10:00:00";
   private static final String NEW_DATE = "2014-10-10 10:00:00";
+  private static final String TEST_DATABASE = "cloudspanner";
 
   private QueryMaker queryMaker;
   private String defaultQuery;
@@ -44,6 +45,7 @@ public class QueryMakerTest {
   @Before
   public void setUp() throws Exception {
     when(cfgMock.getReturnLimit()).thenReturn(10);
+    when(cfgMock.getStoreUrl()).thenReturn(TEST_DATABASE);
     queryMaker = new SQLQueryMaker(cfgMock);
     defaultQuery = queryMaker.getDefaultQuery();
   }
@@ -61,13 +63,13 @@ public class QueryMakerTest {
   @Test
   public void dateOneOnly() throws Exception {
     query = queryMaker.formQueryFromRequestParameters(ImmutableMap.of(T1, OLD_DATE));
-    assertThat(query).contains(String.format("'%s' and ", OLD_DATE));
+    assertThat(query).contains(String.format("'%sZ' and ", OLD_DATE));
   }
 
   @Test
   public void dateTwoOnly() throws Exception {
     query = queryMaker.formQueryFromRequestParameters(ImmutableMap.of(T2, OLD_DATE));
-    assertThat(query).contains(String.format("'%s' and ", OLD_DATE));
+    assertThat(query).contains(String.format("'%sZ' and ", OLD_DATE));
   }
 
   @Test(expected = MalformedQueryException.class)
@@ -78,10 +80,10 @@ public class QueryMakerTest {
   @Test
   public void dateOrdering() throws Exception {
     query = queryMaker.formQueryFromRequestParameters(ImmutableMap.of(T1, OLD_DATE, T2, NEW_DATE));
-    assertThat(query).contains(String.format("'%s' and '%s'", OLD_DATE, NEW_DATE));
+    assertThat(query).contains(String.format("'%sZ' and '%sZ'", OLD_DATE, NEW_DATE));
 
     query = queryMaker.formQueryFromRequestParameters(ImmutableMap.of(T1, NEW_DATE, T2, OLD_DATE));
-    assertThat(query).contains(String.format("'%s' and '%s'", OLD_DATE, NEW_DATE));
+    assertThat(query).contains(String.format("'%sZ' and '%sZ'", OLD_DATE, NEW_DATE));
   }
 
   @Test
