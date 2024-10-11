@@ -16,6 +16,24 @@
       "message": "The whole change looks OK but I only have a concern here as we will append the UTC timezone to the timestamp string. Will that work in all supported SQL dialects (mysql, postgres, h2)?",
       "revId": "f4b9b00a9a1b2bc210fabdc502c3fce21c534a83",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "435b8e11_328c4fc1",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLQueryMaker.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1144862
+      },
+      "writtenOn": "2024-10-11T09:14:32Z",
+      "side": 1,
+      "message": "This change should be abandoned, comment addressed here https://gerrit-review.googlesource.com/c/plugins/events-log/+/439221/2/src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLQueryMaker.java#65 - you were right that it would not work in all supported dialects, so we only append it specifically for Spanner",
+      "parentUuid": "5994101b_800c5c8b",
+      "revId": "f4b9b00a9a1b2bc210fabdc502c3fce21c534a83",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
