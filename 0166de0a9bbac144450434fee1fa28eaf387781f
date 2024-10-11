@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "add4940e_7837ab00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1144862
+      },
+      "writtenOn": "2024-10-11T09:09:11Z",
+      "side": 1,
+      "message": "https://gerrit-review.googlesource.com/c/plugins/events-log/+/429521 should be abandoned (unfortunately I can\u0027t take over the existing change)",
+      "revId": "0166de0a9bbac144450434fee1fa28eaf387781f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
