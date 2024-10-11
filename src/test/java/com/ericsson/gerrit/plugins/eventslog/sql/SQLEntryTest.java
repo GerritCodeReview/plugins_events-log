@@ -16,7 +16,7 @@ package com.ericsson.gerrit.plugins.eventslog.sql;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Calendar;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,9 +34,9 @@ public class SQLEntryTest {
 
   @Before
   public void setUp() {
-    Timestamp timestamp = new Timestamp(NOW);
-    Timestamp past = new Timestamp(0);
-    Timestamp future = new Timestamp(NOW + 60000);
+    Instant timestamp = Instant.ofEpochMilli(NOW);
+    Instant past = Instant.ofEpochMilli(0);
+    Instant future = Instant.ofEpochMilli(NOW + 60000);
     entry1 = new SQLEntry("name1", future, "event1", Integer.MAX_VALUE);
     entry2 = new SQLEntry("name2", past, "event2", Integer.MIN_VALUE);
     entry3 = new SQLEntry("name3", timestamp, "event3", 0);
@@ -53,7 +53,7 @@ public class SQLEntryTest {
 
   @Test
   public void testGetTimestamp() throws Exception {
-    assertThat(entry3.getTimestamp()).isEqualTo(new Timestamp(NOW));
+    assertThat(entry3.getTimestamp()).isEqualTo(Instant.ofEpochMilli(NOW));
   }
 
   @Test

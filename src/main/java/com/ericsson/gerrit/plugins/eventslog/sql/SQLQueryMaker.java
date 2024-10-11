@@ -34,16 +34,19 @@ class SQLQueryMaker implements QueryMaker {
   private static final int TWO = 2;
   private static final String TIME_ONE = "t1";
   private static final String TIME_TWO = "t2";
+  private static final String UTC = "Z";
   private static final DateTimeFormatter DATE_TIME_FORMAT =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
   private static final DateTimeFormatter DATE_ONLY_FORMAT =
       DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
   private final int returnLimit;
+  private final SQLDialect databaseDialect;
 
   @Inject
   SQLQueryMaker(EventsLogConfig config) {
     this.returnLimit = config.getReturnLimit();
+    this.databaseDialect = SQLDialect.fromJdbcUrl(config.getStoreUrl());
   }
 
   @Override
@@ -58,9 +61,17 @@ class SQLQueryMaker implements QueryMaker {
     } catch (DateTimeParseException e) {
       throw new MalformedQueryException(e);
     }
-    return String.format(
-        "SELECT * FROM %s WHERE %s BETWEEN '%s' and '%s' ORDER BY date_created LIMIT %d",
-        TABLE_NAME, DATE_ENTRY, dates[0], dates[1], returnLimit);
+
+    switch (databaseDialect) {
+      case SPANNER:
+        return String.format(
+            "SELECT * FROM %s WHERE %s BETWEEN '%s%s' and '%s%s' ORDER BY date_created LIMIT %d",
+            TABLE_NAME, DATE_ENTRY, dates[0], UTC, dates[1], UTC, returnLimit);
+      default:
+        return String.format(
+            "SELECT * FROM %s WHERE %s BETWEEN '%s' and '%s' ORDER BY date_created LIMIT %d",
+            TABLE_NAME, DATE_ENTRY, dates[0], dates[1], returnLimit);
+    }
   }
 
   @Override

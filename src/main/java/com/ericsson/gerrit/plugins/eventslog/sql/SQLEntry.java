@@ -14,16 +14,16 @@
 
 package com.ericsson.gerrit.plugins.eventslog.sql;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Objects;
 
 class SQLEntry implements Comparable<SQLEntry> {
   private String name;
-  private Timestamp timestamp;
+  private Instant timestamp;
   private String event;
   private Object id;
 
-  SQLEntry(String name, Timestamp timestamp, String event, Object id) {
+  SQLEntry(String name, Instant timestamp, String event, Object id) {
     this.name = name;
     this.timestamp = timestamp;
     this.event = event;
@@ -34,7 +34,7 @@ class SQLEntry implements Comparable<SQLEntry> {
     return name;
   }
 
-  public Timestamp getTimestamp() {
+  public Instant getTimestamp() {
     return timestamp;
   }
 
