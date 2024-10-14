@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d24f9006_3f567836",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1144862
+      },
+      "writtenOn": "2024-10-14T07:46:25Z",
+      "side": 1,
+      "message": "abandon in favor of https://gerrit-review.googlesource.com/c/plugins/events-log/+/439243",
+      "revId": "50a7b9c6fa0df9a8b05c9b4c687e92a7fc2aac39",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
