@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e226fbe_f4e828dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1004034
+      },
+      "writtenOn": "2024-10-14T11:51:55Z",
+      "side": 1,
+      "message": "I cherry-picked your fix into my series and rebased it to master, please abandon this change",
+      "revId": "14e68ecfc893723742d24d60be2b0ee0e54dc60b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
