@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f502d26f_1eed869e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1144862
+      },
+      "writtenOn": "2024-10-14T08:35:54Z",
+      "side": 1,
+      "message": "I think this just needs to be rebased on https://gerrit-review.googlesource.com/c/plugins/events-log/+/439243 with no additional changes",
+      "revId": "5c95c087701ec70536d75f0e4477e1991e88565d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
