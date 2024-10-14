@@ -16,6 +16,24 @@
       "message": "abandon in favor of https://gerrit-review.googlesource.com/c/plugins/events-log/+/439243",
       "revId": "50a7b9c6fa0df9a8b05c9b4c687e92a7fc2aac39",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce31fced_b843b847",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1004034
+      },
+      "writtenOn": "2024-10-14T11:50:51Z",
+      "side": 1,
+      "message": "I cherry-picked your patch and rebased my series so that we don\u0027t loose the comments on the existing changes, please review and abandon your new changes",
+      "parentUuid": "d24f9006_3f567836",
+      "revId": "50a7b9c6fa0df9a8b05c9b4c687e92a7fc2aac39",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
