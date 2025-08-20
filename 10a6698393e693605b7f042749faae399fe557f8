@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f12c5910_3f5be0b2",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1003873
+      },
+      "writtenOn": "2025-08-20T12:59:41Z",
+      "side": 1,
+      "message": "The `QueryMaker` is an interface, so we can assume multiple implementations (also non-sql based implementations?). The `QueryMaker` interface is defined in the parents package and is, therefore, not SQL specific. This class is in the `sql` package: can it work with any `QueryMaker` implementation or can it only work with (queries made by) the `SqlQueryMaker`?\n\nIf it can work with any `QueryMaker` implementation then the `QueryMaker` interface belongs to the `sql` package too.\n\nIf it is not guaranteed to work with all `QueryMaker` implementations, then this class should rather depend on the `SqlQueryMaker`.",
+      "revId": "10a6698393e693605b7f042749faae399fe557f8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
