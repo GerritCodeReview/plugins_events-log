@@ -19,7 +19,6 @@ import java.util.List;
 
 /** A store for change events to query. */
 public interface EventStore {
-
   /**
    * Stores the given event.
    *
