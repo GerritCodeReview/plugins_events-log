@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.ericsson.gerrit.plugins.eventslog;
+package com.ericsson.gerrit.plugins.eventslog.sql;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import com.google.gerrit.acceptance.config.GerritConfig;
 import com.google.gerrit.acceptance.LightweightPluginDaemonTest;
 import com.google.gerrit.acceptance.TestPlugin;
+import com.google.gerrit.acceptance.config.GerritConfig;
 import org.junit.Test;
 
 @TestPlugin(
@@ -30,14 +30,16 @@ public class EventsLogIT extends LightweightPluginDaemonTest {
   @Test
   @GerritConfig(name = "plugin.events-log.storeUrl", value = "jdbc:h2:mem:db")
   public void getEventsShallBeConsistent() throws Exception {
+    SQLStore store = plugin.getSysInjector().getInstance(SQLStore.class);
     String events = "/plugins/events-log/events/?t1=1970-01-01;t2=2999-01-01";
     String change1 = "refs/changes/01/1/1";
-
     createChange();
+    store.flush();
     String response = adminRestSession.get(events).getEntityContent();
     assertThat(response).contains(change1);
 
     createChange();
+    store.flush();
     response = adminRestSession.get(events).getEntityContent();
     assertThat(response).contains(change1);
     assertThat(response).contains("refs/changes/02/2/1");
