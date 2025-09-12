@@ -149,7 +149,7 @@ class SQLStore implements EventStore, LifecycleListener {
       done = true;
       try {
         getEventsDb().storeEvent(event);
-      } catch (SQLException e) {
+      } catch (EventsLogException e) {
         log.atWarning().withCause(e).log("Cannot store ChangeEvent for: %s}", projectName.get());
         if (e.getCause() instanceof ConnectException
             || e.getMessage().contains("terminating connection")) {

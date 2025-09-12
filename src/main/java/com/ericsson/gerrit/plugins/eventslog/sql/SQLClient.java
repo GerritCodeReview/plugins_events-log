@@ -36,6 +36,7 @@ import com.google.gson.GsonBuilder;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -43,20 +44,80 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 class SQLClient {
+  static final int MAX_BATCH_SIZE = 100;
+  static final int QUEUE_CAPACITY = 10000;
+
   private static final FluentLogger log = FluentLogger.forEnclosingClass();
   private final Gson gson;
   private final SQLDialect databaseDialect;
+  private final BlockingQueue<ProjectEvent> eventQueue;
+  private final ScheduledExecutorService scheduler;
 
   private HikariDataSource ds;
 
   public SQLClient(HikariConfig config) {
     ds = new HikariDataSource(config);
-
+    eventQueue = new LinkedBlockingQueue<>(QUEUE_CAPACITY);
     gson = new GsonBuilder().registerTypeAdapter(Supplier.class, new SupplierSerializer()).create();
-
     databaseDialect = SQLDialect.fromJdbcUrl(config.getJdbcUrl());
+    scheduler = Executors.newSingleThreadScheduledExecutor();
+    scheduler.scheduleAtFixedRate(this::flush, 2, 2, TimeUnit.SECONDS);
+  }
+
+  private void flush() {
+    List<ProjectEvent> batch = new ArrayList<>();
+    getQueue().drainTo(batch, MAX_BATCH_SIZE);
+
+    if (batch.isEmpty()) {
+      return;
+    }
+
+    try {
+      batchInsert(batch);
+    } catch (SQLException e) {
+      log.atSevere().withCause(e).log("Failed to batch insert events");
+    }
+  }
+
+  private void batchInsert(List<ProjectEvent> events) throws SQLException {
+    String sql =
+        "INSERT INTO "
+            + TABLE_NAME
+            + " ("
+            + PROJECT_ENTRY
+            + ", "
+            + DATE_ENTRY
+            + ", "
+            + EVENT_ENTRY
+            + ") VALUES (?, ?, ?)";
+
+    try (Connection conn = ds.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)) {
+
+      for (ProjectEvent e : events) {
+        String projectName = e.getProjectNameKey().get();
+        Instant ts = Instant.ofEpochSecond(e.eventCreatedOn);
+        String eventJson = gson.toJson(e);
+
+        if (databaseDialect == SQLDialect.SPANNER && eventJson != null) {
+          eventJson = eventJson.replace("\\n", "\\\\n");
+        }
+
+        ps.setString(1, projectName);
+        ps.setTimestamp(2, Timestamp.from(ts));
+        ps.setString(3, eventJson);
+        ps.addBatch();
+      }
+
+      ps.executeBatch();
+    }
   }
 
   /**
@@ -90,6 +151,7 @@ class SQLClient {
   }
 
   void close() {
+    scheduler.shutdownNow();
     ds.close();
   }
 
@@ -111,39 +173,44 @@ class SQLClient {
   }
 
   /**
-   * Store the event in the database.
+   * Get the queue of events to store.
    *
-   * @param event The event to store
-   * @throws SQLException If there was a problem with the database
+   * @return The queue of events
    */
-  void storeEvent(ProjectEvent event) throws SQLException {
-    storeEvent(
-        event.getProjectNameKey().get(),
-        Instant.ofEpochSecond(event.eventCreatedOn),
-        gson.toJson(event));
+  BlockingQueue<ProjectEvent> getQueue() {
+    return eventQueue;
   }
 
   /**
-   * Store the event in the database.
+   * Queue the event in memory for processing.
    *
-   * @param projectName The project in which this event happened
-   * @param timestamp The instant at which this event took place
-   * @param event The event as a string
-   * @throws SQLException If there was a problem with the database
+   * @throws EventsLogException If there was a problem queueing the event
+   * @param event the event to store
    */
-  void storeEvent(String projectName, Instant timestamp, String event) throws SQLException {
-    switch (databaseDialect) {
-      case SPANNER:
-        if (event != null) {
-          event = event.replace("\\n", "\\\\n");
-        }
-        break;
-      default:
+  void storeEvent(ProjectEvent event) throws EventsLogException {
+    if (!eventQueue.offer(event)) {
+      throw new EventsLogException(String.format("Cannot offer event %s", gson.toJson(event)));
     }
-    String values = format("VALUES('%s', '%s', '%s')", projectName, timestamp, event);
-    execute(
-        format("INSERT INTO %s(%s, %s, %s) ", TABLE_NAME, PROJECT_ENTRY, DATE_ENTRY, EVENT_ENTRY)
-            + values);
+  }
+
+  void storeEvent(String projectName, Instant timestamp, String eventJson) throws SQLException {
+    String sql =
+        "INSERT INTO "
+            + TABLE_NAME
+            + " ("
+            + PROJECT_ENTRY
+            + ", "
+            + DATE_ENTRY
+            + ", "
+            + EVENT_ENTRY
+            + ") VALUES (?, ?, ?)";
+    try (Connection conn = ds.getConnection();
+        PreparedStatement ps = conn.prepareStatement(sql)) {
+      ps.setString(1, projectName);
+      ps.setTimestamp(2, Timestamp.from(timestamp));
+      ps.setString(3, eventJson);
+      ps.executeUpdate();
+    }
   }
 
   /**
