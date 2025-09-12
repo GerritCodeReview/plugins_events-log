@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9444dac0_73488099",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLClient.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1004034
+      },
+      "writtenOn": "2025-09-12T13:26:49Z",
+      "side": 1,
+      "message": "I\u0027d use batching using a `PreparedStatement` using its `addBatch()` method, see https://www.baeldung.com/jdbc-batch-processing#2-batch-processing-using-preparedstatement\n\nUsing a `PreparedStatement` ensures type safety and that the database needs to create an execution plan for the `PreparedStatement` only once.\n\nThere is also a `Statement.addBatch(String)` method but I think it\u0027s not worth using that repeatedly since `PreparedStatement` in addition avoids recreation of the execution plan. \n\nFor the same reasons we should use `PreparedStatements` also for other, e.g. select statements.\nMaybe do that first in another change and then rebase this one on top of that change.",
+      "revId": "ab2abb0c2d4a58d75b0033f5ffd1803bdef8679d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1983f369_e27ff317",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1004034
+      },
+      "writtenOn": "2025-09-12T13:26:49Z",
+      "side": 1,
+      "message": "this doesn\u0027t compile and fails with the following error:\n```\nerror: method storeEvent in class SQLClient cannot be applied to given types;\n      eventsDb.storeEvent(entry.getName(), entry.getTimestamp(), entry.getEvent());\n              ^\n  required: ProjectEvent\n  found:    String,Instant,String\n  reason: actual and formal argument lists differ in length\n```",
+      "revId": "ab2abb0c2d4a58d75b0033f5ffd1803bdef8679d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
