@@ -17,6 +17,7 @@ package com.ericsson.gerrit.plugins.eventslog.sql;
 import static com.ericsson.gerrit.plugins.eventslog.sql.SQLTable.TABLE_NAME;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.ericsson.gerrit.plugins.eventslog.EventsLogConfig;
+import com.ericsson.gerrit.plugins.eventslog.EventsLogException;
 import com.ericsson.gerrit.plugins.eventslog.MalformedQueryException;
 import com.ericsson.gerrit.plugins.eventslog.ServiceUnavailableException;
 import com.google.common.collect.ImmutableList;
@@ -42,7 +44,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -113,6 +114,7 @@ public class SQLStoreTest {
     doNothing().when(forProjectMock).check(ProjectPermission.ACCESS);
     setUpClient();
     store.storeEvent(mockEvent);
+    eventsDb.flush();
     List<String> events = store.queryChangeEvents(GENERIC_QUERY);
     String json = new Gson().toJson(mockEvent);
     assertThat(events).containsExactly(json).inOrder();
@@ -125,6 +127,7 @@ public class SQLStoreTest {
     localEventsDb = new SQLClient(config);
     localEventsDb.createDBIfNotCreated();
     localEventsDb.storeEvent(mockEvent);
+    localEventsDb.flush();
     store =
         new SQLStore(
             cfgMock,
@@ -150,6 +153,7 @@ public class SQLStoreTest {
         .check(ProjectPermission.ACCESS);
     setUpClient();
     store.storeEvent(mockEvent);
+    eventsDb.flush();
     List<String> events = store.queryChangeEvents(GENERIC_QUERY);
     assertThat(events).isEmpty();
   }
@@ -170,6 +174,7 @@ public class SQLStoreTest {
         .check(ProjectPermission.ACCESS);
     setUpClient();
     store.storeEvent(mockEvent);
+    eventsDb.flush();
     List<String> events = store.queryChangeEvents(GENERIC_QUERY);
     assertThat(events).isEmpty();
   }
@@ -177,11 +182,18 @@ public class SQLStoreTest {
   @Test
   public void retryOnConnectException() throws Exception {
     when(cfgMock.getMaxTries()).thenReturn(3);
-    Throwable[] exceptions = new Throwable[3];
-    Arrays.fill(exceptions, new SQLException(new ConnectException()));
     setUpClientMock();
-    doThrow(exceptions).doNothing().when(eventsDb).storeEvent(mockEvent);
-    doThrow(exceptions).doNothing().when(eventsDb).queryOne();
+    doAnswer(
+            invocation -> {
+              throw new EventsLogException("Error", new ConnectException());
+            })
+        .doAnswer(
+            invocation -> {
+              throw new EventsLogException("Error", new ConnectException());
+            })
+        .doNothing()
+        .when(eventsDb)
+        .flush();
     store =
         new SQLStore(
             cfgMock,
@@ -191,21 +203,36 @@ public class SQLStoreTest {
             permissionBackendMock,
             logCleanerMock,
             PLUGIN_NAME);
-
     store.start();
     store.storeEvent(mockEvent);
-    verify(eventsDb, times(3)).storeEvent(mockEvent);
-    verify(localEventsDb).storeEvent(mockEvent);
+    store.flush();
+    verify(eventsDb, times(3)).flush();
   }
 
   @Test
   public void retryOnMessage() throws Exception {
     when(cfgMock.getMaxTries()).thenReturn(3);
-    Throwable[] exceptions = new Throwable[3];
-    Arrays.fill(exceptions, new SQLException(TERM_CONN_MSG));
-    setUpClientMock();
-    doThrow(exceptions).doNothing().when(eventsDb).storeEvent(mockEvent);
-    doThrow(exceptions).doNothing().when(eventsDb).queryOne();
+    mockEvent = new MockEvent("test");
+    eventsDb = mock(SQLClient.class);
+    localEventsDb = mock(SQLClient.class);
+    doAnswer(
+            invocation -> {
+              throw new EventsLogException(TERM_CONN_MSG, new SQLException(TERM_CONN_MSG));
+            })
+        .doAnswer(
+            invocation -> {
+              throw new EventsLogException(TERM_CONN_MSG, new SQLException(TERM_CONN_MSG));
+            })
+        .doNothing()
+        .when(eventsDb)
+        .flush();
+    doAnswer(
+            invocation -> {
+              throw new EventsLogException(TERM_CONN_MSG, new SQLException(TERM_CONN_MSG));
+            })
+        .doNothing()
+        .when(eventsDb)
+        .queryOne();
 
     store =
         new SQLStore(
@@ -219,15 +246,21 @@ public class SQLStoreTest {
 
     store.start();
     store.storeEvent(mockEvent);
-    verify(eventsDb, times(3)).storeEvent(mockEvent);
-    verify(localEventsDb).storeEvent(mockEvent);
+    store.flush();
+    verify(eventsDb, times(3)).flush();
   }
 
   @Test
   public void noRetryOnMessage() throws Exception {
     when(cfgMock.getMaxTries()).thenReturn(3);
     setUpClientMock();
-    doThrow(new SQLException(MSG)).when(eventsDb).storeEvent(mockEvent);
+    doAnswer(
+            invocation -> {
+              throw new SQLException(TERM_CONN_MSG);
+            })
+        .doNothing()
+        .when(eventsDb)
+        .flush();
 
     store =
         new SQLStore(
@@ -241,17 +274,22 @@ public class SQLStoreTest {
 
     store.start();
     store.storeEvent(mockEvent);
-    verify(eventsDb, times(1)).storeEvent(mockEvent);
+    store.flush();
+    verify(eventsDb, times(1)).flush();
   }
 
   @Test
   public void noRetryOnZeroMaxTries() throws Exception {
     when(cfgMock.getMaxTries()).thenReturn(0);
-    Throwable[] exceptions = new Throwable[3];
-    Arrays.fill(exceptions, new SQLException(new ConnectException()));
     setUpClientMock();
-    doThrow(exceptions).doNothing().when(eventsDb).storeEvent(mockEvent);
-    doThrow(exceptions).doNothing().when(eventsDb).queryOne();
+
+    doAnswer(
+            invocation -> {
+              throw new SQLException(TERM_CONN_MSG);
+            })
+        .doNothing()
+        .when(eventsDb)
+        .flush();
 
     store =
         new SQLStore(
@@ -265,7 +303,8 @@ public class SQLStoreTest {
 
     store.start();
     store.storeEvent(mockEvent);
-    verify(eventsDb, times(1)).storeEvent(mockEvent);
+    store.flush();
+    verify(eventsDb, times(1)).flush();
   }
 
   @Test(expected = ServiceUnavailableException.class)
@@ -286,6 +325,7 @@ public class SQLStoreTest {
 
     store.start();
     store.storeEvent(mockEvent);
+    eventsDb.flush();
     store.queryChangeEvents(GENERIC_QUERY);
   }
 
@@ -315,6 +355,7 @@ public class SQLStoreTest {
     localEventsDb.createDBIfNotCreated();
     localEventsDb.storeEvent(mockEvent);
     localEventsDb.storeEvent(mockEvent2);
+    localEventsDb.flush();
     store.start();
 
     List<String> events = store.queryChangeEvents(GENERIC_QUERY);
@@ -365,6 +406,7 @@ public class SQLStoreTest {
 
     store.start();
     store.storeEvent(mockEvent);
+    eventsDb.flush();
     verify(localEventsDb).storeEvent(mockEvent);
   }
 
@@ -387,6 +429,7 @@ public class SQLStoreTest {
 
     store.start();
     store.storeEvent(mockEvent);
+    eventsDb.flush();
     verify(localEventsDb).storeEvent(mockEvent);
   }
 
@@ -407,12 +450,6 @@ public class SQLStoreTest {
     store.start();
   }
 
-  private void setUpClientMock() throws SQLException {
-    eventsDb = mock(SQLClient.class);
-    localEventsDb = mock(SQLClient.class);
-    when(localEventsDb.dbExists()).thenReturn(true);
-  }
-
   /**
    * For this test we expect that if we can connect to main database, then we should come back
    * online and try setting up again. We just want to make sure that restoreEventsFromLocal gets
@@ -424,7 +461,11 @@ public class SQLStoreTest {
     eventsDb = new SQLClient(config);
     localEventsDb = mock(SQLClient.class);
     when(localEventsDb.dbExists()).thenReturn(true);
-    when(localEventsDb.getAll()).thenReturn(ImmutableList.of(mock(SQLEntry.class)));
+    SQLEntry entry =
+        new SQLEntry(
+            "proj", Instant.now(), "{\"type\":\"mock event\"}", 123L // dummy primary key
+            );
+    when(localEventsDb.getAll()).thenReturn(ImmutableList.of(entry));
 
     store =
         new SQLStore(
@@ -458,6 +499,7 @@ public class SQLStoreTest {
     localEventsDb = new SQLClient(config);
     localEventsDb.createDBIfNotCreated();
     localEventsDb.storeEvent(mockEvent);
+    localEventsDb.flush();
     doThrow(new SQLException(new ConnectException()))
         .doNothing()
         .when(eventsDb)
@@ -482,6 +524,12 @@ public class SQLStoreTest {
     verify(eventsDb).storeEvent(any(String.class), any(Instant.class), any(String.class));
     List<SQLEntry> entries = localEventsDb.getAll();
     assertThat(entries).isEmpty();
+  }
+
+  private void setUpClientMock() throws SQLException {
+    eventsDb = mock(SQLClient.class);
+    localEventsDb = mock(SQLClient.class);
+    when(localEventsDb.dbExists()).thenReturn(true);
   }
 
   public class MockEvent extends ProjectEvent {
