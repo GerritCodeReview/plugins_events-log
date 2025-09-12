@@ -143,37 +143,48 @@ class SQLStore implements EventStore, LifecycleListener {
     if (projectName == null) {
       return;
     }
+    try {
+      getEventsDb().storeEvent(event);
+    } catch (EventsLogException e) {
+      log.atWarning().withCause(e).log("Cannot queue event");
+    }
+  }
+
+  /** Triggers flushes with retry support. */
+  public void flush() {
     int failedConnections = 0;
     boolean done = false;
+
     while (!done) {
-      done = true;
       try {
-        getEventsDb().storeEvent(event);
-      } catch (SQLException e) {
-        log.atWarning().withCause(e).log("Cannot store ChangeEvent for: %s}", projectName.get());
-        if (e.getCause() instanceof ConnectException
+        getEventsDb().flush();
+        done = true;
+      } catch (Exception e) {
+        if ((e.getCause() instanceof ConnectException)
             || e.getMessage().contains("terminating connection")) {
-          done = false;
+          failedConnections++;
           try {
             retryIfAllowed(failedConnections);
           } catch (InterruptedException e1) {
-            log.atWarning().log("Cannot store ChangeEvent for %s: Interrupted", projectName.get());
             Thread.currentThread().interrupt();
             return;
           }
-          failedConnections++;
+        } else {
+          log.atWarning().withCause(e).log("Cannot flush batched events");
+          return;
         }
       }
     }
   }
 
   private void retryIfAllowed(int failedConnections) throws InterruptedException {
-    if (failedConnections < maxTries - 1) {
-      log.atInfo().log("Retrying store event");
+    if (failedConnections < maxTries) {
+      log.atInfo().log("Retrying store events");
       Thread.sleep(waitTime);
     } else {
-      log.atSevere().log("Failed to store event %d times", maxTries);
+      log.atSevere().log("Failed to store events %d times", maxTries);
       setOnline(false);
+      throw new InterruptedException("Max retries exceeded");
     }
   }
 
