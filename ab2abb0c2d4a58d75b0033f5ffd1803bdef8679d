@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a67e7ea0_351f891e",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLClient.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1144862
+      },
+      "writtenOn": "2025-10-13T12:34:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9444dac0_73488099",
+      "revId": "ab2abb0c2d4a58d75b0033f5ffd1803bdef8679d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1983f369_e27ff317",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-09-12T13:26:49Z",
       "side": 1,
       "message": "this doesn\u0027t compile and fails with the following error:\n```\nerror: method storeEvent in class SQLClient cannot be applied to given types;\n      eventsDb.storeEvent(entry.getName(), entry.getTimestamp(), entry.getEvent());\n              ^\n  required: ProjectEvent\n  found:    String,Instant,String\n  reason: actual and formal argument lists differ in length\n```",
+      "revId": "ab2abb0c2d4a58d75b0033f5ffd1803bdef8679d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af5df5a1_94bb28ee",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLStore.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1144862
+      },
+      "writtenOn": "2025-10-13T12:34:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1983f369_e27ff317",
       "revId": "ab2abb0c2d4a58d75b0033f5ffd1803bdef8679d",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
