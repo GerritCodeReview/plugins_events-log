@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "109022ef_7f8a8915",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLClient.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1144862
+      },
+      "writtenOn": "2025-12-18T13:40:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35fbd783_c935e9ac",
+      "revId": "d90d6629bb7c8d41591039de9be5e996619c1890",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f0b9c72a_81317146",
@@ -31,6 +49,24 @@
       "writtenOn": "2025-12-16T15:04:50Z",
       "side": 1,
       "message": "inline this method since it\u0027s only used in this class",
+      "revId": "d90d6629bb7c8d41591039de9be5e996619c1890",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1bb581b_5c48c4b2",
+        "filename": "src/main/java/com/ericsson/gerrit/plugins/eventslog/sql/SQLClient.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1144862
+      },
+      "writtenOn": "2025-12-18T13:40:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0b9c72a_81317146",
       "revId": "d90d6629bb7c8d41591039de9be5e996619c1890",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
