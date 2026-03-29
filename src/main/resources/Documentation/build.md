@@ -48,8 +48,8 @@ replacing the existing empty one.
 
 ```
   cd gerrit/plugins
-  rm external_plugin_deps.bzl
-  ln -s @PLUGIN@/external_plugin_deps.bzl .
+  rm external_plugin_deps.MODULE.bazel
+  ln -s @PLUGIN@/external_plugin_deps.MODULE.bazel .
 ```
 
 Then issue
